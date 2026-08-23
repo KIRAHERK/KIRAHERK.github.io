@@ -15,6 +15,8 @@ IT graduate — AI & cybersecurity
 `Kali Linux` `Wireshark` `aircrack-ng` `ASP.NET` `SQL` `Git`
 
 ---
-Links
+
+**Links**
+
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Hussein_Al_Herk-0A66C2?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/husseinalherk/)
 [![Email](https://img.shields.io/badge/Email-hussenalherk@gmail.com-EA4335?style=flat&logo=gmail&logoColor=white)](mailto:hussenalherk@gmail.com)
