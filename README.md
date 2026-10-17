@@ -1,29 +1,21 @@
-# Welcome to your Lovable project
+# kiraherk.github.io
 
-This project was built with [Lovable](https://lovable.dev).
+Personal site of **Hussein Al Herk**, junior AI engineer (computer vision, RAG, security) in Damascus, Syria.
 
-## Build with Lovable
+Live at **https://kiraherk.github.io**
 
-Open your project in the [Lovable editor](https://lovable.dev) and keep building.
+## Stack
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: connect the project to GitHub and every change made in Lovable is committed straight to your repository.
-- **Full ownership**: this code is yours. Push to your repository and your changes sync back into Lovable, ready for your next prompt.
+React 19 · TanStack Start (static prerender) · Tailwind CSS v4 · TypeScript. Deployed to GitHub Pages by `.github/workflows/deploy.yml` on every push to `main`.
 
-## Development
+## Develop
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
-
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
+```bash
+npm install
+npm run dev                      # local dev server
+GITHUB_PAGES=true npm run build  # static build, same as CI
 ```
 
-## Built with
+The page lives in `src/routes/index.tsx`; the animated pose figure in the hero is `src/components/PoseFigure.tsx`; colours and fonts are in `src/styles.css`.
 
-- TanStack Start
-- TypeScript
-- React
-- Tailwind CSS
+The previous design is kept on the `backup/original-2026-10-17` branch.
