@@ -17,7 +17,7 @@ export default defineConfig({
     server: { entry: "server" },
     ...(isGithubPages
       ? {
-          pages: [{ path: "/" }],
+          pages: [{ path: "/" }, { path: "/ar" }],
           prerender: { enabled: true, autoStaticPathsDiscovery: false },
         }
       : {}),

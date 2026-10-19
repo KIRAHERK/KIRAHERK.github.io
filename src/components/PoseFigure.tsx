@@ -1,9 +1,9 @@
 import { useEffect, useRef } from "react";
 
 /*
-  Hero illustration of the fight-detection input: a COCO-17 pose skeleton
-  (what YOLO26-pose returns), per-joint velocity vectors, and the 30-frame
-  window the mLSTM classifies. It is drawn, not inferred.
+  Hero illustration of the fight detector's input: a COCO-17 pose skeleton
+  (what YOLO26-pose returns) with a bounding box and motion arrows on the
+  moving arm. It is drawn, not inferred.
 */
 
 type Pt = [number, number];
@@ -16,13 +16,13 @@ const EDGES: Array<[number, number]> = [
 
 // Figure space bounds used to fit the drawing into the canvas.
 const BOUNDS = { x0: -40, y0: -30, x1: 330, y1: 500 };
-const WINDOW = 30;
-const FPS = 15;
 
 const INK = "#1d2236";
 const ULTRA = "#2b3fcf";
-const PAPER = "#f6f7fc";
-const RULE = "#cfd4e6";
+const WHITE = "#ffffff";
+
+// Indexes are fixed COCO ids, always in range.
+const at = (pts: Pt[], i: number): Pt => pts[i] as Pt;
 
 function pose(t: number): Pt[] {
   const sway = Math.sin(t * 0.9) * 5;
@@ -58,9 +58,6 @@ function pose(t: number): Pt[] {
   ];
 }
 
-// Indexes are fixed COCO ids, always in range.
-const at = (pts: Pt[], i: number): Pt => pts[i] as Pt;
-
 function arrow(ctx: CanvasRenderingContext2D, from: Pt, to: Pt) {
   const [x0, y0] = from;
   const [x1, y1] = to;
@@ -69,9 +66,9 @@ function arrow(ctx: CanvasRenderingContext2D, from: Pt, to: Pt) {
   ctx.moveTo(x0, y0);
   ctx.lineTo(x1, y1);
   ctx.moveTo(x1, y1);
-  ctx.lineTo(x1 - 7 * Math.cos(a - 0.45), y1 - 7 * Math.sin(a - 0.45));
+  ctx.lineTo(x1 - 8 * Math.cos(a - 0.45), y1 - 8 * Math.sin(a - 0.45));
   ctx.moveTo(x1, y1);
-  ctx.lineTo(x1 - 7 * Math.cos(a + 0.45), y1 - 7 * Math.sin(a + 0.45));
+  ctx.lineTo(x1 - 8 * Math.cos(a + 0.45), y1 - 8 * Math.sin(a + 0.45));
   ctx.stroke();
 }
 
@@ -107,41 +104,31 @@ export function PoseFigure({ className = "" }: { className?: string }) {
     };
 
     const draw = (t: number) => {
-      const frame = Math.floor(t * FPS);
-      const pts = pose(t);
       ctx.clearRect(0, 0, w, h);
-
-      // Fit figure space into the canvas, leaving room for the window strip.
-      const stripH = 46;
-      const pad = 20;
+      const pad = 24;
       const bw = BOUNDS.x1 - BOUNDS.x0;
       const bh = BOUNDS.y1 - BOUNDS.y0;
-      const k = Math.min((w - pad * 2) / bw, (h - stripH - pad * 2) / bh);
+      const k = Math.min((w - pad * 2) / bw, (h - pad * 2) / bh);
       const ox = (w - bw * k) / 2 - BOUNDS.x0 * k;
-      const oy = pad - BOUNDS.y0 * k;
-      const P = pts.map(([x, y]) => [ox + x * k, oy + y * k] as Pt);
+      const oy = (h - bh * k) / 2 - BOUNDS.y0 * k;
+      const P = pose(t).map(([x, y]) => [ox + x * k, oy + y * k] as Pt);
 
-      // Bounding box from keypoints
+      // Bounding box around the person
       const xs = P.map((p) => p[0]);
       const ys = P.map((p) => p[1]);
       const bx0 = Math.min(...xs) - 14 * k;
-      const by0 = Math.min(...ys) - 22 * k;
+      const by0 = Math.min(...ys) - 18 * k;
       const bx1 = Math.max(...xs) + 14 * k;
       const by1 = Math.max(...ys) + 12 * k;
-      ctx.lineWidth = 1.5;
       ctx.strokeStyle = ULTRA;
+      ctx.lineWidth = 2;
+      ctx.setLineDash([6, 5]);
       ctx.strokeRect(bx0, by0, bx1 - bx0, by1 - by0);
-      ctx.font = "500 11px 'JetBrains Mono', ui-monospace, monospace";
-      const tag = "person 0.97";
-      const tw = ctx.measureText(tag).width + 12;
-      ctx.fillStyle = ULTRA;
-      ctx.fillRect(bx0 - 0.75, by0 - 19, tw, 19);
-      ctx.fillStyle = PAPER;
-      ctx.fillText(tag, bx0 + 5.25, by0 - 5.5);
+      ctx.setLineDash([]);
 
       // Skeleton
       ctx.strokeStyle = INK;
-      ctx.lineWidth = Math.max(1.6, 2.4 * k);
+      ctx.lineWidth = Math.max(2, 3 * k);
       ctx.lineCap = "round";
       ctx.beginPath();
       for (const [a, b] of EDGES) {
@@ -152,16 +139,16 @@ export function PoseFigure({ className = "" }: { className?: string }) {
       }
       ctx.stroke();
 
-      // Velocity vectors on the joints that move most
+      // Motion arrows on the waving arm
       if (prev) {
         ctx.strokeStyle = ULTRA;
-        ctx.lineWidth = 1.4;
-        for (const i of [8, 10, 9]) {
+        ctx.lineWidth = 2;
+        for (const i of [8, 10]) {
           const p = at(P, i);
           const q = at(prev, i);
           const dx = p[0] - q[0];
           const dy = p[1] - q[1];
-          if (Math.hypot(dx, dy) * FPS > 4) arrow(ctx, p, [p[0] + dx * 9, p[1] + dy * 9]);
+          if (Math.hypot(dx, dy) > 0.6) arrow(ctx, p, [p[0] + dx * 9, p[1] + dy * 9]);
         }
       }
 
@@ -170,54 +157,13 @@ export function PoseFigure({ className = "" }: { className?: string }) {
         const moving = i === 8 || i === 10;
         const p = at(P, i);
         ctx.beginPath();
-        ctx.arc(p[0], p[1], moving ? 4.5 : 3.4, 0, Math.PI * 2);
-        ctx.fillStyle = moving ? ULTRA : PAPER;
+        ctx.arc(p[0], p[1], moving ? 5 : 4, 0, Math.PI * 2);
+        ctx.fillStyle = moving ? ULTRA : WHITE;
         ctx.fill();
-        ctx.lineWidth = 1.5;
+        ctx.lineWidth = 2;
         ctx.strokeStyle = moving ? ULTRA : INK;
         ctx.stroke();
       }
-
-      // Callout for the waving wrist
-      const wr = at(P, 10);
-      const dxw = prev ? (wr[0] - at(prev, 10)[0]) / k : 0;
-      const dyw = prev ? (wr[1] - at(prev, 10)[1]) / k : 0;
-      // Callout sits in the empty top-right corner, with a leader line to the wrist.
-      ctx.font = "500 10.5px 'JetBrains Mono', ui-monospace, monospace";
-      const l1 = "kp10 r_wrist";
-      const l2 = `v=(${dxw >= 0 ? "+" : ""}${dxw.toFixed(1)}, ${dyw >= 0 ? "+" : ""}${dyw.toFixed(1)})`;
-      const lw = Math.max(ctx.measureText(l1).width, ctx.measureText(l2).width);
-      const lx = w - pad - lw;
-      const ly = pad + 8;
-      ctx.strokeStyle = ULTRA;
-      ctx.globalAlpha = 0.45;
-      ctx.lineWidth = 1;
-      ctx.setLineDash([3, 3]);
-      ctx.beginPath();
-      ctx.moveTo(lx - 6, ly + 3);
-      ctx.lineTo(wr[0] + 7, wr[1] - 2);
-      ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.globalAlpha = 1;
-      ctx.fillStyle = INK;
-      ctx.fillText(l1, lx, ly);
-      ctx.fillStyle = ULTRA;
-      ctx.fillText(l2, lx, ly + 13);
-
-      // 30-frame window strip
-      const idx = frame % WINDOW;
-      const sx = pad;
-      const sy = h - stripH + 14;
-      const cw = (w - pad * 2 - 112) / WINDOW;
-      ctx.fillStyle = INK;
-      ctx.font = "500 10.5px 'JetBrains Mono', ui-monospace, monospace";
-      ctx.fillText(`window ${String(idx + 1).padStart(2, "0")}/${WINDOW}`, sx, sy + 12);
-      for (let i = 0; i < WINDOW; i++) {
-        ctx.fillStyle = i < idx ? ULTRA : i === idx ? INK : RULE;
-        ctx.globalAlpha = i < idx ? 0.35 + (0.65 * i) / WINDOW : 1;
-        ctx.fillRect(sx + 108 + i * cw, sy, Math.max(1, cw - 2), 16);
-      }
-      ctx.globalAlpha = 1;
 
       prev = P;
     };
@@ -228,9 +174,9 @@ export function PoseFigure({ className = "" }: { className?: string }) {
     };
 
     resize();
-    // A still frame, drawn synchronously, with a frame just before it so velocity
-    // arrows show. Used for reduced motion, and so the figure is never blank while
-    // animation frames are paused (background tabs, link-preview screenshots).
+    // A still frame, drawn synchronously, with a frame just before it so the
+    // arrows show. Used for reduced motion, and so the figure is never blank
+    // while animation frames are paused (background tabs, link previews).
     const still = () => {
       prev = null;
       draw(0.583);
@@ -261,7 +207,7 @@ export function PoseFigure({ className = "" }: { className?: string }) {
       <canvas
         ref={canvasRef}
         role="img"
-        aria-label="Animated stick figure made of 17 pose keypoints, waving, with a bounding box, velocity arrows on the moving arm, and a 30-frame window counter."
+        aria-label="Animated stick figure made of 17 body keypoints, waving, inside a detection box, with arrows showing how the arm moves."
         className="absolute inset-0"
       />
     </div>
