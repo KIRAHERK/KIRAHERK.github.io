@@ -228,7 +228,9 @@ export function PoseFigure({ className = "" }: { className?: string }) {
     };
 
     resize();
-    // Reduced motion: one still frame, with a frame just before it so velocity arrows show.
+    // A still frame, drawn synchronously, with a frame just before it so velocity
+    // arrows show. Used for reduced motion, and so the figure is never blank while
+    // animation frames are paused (background tabs, link-preview screenshots).
     const still = () => {
       prev = null;
       draw(0.583);
@@ -236,8 +238,7 @@ export function PoseFigure({ className = "" }: { className?: string }) {
     };
     const ro = new ResizeObserver(() => {
       resize();
-      prev = null;
-      if (reduce) still();
+      still();
     });
     ro.observe(wrap);
     const io = new IntersectionObserver(([e]) => {
@@ -245,11 +246,8 @@ export function PoseFigure({ className = "" }: { className?: string }) {
     });
     io.observe(wrap);
 
-    if (reduce) {
-      still();
-    } else {
-      raf = requestAnimationFrame(loop);
-    }
+    still();
+    if (!reduce) raf = requestAnimationFrame(loop);
 
     return () => {
       cancelAnimationFrame(raf);
