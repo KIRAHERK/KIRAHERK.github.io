@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { useState, type CSSProperties, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import {
   ArrowDown,
   ArrowUpRight,
@@ -10,16 +10,11 @@ import {
   Languages,
   Linkedin,
   Mail,
-  Radar,
-  Receipt,
-  Wifi,
 } from "lucide-react";
 import { PoseFigure } from "@/components/PoseFigure";
 import {
   CountUp,
-  Rotator,
   ScrollProgress,
-  spotlight,
   timeAgo,
   useActiveSection,
   useLatestRelease,
@@ -27,11 +22,13 @@ import {
 } from "@/components/motion";
 import {
   OrderJourney,
+  Pins,
   Pipeline,
   PhoneShowcase,
   ResultBars,
   RetrievalFlow,
   SnakeDraft,
+  Star,
   TodoPhone,
   VoiceNote,
 } from "@/components/WorkVisuals";
@@ -44,17 +41,7 @@ import {
   type ProjectId,
 } from "@/content";
 
-const ACCENT: Record<ProjectId, string> = {
-  forge: "var(--lime)",
-  fight: "var(--rose)",
-  qgen: "var(--sky)",
-  shop: "var(--gold)",
-  todo: "var(--teal)",
-  classes: "var(--signal)",
-};
-
-// Bento layout: how wide each card is on large screens, and whether its
-// picture sits beside the text ("side") or inside it ("inline").
+// How wide each panel is on large screens (a six-column grid).
 const LAYOUT: Record<ProjectId, string> = {
   forge: "lg:col-span-6",
   fight: "lg:col-span-3",
@@ -66,8 +53,6 @@ const LAYOUT: Record<ProjectId, string> = {
 
 const SECTIONS = ["work", "about", "skills", "contact"] as const;
 
-const css = (vars: Record<string, string | number>) => vars as CSSProperties;
-
 export function Portfolio({ lang }: { lang: Lang }) {
   const t = content[lang];
   const rtl = lang === "ar";
@@ -78,63 +63,49 @@ export function Portfolio({ lang }: { lang: Lang }) {
     <div
       lang={lang}
       dir={rtl ? "rtl" : "ltr"}
-      className="relative isolate min-h-screen text-text"
+      className="min-h-screen text-nacre"
     >
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:fixed focus:start-3 focus:top-3 focus:z-50 focus:rounded-lg focus:bg-signal focus:px-4 focus:py-2 focus:text-signal-ink"
+        className="sr-only focus:not-sr-only focus:fixed focus:start-3 focus:top-3 focus:z-50 focus:bg-brass focus:px-4 focus:py-2 focus:text-walnut"
       >
         {t.skip}
       </a>
 
-      {/* Background: dot grid and two slow glows */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
-      >
-        <div className="backdrop-grid absolute inset-0" />
-        <div className="glow glow-a -top-48 start-[-12%] h-[560px] w-[560px] bg-[radial-gradient(closest-side,rgb(34_197_94/0.15),transparent)]" />
-        <div className="glow glow-b end-[-18%] top-[28%] h-[640px] w-[640px] bg-[radial-gradient(closest-side,rgb(96_165_250/0.09),transparent)]" />
-      </div>
-
-      <header className="sticky top-0 z-40 border-b border-line/80 bg-bg/75 backdrop-blur-md">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-8">
+      <header className="sticky top-0 z-40 bg-walnut [background-image:var(--grain-h)]">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2.5 sm:px-8">
           <a
             href="#top"
-            className="flex min-h-10 items-center gap-2.5"
+            className="flex min-h-11 items-center gap-2.5"
             lang="en"
             dir="ltr"
           >
-            <span className="grid size-8 place-items-center rounded-lg border border-signal/40 bg-signal/10 font-mono text-[13px] font-semibold text-signal">
-              HA
-            </span>
-            <span className="text-[16px] font-semibold tracking-tight">
-              Hussein Al Herk
+            <Star className="size-6" />
+            <span className="font-display text-[19px] text-nacre">
+              <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                Hussein Al Herk
+              </span>
             </span>
           </a>
           <nav
             aria-label={rtl ? "الأقسام" : "Sections"}
-            className="flex items-center gap-1"
+            className="flex items-center"
           >
             {SECTIONS.map((id) => (
               <a
                 key={id}
                 href={`#${id}`}
                 aria-current={active === id ? "true" : undefined}
-                className={`relative hidden rounded-md px-3 py-2 text-[15px] transition-colors duration-200 md:inline-block ${
-                  active === id ? "text-text" : "text-soft hover:text-text"
-                }`}
+                className={`min-h-11 items-center px-2 text-[15px] underline-offset-[7px] transition-colors duration-200 sm:px-3 ${
+                  id === "skills" ? "hidden sm:inline-flex" : "inline-flex"
+                } ${active === id ? "text-nacre underline decoration-brass" : "text-nacre-faint hover:text-nacre"}`}
               >
                 {t.nav[id]}
-                <span
-                  aria-hidden="true"
-                  className={`absolute inset-x-3 -bottom-0.5 h-0.5 rounded-full bg-signal transition-opacity duration-300 ${active === id ? "opacity-100" : "opacity-0"}`}
-                />
               </a>
             ))}
             <Link
               to={t.nav.switchTo}
-              className="ms-2 inline-flex min-h-10 items-center gap-2 rounded-full border border-line-strong bg-surface px-4 text-[15px] font-medium transition-colors duration-200 hover:border-signal hover:text-signal"
+              className="ms-1 inline-flex min-h-11 items-center gap-1.5 px-2 text-[15px] text-brass-bright hover:text-nacre"
               lang={rtl ? "en" : "ar"}
             >
               <Languages className="size-4" aria-hidden="true" />
@@ -142,173 +113,101 @@ export function Portfolio({ lang }: { lang: Lang }) {
             </Link>
           </nav>
         </div>
+        <span aria-hidden="true" className="band" />
         <ScrollProgress rtl={rtl} />
       </header>
 
       <main id="main">
         <Hero t={t} rtl={rtl} />
 
-        {/* Headline numbers */}
-        <section
-          aria-label={rtl ? "أرقام" : "Highlights"}
-          className="mx-auto max-w-6xl px-4 sm:px-8"
-        >
-          <ul className="grid grid-cols-2 overflow-hidden rounded-2xl border border-line bg-surface/60 backdrop-blur-sm md:grid-cols-4">
-            {t.stats.map(([v, l], i) => (
+        <Section id="work" title={t.work.title} intro={t.work.intro}>
+          <div className="grid gap-7 lg:grid-cols-6">
+            {t.work.projects.map((p) => (
+              <ProjectPanel key={p.id} p={p} t={t} lang={lang} />
+            ))}
+          </div>
+
+          <h3 className="mt-16 text-[24px] text-nacre">{t.work.moreTitle}</h3>
+          <ul className="mt-4 border-t border-brass/40">
+            {t.work.more.map((m) => (
               <li
-                key={l}
+                key={m.title}
                 data-reveal
-                style={css({ "--d": i })}
-                className={`border-line p-5 sm:p-6 ${i % 2 === 0 ? "border-e" : ""} ${i < 2 ? "border-b md:border-b-0" : ""} ${i === 1 ? "md:border-e" : ""}`}
+                className="grid gap-x-6 gap-y-1 border-b border-brass/40 py-4 sm:grid-cols-[4rem_minmax(0,16rem)_1fr] sm:items-baseline"
               >
-                <div
-                  className="font-mono text-[clamp(1.9rem,4vw,2.6rem)] font-semibold leading-none text-text rtl:text-right"
-                  dir="ltr"
-                >
-                  <CountUp value={v} />
-                </div>
-                <p className="mt-3 text-[14.5px] leading-snug text-soft">{l}</p>
+                <span className="text-[14px] text-nacre-faint tnum">
+                  {m.year}
+                </span>
+                <span className="text-[17px] text-nacre">{m.title}</span>
+                <span className="text-[15.5px] leading-relaxed text-nacre-soft">
+                  {m.text}
+                </span>
               </li>
             ))}
           </ul>
-        </section>
-
-        <Section
-          id="work"
-          eyebrow={t.work.eyebrow}
-          title={t.work.title}
-          intro={t.work.intro}
-        >
-          <div className="grid gap-5 lg:grid-cols-6">
-            {t.work.projects.map((p, i) => (
-              <ProjectCard key={p.id} p={p} t={t} lang={lang} index={i} />
-            ))}
-          </div>
-
-          <h3 className="mt-14 font-mono text-[13px] uppercase tracking-[0.14em] text-faint">
-            {t.work.moreTitle}
-          </h3>
-          <div className="mt-4 grid gap-4 md:grid-cols-3">
-            {t.work.more.map((m, i) => {
-              const Icon = { wifi: Wifi, radar: Radar, receipt: Receipt }[
-                m.icon
-              ];
-              return (
-                <article
-                  key={m.title}
-                  data-reveal
-                  style={css({ "--d": i })}
-                  onPointerMove={spotlight}
-                  className="spot rounded-2xl border border-line bg-surface/70 p-5 transition-colors duration-300"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="grid size-9 place-items-center rounded-lg border border-line bg-surface-2 text-signal">
-                      <Icon className="size-[18px]" aria-hidden="true" />
-                    </span>
-                    <span className="font-mono text-[13px] text-faint">
-                      {m.year}
-                    </span>
-                  </div>
-                  <h4 className="mt-4 text-[18px] font-semibold leading-snug">
-                    {m.title}
-                  </h4>
-                  <p className="mt-2 text-[15.5px] leading-[1.65] text-soft">
-                    {m.text}
-                  </p>
-                </article>
-              );
-            })}
-          </div>
         </Section>
 
-        <Section id="about" eyebrow={t.about.eyebrow} title={t.about.title}>
-          <div className="grid gap-12 lg:grid-cols-[1.05fr_1fr]">
+        <Section id="about" title={t.about.title}>
+          <div className="grid gap-12 lg:grid-cols-[1.25fr_1fr] lg:items-start">
             <div data-reveal>
-              <p className="text-[18px] leading-[1.8] text-soft">
+              <p className="max-w-[60ch] text-[18px] leading-[1.75] text-nacre-soft">
                 {t.about.bio}
               </p>
-              <dl className="mt-8 grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
+              <dl className="mt-8 border-t border-brass/40">
                 {t.about.facts.map(([k, v]) => (
                   <div
                     key={k}
-                    className="rounded-xl border border-line bg-surface/70 p-4"
+                    className="grid gap-1 border-b border-brass/40 py-3.5 sm:grid-cols-[11rem_1fr] sm:gap-6"
                   >
-                    <dt className="font-mono text-[12.5px] uppercase tracking-wider text-signal">
-                      {k}
-                    </dt>
-                    <dd className="mt-1.5 text-[15.5px] leading-snug">{v}</dd>
+                    <dt className="text-[15px] text-brass-bright">{k}</dt>
+                    <dd className="text-[16px] text-nacre">{v}</dd>
                   </div>
                 ))}
               </dl>
             </div>
-            <div>
-              <h3 className="font-mono text-[13px] uppercase tracking-[0.14em] text-faint">
-                {t.about.timelineTitle}
-              </h3>
-              <ol className="relative mt-5 border-s border-line ps-6">
-                {t.about.timeline.map(([when, title, text], i) => {
-                  const now = when === t.about.nowLabel;
-                  return (
-                    <li
-                      key={`${when}-${title}`}
-                      data-reveal
-                      className="relative pb-7 last:pb-0"
-                    >
-                      <span
-                        aria-hidden="true"
-                        className={`absolute -start-[31px] top-1.5 size-3 rounded-full border-2 border-bg ${now ? "pulse-dot bg-amber text-amber" : "tl-dot bg-line-strong"}`}
-                      />
-                      <p
-                        className={`font-mono text-[13px] ${now ? "text-amber" : "text-faint"}`}
-                      >
-                        {when}
-                      </p>
-                      <p className="mt-0.5 text-[17px] font-semibold">
-                        {title}
-                      </p>
-                      <p className="mt-1 text-[15.5px] leading-relaxed text-soft">
-                        {text}
-                      </p>
-                    </li>
-                  );
-                })}
-              </ol>
-            </div>
+            <aside data-reveal className="inlay p-7 sm:p-8">
+              <Pins />
+              <h3 className="text-[24px] text-nacre">{t.about.nowTitle}</h3>
+              <ul className="mt-5 space-y-5">
+                {t.about.now.map(([what, detail]) => (
+                  <li key={what} className="flex gap-3">
+                    <span
+                      className="mark mt-[9px] bg-lemonwood"
+                      aria-hidden="true"
+                    />
+                    <p className="text-[16.5px] leading-relaxed text-nacre-soft">
+                      <span className="text-lemonwood">{what}</span> · {detail}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </aside>
           </div>
         </Section>
 
-        <Section
-          id="skills"
-          eyebrow={t.skills.eyebrow}
-          title={t.skills.title}
-          intro={t.skills.intro}
-        >
-          <Marquee items={t.skills.groups.flatMap(([, items]) => items)} />
-          <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-6">
-            {t.skills.groups.map(([label, items], i, all) => (
-              <div
-                key={label}
-                data-reveal
-                style={css({ "--d": i % 3 })}
-                onPointerMove={spotlight}
-                className={`spot rounded-2xl border border-line bg-surface/70 p-5 transition-colors duration-300 ${
-                  i < 3 ? "lg:col-span-2" : "lg:col-span-3"
-                } ${i === all.length - 1 && all.length % 2 === 1 ? "md:col-span-2 lg:col-span-3" : ""}`}
-              >
-                <h3 className="text-[17px] font-semibold">{label}</h3>
-                <ul className="mt-3 flex flex-wrap gap-2">
-                  {items.map((it) => (
-                    <li
-                      key={it}
-                      className="rounded-md border border-line bg-surface-2/70 px-2.5 py-1 font-mono text-[13px] text-soft"
-                      dir="ltr"
-                    >
-                      {it}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+        <Section id="skills" title={t.skills.title} intro={t.skills.intro}>
+          <div data-reveal className="inlay p-7 sm:p-9">
+            <Pins />
+            <div className="grid gap-x-8 gap-y-8 sm:grid-cols-2 lg:grid-cols-5">
+              {t.skills.groups.map(([label, items]) => (
+                <div key={label}>
+                  <h3 className="text-[18px] leading-snug text-brass-bright">
+                    {label}
+                  </h3>
+                  <ul className="mt-3 space-y-1.5">
+                    {items.map((it) => (
+                      <li
+                        key={it}
+                        className="text-[15.5px] text-nacre-soft"
+                        dir="auto"
+                      >
+                        {it}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
           </div>
         </Section>
 
@@ -322,78 +221,66 @@ function Hero({ t, rtl }: { t: Content; rtl: boolean }) {
   return (
     <section
       id="top"
-      className="mx-auto grid max-w-6xl items-center gap-12 px-4 pb-14 pt-10 sm:px-8 md:grid-cols-[1.1fr_1fr] md:pb-20 md:pt-20"
+      className="mx-auto grid max-w-6xl gap-x-12 gap-y-6 px-4 pb-4 pt-7 [grid-template-areas:'name'_'fig'_'cta'_'intro'] sm:px-8 md:grid-cols-[1.05fr_1fr] md:items-center md:pb-8 md:pt-16 md:[grid-template-areas:'name_fig'_'intro_fig'_'cta_fig']"
     >
-      <div className="min-w-0">
-        <p className="rise inline-flex items-center gap-2.5 rounded-full border border-signal/30 bg-signal/[0.07] px-3.5 py-1.5 text-[14px] text-signal">
-          <span
-            aria-hidden="true"
-            className="pulse-dot size-2 shrink-0 rounded-full bg-signal text-signal"
-          />
-          {t.hero.status}
-        </p>
+      <div className="[grid-area:name] md:self-end">
         <h1
-          className="rise d1 mt-6 text-[clamp(2.75rem,7vw,5rem)] font-bold leading-[1.02] tracking-[-0.03em] rtl:text-right"
+          className="rise text-[clamp(2.9rem,8.4vw,5.6rem)] leading-[0.98] tracking-[-0.015em] text-nacre rtl:text-right"
           lang="en"
           dir="ltr"
         >
-          {t.hero.name}
+          Hussein Al Herk
         </h1>
-        <p className="rise d2 mt-5 text-[19px] text-soft">{t.hero.lead}</p>
-        <p className="rise d2 mt-1 text-[clamp(1.45rem,3vw,2rem)] font-semibold leading-snug">
-          <span>{t.hero.buildPrefix} </span>
-          <Rotator
-            items={t.hero.builds}
-            spoken={t.hero.buildsSpoken}
-            className="text-signal"
-          />
+        <p className="rise d1 mt-4 text-[17px] text-nacre-faint">
+          {t.hero.lead}
         </p>
-        <p className="rise d3 mt-5 max-w-[36rem] text-[17.5px] leading-[1.75] text-soft">
-          {t.hero.intro}
+        <p className="rise d1 mt-2 max-w-[22ch] font-display text-[clamp(1.4rem,2.6vw,1.95rem)] leading-snug text-brass-bright md:max-w-[26ch]">
+          {t.hero.line}
         </p>
-        <div className="rise d3 mt-8 flex flex-wrap items-center gap-3">
-          <a
-            href="#work"
-            className="group inline-flex min-h-12 items-center gap-2 rounded-xl bg-signal px-6 text-[16px] font-semibold text-signal-ink transition-[filter,transform] duration-200 hover:brightness-110 active:scale-[0.98]"
-          >
-            {t.hero.seeWork}
-            <ArrowDown
-              className="size-4 transition-transform duration-300 group-hover:translate-y-0.5"
-              aria-hidden="true"
-            />
-          </a>
-          <a
-            href={`mailto:${LINKS.email}`}
-            className="inline-flex min-h-12 items-center gap-2 rounded-xl border border-line-strong bg-surface/80 px-6 text-[16px] font-semibold transition-colors duration-200 hover:border-signal hover:text-signal"
-          >
-            <Mail className="size-4" aria-hidden="true" />
-            {t.hero.emailMe}
-          </a>
-        </div>
-        <div className="rise d4 mt-6 flex gap-2">
+      </div>
+
+      <p className="rise d2 max-w-[34rem] text-[17px] leading-[1.7] text-nacre-soft [grid-area:intro]">
+        {t.hero.intro}
+      </p>
+
+      <div className="rise d2 flex flex-wrap items-center gap-x-6 gap-y-3 [grid-area:cta] md:self-start">
+        <a href={`mailto:${LINKS.email}`} className="plaque text-[16px]">
+          <Mail className="size-[18px]" aria-hidden="true" />
+          {t.hero.emailMe}
+        </a>
+        <a
+          href="#work"
+          className="inline-flex min-h-11 items-center gap-1.5 text-[16px] text-nacre underline decoration-brass"
+        >
+          {t.hero.seeWork}
+          <ArrowDown className="size-4" aria-hidden="true" />
+        </a>
+        <span className="flex gap-4">
           <IconLink
             href={LINKS.github}
             label="GitHub"
-            icon={<Github className="size-[18px]" aria-hidden="true" />}
+            icon={<Github className="size-[17px]" aria-hidden="true" />}
           />
           <IconLink
             href={LINKS.linkedin}
             label="LinkedIn"
-            icon={<Linkedin className="size-[18px]" aria-hidden="true" />}
+            icon={<Linkedin className="size-[17px]" aria-hidden="true" />}
           />
-        </div>
+        </span>
       </div>
-      <figure className="rise d4 min-w-0">
-        <div className="overflow-hidden rounded-2xl border border-line bg-surface/80 shadow-[0_40px_120px_-50px_rgb(34_197_94/0.35)]">
+
+      <figure className="rise d3 min-w-0 [grid-area:fig]">
+        <div className="inlay">
+          <Pins />
           <PoseFigure
-            className="h-[360px] sm:h-[430px]"
+            className="h-[280px] sm:h-[380px] md:h-[470px]"
             label={t.pose.label}
             motionLabel={t.pose.motion}
             alertLabel={t.pose.alert}
             rtl={rtl}
           />
         </div>
-        <figcaption className="mt-3 text-[14.5px] leading-relaxed text-faint">
+        <figcaption className="mt-3 text-[14px] leading-relaxed text-nacre-faint">
           {t.pose.caption}
         </figcaption>
       </figure>
@@ -403,13 +290,11 @@ function Hero({ t, rtl }: { t: Content; rtl: boolean }) {
 
 function Section({
   id,
-  eyebrow,
   title,
   intro,
   children,
 }: {
   id: string;
-  eyebrow: string;
   title: string;
   intro?: string;
   children: ReactNode;
@@ -418,20 +303,20 @@ function Section({
     <section
       id={id}
       aria-labelledby={`${id}-title`}
-      className="mx-auto max-w-6xl px-4 py-16 sm:px-8 sm:py-24"
+      className="mx-auto max-w-6xl px-4 pb-8 pt-16 sm:px-8 sm:pt-24"
     >
-      <div data-reveal className="mb-10 max-w-[46rem]">
-        <p className="font-mono text-[13px] uppercase tracking-[0.14em] text-signal">
-          {eyebrow}
-        </p>
+      <div data-reveal className="mb-9 max-w-[46rem]">
         <h2
           id={`${id}-title`}
-          className="mt-3 text-[clamp(2rem,4.5vw,3rem)] font-bold leading-[1.08] tracking-tight"
+          className="text-[clamp(2.1rem,4.6vw,3.2rem)] leading-[1.05] text-nacre"
         >
           {title}
         </h2>
+        <span aria-hidden="true" className="rule band mt-4 w-40" />
         {intro && (
-          <p className="mt-4 text-[17.5px] leading-[1.7] text-soft">{intro}</p>
+          <p className="mt-4 text-[17px] leading-[1.7] text-nacre-soft">
+            {intro}
+          </p>
         )}
       </div>
       {children}
@@ -455,7 +340,7 @@ function visualsFor(
     case "fight":
       return {
         inline: (
-          <div className="space-y-4">
+          <div className="space-y-6">
             <Pipeline title={v.fightStepsTitle} steps={v.fightSteps} />
             <ResultBars title={v.fightTitle} rows={v.fightRows} />
           </div>
@@ -499,148 +384,128 @@ function visualsFor(
   }
 }
 
-function ProjectCard({
-  p,
-  t,
-  lang,
-  index,
-}: {
-  p: Project;
-  t: Content;
-  lang: Lang;
-  index: number;
-}) {
+function ProjectPanel({ p, t, lang }: { p: Project; t: Content; lang: Lang }) {
   const release = useLatestRelease(p.releaseRepo);
   const version = release?.tag ?? p.version;
   const building = p.status === "building";
-  const accent = ACCENT[p.id];
   const { side, inline } = visualsFor(p, t, lang);
+  const statusWord = building
+    ? t.work.building
+    : p.releaseRepo
+      ? t.work.released
+      : null;
+  const amberNote = building || p.flagTone === "amber";
 
   return (
     <article
       data-reveal
-      style={css({ "--card-accent": accent, "--d": index % 2 })}
-      onPointerMove={spotlight}
-      className={`spot flex flex-col rounded-2xl border border-line bg-surface/80 p-5 transition-colors duration-300 sm:p-7 ${LAYOUT[p.id]}`}
+      className={`inlay flex flex-col p-6 sm:p-9 ${LAYOUT[p.id]}`}
     >
+      <Pins />
       <div
         className={
           side
-            ? "grid flex-1 gap-8 md:grid-cols-[minmax(0,1fr)_auto] md:items-center md:gap-10"
+            ? "grid flex-1 gap-9 md:grid-cols-[minmax(0,1fr)_auto] md:items-center md:gap-12"
             : "flex flex-1 flex-col"
         }
       >
         <div className="flex min-w-0 flex-1 flex-col">
-          <div className="flex flex-wrap items-center gap-2">
-            {(building || p.releaseRepo) && (
+          <h3 className="text-[clamp(1.75rem,3.2vw,2.4rem)] leading-[1.1] text-nacre">
+            {p.title}
+          </h3>
+          <p className="mt-3 max-w-[58ch] text-[17px] leading-[1.6] text-nacre-soft">
+            {p.summary}
+          </p>
+
+          <p className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[14px] text-nacre-faint">
+            {statusWord && (
               <span
-                className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 font-mono text-[12px] ${
-                  building
-                    ? "border-amber/35 bg-amber/10 text-amber"
-                    : "border-signal/30 bg-signal/10 text-signal"
-                }`}
+                className={`inline-flex items-center gap-2 ${building ? "text-lemonwood" : "text-brass-bright"}`}
               >
                 <span
+                  className={`mark ${building ? "bg-lemonwood" : "bg-brass"}`}
                   aria-hidden="true"
-                  className={`pulse-dot size-1.5 rounded-full ${building ? "bg-amber text-amber" : "bg-signal text-signal"}`}
                 />
-                {building ? t.work.building : t.work.released}
+                {statusWord}
               </span>
             )}
             {version && (
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-line px-2.5 py-1 font-mono text-[12px] text-soft">
+              <span className="tnum">
                 <span dir="ltr">{version}</span>
-                {release && (
-                  <>
-                    <span aria-hidden="true">·</span>
-                    <span>{timeAgo(release.at, lang)}</span>
-                  </>
-                )}
+                {release && <> · {timeAgo(release.at, lang)}</>}
               </span>
             )}
             {p.flag && (
               <span
-                className={`inline-flex items-center rounded-full border px-2.5 py-1 font-mono text-[12px] ${
-                  p.flagTone === "amber"
-                    ? "border-amber/35 bg-amber/10 text-amber"
-                    : "border-line-strong bg-surface-2 text-soft"
-                }`}
+                className={`inline-flex items-center gap-2 ${p.flagTone === "amber" ? "text-lemonwood" : "text-rosewood"}`}
               >
+                <span
+                  className={`mark ${p.flagTone === "amber" ? "bg-lemonwood" : "bg-rosewood"}`}
+                  aria-hidden="true"
+                />
                 {p.flag}
               </span>
             )}
-            <span className="font-mono text-[12.5px] text-faint">{p.meta}</span>
-          </div>
+            <span>{p.meta}</span>
+          </p>
 
-          <h3 className="mt-4 text-[clamp(1.6rem,3vw,2.15rem)] font-bold leading-tight tracking-tight">
-            {p.title}
-          </h3>
-          <p className="mt-1 text-[17px] font-medium" style={{ color: accent }}>
-            {p.tagline}
-          </p>
-          <p className="mt-4 text-[16.5px] leading-[1.75] text-soft">
-            {p.text}
-          </p>
           {p.note && (
             <p
-              className={`mt-4 self-start rounded-lg border px-3 py-2 text-[14.5px] leading-snug ${
-                building || p.flagTone === "amber"
-                  ? "border-amber/30 bg-amber/[0.07] text-amber"
-                  : "border-line-strong bg-surface-2/70 text-soft"
-              }`}
+              className={`mt-3 max-w-[62ch] text-[15px] leading-relaxed ${amberNote ? "text-lemonwood" : "text-nacre-soft"}`}
             >
               {p.note}
             </p>
           )}
 
-          {inline && <div className="mt-6">{inline}</div>}
+          {inline && <div className="mt-7">{inline}</div>}
 
           {p.stats.length > 0 && (
-            <ul className="mt-6 grid gap-2 sm:grid-cols-3 sm:gap-3">
+            <dl className="mt-7 grid border-y border-brass/40 sm:grid-cols-3 [&>div+div]:border-t [&>div+div]:border-brass/40 sm:[&>div+div]:border-s sm:[&>div+div]:border-t-0">
               {p.stats.map(([v, l]) => (
-                <li
-                  key={l}
-                  className="flex items-center gap-4 rounded-xl border border-line bg-bg/50 px-4 py-3 sm:block sm:p-4"
-                >
-                  <div
-                    className="min-w-[4.5rem] shrink-0 font-mono text-[clamp(1.35rem,2.6vw,1.75rem)] font-semibold leading-none rtl:text-right sm:min-w-0"
-                    style={{ color: accent }}
-                    dir="ltr"
-                  >
-                    <CountUp value={v} />
-                  </div>
-                  <p className="text-[14px] leading-snug text-soft sm:mt-2 sm:text-[13.5px]">
-                    {l}
-                  </p>
-                </li>
+                <div key={l} className="py-3 sm:px-4 sm:first:ps-0">
+                  <dt className="sr-only">{l}</dt>
+                  <dd className="flex items-baseline gap-4 sm:block">
+                    <span
+                      className="block min-w-[4.5rem] shrink-0 font-display text-[clamp(1.5rem,3vw,2.1rem)] leading-none text-brass-bright"
+                      dir="ltr"
+                    >
+                      <CountUp value={v} />
+                    </span>
+                    <span
+                      className="block text-[14px] leading-snug text-nacre-soft sm:mt-1.5 sm:text-[13.5px]"
+                      aria-hidden="true"
+                    >
+                      {l}
+                    </span>
+                  </dd>
+                </div>
               ))}
-            </ul>
+            </dl>
           )}
 
-          <div className="mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-4 pt-6">
-            <ul
-              className="flex flex-wrap gap-1.5"
-              aria-label={lang === "ar" ? "التقنيات" : "Technologies"}
-            >
-              {p.tags.map((tag) => (
-                <li
-                  key={tag}
-                  className="rounded-md border border-line bg-surface-2/60 px-2 py-0.5 font-mono text-[12.5px] text-soft"
-                  dir="ltr"
-                >
-                  {tag}
-                </li>
-              ))}
-            </ul>
-            <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
+          <details className="group mt-6">
+            <summary className="inline-flex min-h-11 cursor-pointer items-center gap-2 text-[15px] text-brass-bright">
+              <Star className="size-3 transition-transform duration-300 group-open:rotate-45" />
+              {t.work.details}
+            </summary>
+            <div className="mt-2 max-w-[62ch] space-y-3 pb-1">
+              <p className="text-[15.5px] leading-[1.7] text-nacre-soft">
+                {p.text}
+              </p>
+              <p className="text-[14px] leading-relaxed text-nacre-faint">
+                {t.work.builtWith}:{" "}
+                <span dir="ltr" className="text-nacre-soft">
+                  {p.tags.join(" · ")}
+                </span>
+              </p>
+            </div>
+          </details>
+
+          {p.links.length > 0 && (
+            <div className="mt-auto flex flex-wrap items-center gap-x-6 gap-y-3 pt-5">
               {p.links.map((l) =>
                 l.kind === "download" && p.id === "forge" ? (
-                  <a
-                    key={l.href}
-                    href={l.href}
-                    className="inline-flex min-h-11 items-center gap-2 rounded-xl px-4 text-[15px] font-semibold text-[#0a0f02] transition-[filter,transform] duration-200 hover:brightness-110 active:scale-[0.98]"
-                    style={{ background: accent }}
-                  >
+                  <a key={l.href} href={l.href} className="plaque text-[15px]">
                     <Download className="size-4" aria-hidden="true" />
                     {l.label}
                   </a>
@@ -651,39 +516,11 @@ function ProjectCard({
                 ),
               )}
             </div>
-          </div>
+          )}
         </div>
         {side && <div className="flex justify-center">{side}</div>}
       </div>
     </article>
-  );
-}
-
-function Marquee({ items }: { items: string[] }) {
-  const half = Math.ceil(items.length / 2);
-  const rows = [items.slice(0, half), items.slice(half)];
-  return (
-    <div
-      aria-hidden="true"
-      className="marquee space-y-3 overflow-hidden [mask-image:linear-gradient(to_right,transparent,#000_10%,#000_90%,transparent)]"
-    >
-      {rows.map((row, r) => (
-        <div
-          key={r}
-          className={`marquee-track gap-3 ${r === 1 ? "reverse" : ""}`}
-        >
-          {[...row, ...row].map((it, i) => (
-            <span
-              key={`${it}-${i}`}
-              className="shrink-0 whitespace-nowrap rounded-full border border-line bg-surface/70 px-4 py-2 font-mono text-[14px] text-soft"
-              dir="ltr"
-            >
-              {it}
-            </span>
-          ))}
-        </div>
-      ))}
-    </div>
   );
 }
 
@@ -704,42 +541,34 @@ function Contact({ t }: { t: Content }) {
     <section
       id="contact"
       aria-labelledby="contact-title"
-      className="mx-auto max-w-6xl px-4 pb-10 pt-8 sm:px-8 sm:pt-12"
+      className="mx-auto max-w-6xl px-4 pb-10 pt-16 sm:px-8 sm:pt-24"
     >
-      <div
-        data-reveal
-        className="relative overflow-hidden rounded-3xl border border-line bg-surface p-7 sm:p-12"
-      >
-        <div
-          aria-hidden="true"
-          className="glow -end-32 -top-32 h-[420px] w-[420px] bg-[radial-gradient(closest-side,rgb(34_197_94/0.22),transparent)]"
-        />
-        <p className="relative font-mono text-[13px] uppercase tracking-[0.14em] text-signal">
-          {c.eyebrow}
-        </p>
+      <div data-reveal className="inlay px-7 py-10 sm:px-12 sm:py-14">
+        <Pins />
         <h2
           id="contact-title"
-          className="relative mt-3 text-[clamp(2.2rem,6vw,4rem)] font-bold leading-[1.02] tracking-tight"
+          className="text-[clamp(2.4rem,6vw,4.2rem)] leading-[1.02] text-nacre"
         >
           {c.title}
         </h2>
-        <p className="relative mt-4 max-w-[38rem] text-[18px] leading-[1.7] text-soft">
+        <span aria-hidden="true" className="rule band mt-5 w-40" />
+        <p className="mt-5 max-w-[40ch] text-[18px] leading-[1.7] text-nacre-soft">
           {c.text}
         </p>
-        <div className="relative mt-8 flex flex-wrap items-center gap-3">
+        <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
           <a
             href={`mailto:${LINKS.email}`}
             dir="ltr"
-            className="inline-flex min-h-12 items-center gap-2 rounded-xl bg-signal px-5 text-[16px] font-semibold text-signal-ink transition-[filter] duration-200 hover:brightness-110"
+            className="plaque text-[16px]"
           >
-            <Mail className="size-4" aria-hidden="true" />
+            <Mail className="size-[18px]" aria-hidden="true" />
             {LINKS.email}
           </a>
           <button
             type="button"
             onClick={copy}
             aria-live="polite"
-            className="inline-flex min-h-12 cursor-pointer items-center gap-2 rounded-xl border border-line-strong px-4 text-[16px] transition-colors duration-200 hover:border-signal hover:text-signal"
+            className="inline-flex min-h-11 cursor-pointer items-center gap-2 text-[16px] text-brass-bright hover:text-nacre"
           >
             {copied ? (
               <Check className="size-4" aria-hidden="true" />
@@ -749,26 +578,26 @@ function Contact({ t }: { t: Content }) {
             {copied ? c.copied : c.copy}
           </button>
         </div>
-        <div className="relative mt-6 flex gap-2">
+        <div className="mt-6 flex gap-6">
           <IconLink
             href={LINKS.github}
             label="GitHub"
-            icon={<Github className="size-[18px]" aria-hidden="true" />}
+            icon={<Github className="size-[17px]" aria-hidden="true" />}
           />
           <IconLink
             href={LINKS.linkedin}
             label="LinkedIn"
-            icon={<Linkedin className="size-[18px]" aria-hidden="true" />}
+            icon={<Linkedin className="size-[17px]" aria-hidden="true" />}
           />
         </div>
       </div>
-      <footer className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-line pt-6 text-[14px] text-faint">
+      <footer className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-brass/40 pt-6 text-[14px] text-nacre-faint">
         <p>{c.footer}</p>
         <a
           href={LINKS.source}
           target="_blank"
           rel="noreferrer"
-          className="underline decoration-line-strong underline-offset-4 hover:text-text"
+          className="inline-flex min-h-11 items-center underline decoration-brass/60 hover:text-nacre"
         >
           {c.built}
         </a>
@@ -791,7 +620,7 @@ function IconLink({
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-line bg-surface/70 px-4 text-[15px] font-medium text-soft transition-colors duration-200 hover:border-line-strong hover:text-text"
+      className="inline-flex min-h-11 items-center gap-2 text-[15px] text-nacre-soft transition-colors duration-200 hover:text-nacre"
     >
       {icon}
       {label}
@@ -805,11 +634,11 @@ function ExtLink({ href, children }: { href: string; children: ReactNode }) {
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="group inline-flex min-h-11 items-center gap-1 text-[15px] font-semibold underline decoration-line-strong decoration-2 underline-offset-[5px] transition-colors duration-200 hover:decoration-[var(--card-accent,var(--signal))]"
+      className="group inline-flex min-h-11 items-center gap-1 text-[15px] text-nacre underline decoration-brass underline-offset-[6px] transition-colors duration-200 hover:text-brass-bright"
     >
       {children}
       <ArrowUpRight
-        className="size-4 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 rtl:-scale-x-100 rtl:group-hover:-translate-x-0.5"
+        className="size-4 text-brass transition-transform duration-200 group-hover:-translate-y-0.5 rtl:-scale-x-100"
         aria-hidden="true"
       />
     </a>

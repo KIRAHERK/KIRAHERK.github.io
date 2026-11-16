@@ -1,12 +1,13 @@
 import { useEffect, useRef } from "react";
 
 /*
-  Hero illustration of the fight detector's input, drawn like a camera feed:
-  a COCO-17 pose skeleton (what YOLO26-pose returns) inside a detection box.
-  It is drawn, not inferred. Idle, one arm waves. Move a mouse over it and the
-  nearest arm reaches for the cursor; tap or click and it jabs at that point.
-  The meter shows how fast the wrists move, the same kind of velocity feature
-  the real model reads.
+  Hero illustration of the fight detector's input, set as Damascene inlay:
+  the COCO-17 pose skeleton (what YOLO26-pose returns) as brass wire and
+  mother-of-pearl joints inside a star-pinned frame. It is drawn, not inferred.
+  Idle, one arm waves. Move a mouse over it and the nearest arm reaches for
+  the cursor; tap or click and it jabs at that point. The faster the wrists
+  move, the more the nacre catches an iridescent sheen, and the strip along
+  the bottom fills: the same kind of velocity feature the real model reads.
 */
 
 type Pt = [number, number];
@@ -41,15 +42,13 @@ const FORE = 70;
 const THRESHOLD = 0.6;
 
 const COL = {
-  bone: "#dce3ee",
-  joint: "#22c55e",
-  hot: "#ccff4d",
-  box: "#22c55e",
-  alert: "#fbbf24",
-  text: "#a6b2c5",
-  grid: "rgba(148,163,184,0.06)",
-  track: "rgba(148,163,184,0.16)",
-  ink: "#04130a",
+  brass: "#d2a957",
+  brassBright: "#e7c477",
+  groove: "rgba(12,7,3,0.62)",
+  nacre: "#fffaf2",
+  nacreDeep: "#cdbfae",
+  faint: "#b8a998",
+  lemon: "#ead58c",
 };
 
 const at = (pts: Pt[], i: number): Pt => pts[i] as Pt;
@@ -134,25 +133,22 @@ function arrow(ctx: CanvasRenderingContext2D, from: Pt, to: Pt) {
   ctx.stroke();
 }
 
-function corners(
-  ctx: CanvasRenderingContext2D,
-  x0: number,
-  y0: number,
-  x1: number,
-  y1: number,
-  len: number,
-) {
+/** An eight-pointed star (khatam) centred on x, y. */
+function star(ctx: CanvasRenderingContext2D, x: number, y: number, r: number) {
   ctx.beginPath();
-  for (const [x, y, sx, sy] of [
-    [x0, y0, 1, 1],
-    [x1, y0, -1, 1],
-    [x0, y1, 1, -1],
-    [x1, y1, -1, -1],
-  ] as const) {
-    ctx.moveTo(x + sx * len, y);
-    ctx.lineTo(x, y);
-    ctx.lineTo(x, y + sy * len);
+  for (let i = 0; i < 16; i++) {
+    const a = (Math.PI / 8) * i - Math.PI / 2;
+    const rr = i % 2 === 0 ? r : r * 0.62;
+    const px = x + rr * Math.cos(a);
+    const py = y + rr * Math.sin(a);
+    if (i === 0) ctx.moveTo(px, py);
+    else ctx.lineTo(px, py);
   }
+  ctx.closePath();
+  ctx.fillStyle = COL.nacre;
+  ctx.fill();
+  ctx.strokeStyle = COL.brass;
+  ctx.lineWidth = 1;
   ctx.stroke();
 }
 
@@ -205,7 +201,6 @@ export function PoseFigure({
     let prevWrists: [Pt, Pt] | null = null;
     let meter = 0;
     let lastT = 0;
-    let frame = 0;
     const start = performance.now();
 
     const resize = () => {
@@ -228,25 +223,10 @@ export function PoseFigure({
     const draw = (t: number, now: number) => {
       const dt = Math.min(0.05, Math.max(0.001, t - lastT));
       lastT = t;
-      frame++;
       ctx.clearRect(0, 0, w, h);
 
-      // Camera-feed grid
-      ctx.strokeStyle = COL.grid;
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      for (let x = 0.5; x < w; x += 24) {
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, h);
-      }
-      for (let y = 0.5; y < h; y += 24) {
-        ctx.moveTo(0, y);
-        ctx.lineTo(w, y);
-      }
-      ctx.stroke();
-
-      const padTop = 40;
-      const padBottom = 58;
+      const padTop = 22;
+      const padBottom = 50;
       const bw = BOUNDS.x1 - BOUNDS.x0;
       const bh = BOUNDS.y1 - BOUNDS.y0;
       k = Math.min((w - 32) / bw, (h - padTop - padBottom) / bh);
@@ -304,62 +284,54 @@ export function PoseFigure({
       const prevPose = prevWrists;
       prevWrists = wrists;
       const hot = meter >= THRESHOLD;
-      const accent = hot ? COL.alert : COL.box;
 
       const P = pose.map(([x, y]) => [ox + x * k, oy + y * k] as Pt);
 
-      // Detection box with corner brackets and a label tab
+      // A thin brass frame around the figure, pinned with stars at its corners.
       const xs = P.map((p) => p[0]);
       const ys = P.map((p) => p[1]);
-      const bx0 = Math.min(...xs) - 16 * k;
-      const by0 = Math.min(...ys) - 20 * k;
-      const bx1 = Math.max(...xs) + 16 * k;
+      const bx0 = Math.min(...xs) - 18 * k;
+      const by0 = Math.min(...ys) - 18 * k;
+      const bx1 = Math.max(...xs) + 18 * k;
       const by1 = Math.max(...ys) + 12 * k;
-      ctx.strokeStyle = accent;
-      ctx.globalAlpha = 0.35;
-      ctx.lineWidth = 1;
-      ctx.setLineDash([4, 6]);
-      ctx.strokeRect(bx0, by0, bx1 - bx0, by1 - by0);
-      ctx.setLineDash([]);
-      ctx.globalAlpha = 1;
-      ctx.lineWidth = 2.5;
-      corners(ctx, bx0, by0, bx1, by1, Math.min(22, (bx1 - bx0) / 4));
+      for (const [x, y] of [
+        [bx0, by0],
+        [bx1, by0],
+        [bx0, by1],
+        [bx1, by1],
+      ] as const)
+        star(ctx, x, y, 6);
 
-      ctx.font = "600 12px 'JetBrains Mono', ui-monospace, monospace";
-      const tag = `person ${(0.96 + Math.sin(t * 2.3) * 0.02).toFixed(2)}`;
-      const tw = ctx.measureText(tag).width + 14;
-      ctx.fillStyle = accent;
-      ctx.fillRect(bx0 - 1.25, by0 - 22, tw, 20);
-      ctx.fillStyle = COL.ink;
-      ctx.textBaseline = "middle";
-      ctx.fillText(tag, bx0 + 6, by0 - 12);
-
-      // Skeleton
-      ctx.strokeStyle = COL.bone;
-      ctx.lineWidth = Math.max(2, 3 * k);
+      // Skeleton: brass wire set into a dark groove cut in the wood.
       ctx.lineCap = "round";
-      ctx.beginPath();
-      for (const [a, b] of EDGES) {
-        const pa = at(P, a);
-        const pb = at(P, b);
-        ctx.moveTo(pa[0], pa[1]);
-        ctx.lineTo(pb[0], pb[1]);
+      ctx.lineJoin = "round";
+      for (const [stroke, width] of [
+        [COL.groove, Math.max(6, 8 * k)],
+        [hot ? COL.brassBright : COL.brass, Math.max(2.6, 3.4 * k)],
+      ] as const) {
+        ctx.strokeStyle = stroke;
+        ctx.lineWidth = width;
+        ctx.beginPath();
+        for (const [a, b] of EDGES) {
+          const pa = at(P, a);
+          const pb = at(P, b);
+          ctx.moveTo(pa[0], pa[1]);
+          ctx.lineTo(pb[0], pb[1]);
+        }
+        ctx.stroke();
       }
-      ctx.stroke();
 
-      // Motion arrows on fast wrists
+      // Brass arrows showing where fast wrists are heading.
       if (prevPose) {
-        ctx.strokeStyle = COL.hot;
-        ctx.lineWidth = 2;
+        ctx.strokeStyle = COL.brassBright;
+        ctx.lineWidth = 1.5;
         for (const [i, q] of [
           [9, prevPose[0]],
           [10, prevPose[1]],
         ] as const) {
           const p = at(P, i);
-          const qx = ox + q[0] * k;
-          const qy = oy + q[1] * k;
-          const dx = p[0] - qx;
-          const dy = p[1] - qy;
+          const dx = p[0] - (ox + q[0] * k);
+          const dy = p[1] - (oy + q[1] * k);
           const len = Math.hypot(dx, dy);
           if (len > 0.8) {
             const s = Math.min(9, 60 / len);
@@ -368,70 +340,65 @@ export function PoseFigure({
         }
       }
 
-      // Keypoints
+      // Joints: mother-of-pearl that catches an iridescent sheen as speed rises.
+      const sheen = 0.18 + meter * 0.82;
       for (let i = 0; i < P.length; i++) {
-        const moving = i === 9 || i === 10 || i === 7 || i === 8;
+        const moving = i >= 7 && i <= 10;
         const p = at(P, i);
+        const r = (moving ? 7.5 : 6) * Math.max(0.8, Math.min(1.3, k * 1.5));
+        const hue = (t * 90 + i * 37) % 360;
+        const g = ctx.createRadialGradient(
+          p[0] - r * 0.35,
+          p[1] - r * 0.4,
+          r * 0.1,
+          p[0],
+          p[1],
+          r,
+        );
+        g.addColorStop(0, COL.nacre);
+        g.addColorStop(
+          0.55,
+          `hsl(${hue} ${Math.round(25 + 55 * sheen)}% ${Math.round(90 - 10 * sheen)}%)`,
+        );
+        g.addColorStop(1, COL.nacreDeep);
         ctx.beginPath();
-        ctx.arc(p[0], p[1], moving ? 5.5 : 4.2, 0, Math.PI * 2);
-        ctx.fillStyle = moving ? COL.hot : COL.joint;
-        ctx.shadowColor = moving ? COL.hot : COL.joint;
-        ctx.shadowBlur = moving ? 12 : 6;
+        ctx.arc(p[0], p[1], r, 0, Math.PI * 2);
+        ctx.fillStyle = g;
         ctx.fill();
-        ctx.shadowBlur = 0;
+        ctx.strokeStyle = COL.brass;
+        ctx.lineWidth = 1;
+        ctx.stroke();
       }
 
-      // HUD: top corners
-      ctx.font = "500 11px 'JetBrains Mono', ui-monospace, monospace";
-      ctx.fillStyle = COL.text;
+      // Speed strip along the bottom: a groove that fills with nacre in reading direction.
+      const mx0 = 16;
+      const mx1 = w - 16;
+      const my = h - 20;
+      ctx.font = "400 13px 'Readex Pro', system-ui, sans-serif";
       ctx.textBaseline = "middle";
-      const leftText = `CAM 02 · ${String(frame % 10000).padStart(4, "0")}`;
-      const live = "LIVE";
-      ctx.textAlign = "left";
-      ctx.fillText(rtl ? live : leftText, rtl ? 30 : 14, 20);
-      ctx.textAlign = "right";
-      ctx.fillText(rtl ? leftText : live, rtl ? w - 14 : w - 14, 20);
-      const blink = Math.floor(t * 1.6) % 2 === 0;
-      if (blink) {
-        ctx.beginPath();
-        const liveW = ctx.measureText(live).width;
-        ctx.arc(rtl ? 20 : w - 22 - liveW, 20, 4, 0, Math.PI * 2);
-        ctx.fillStyle = COL.joint;
-        ctx.fill();
-      }
-      ctx.textAlign = "left";
-
-      // HUD: motion meter along the bottom (fills in reading direction)
-      const mx0 = 14;
-      const mx1 = w - 14;
-      const my = h - 22;
-      ctx.fillStyle = COL.text;
-      ctx.font =
-        "500 11px 'JetBrains Mono', 'IBM Plex Sans Arabic', ui-monospace, monospace";
-      const val = meter.toFixed(2);
-      const status = hot ? alertLabel : "";
-      ctx.textAlign = rtl ? "right" : "left";
       ctx.direction = rtl ? "rtl" : "ltr";
+      ctx.fillStyle = COL.faint;
+      ctx.textAlign = rtl ? "right" : "left";
       ctx.fillText(motionLabel, rtl ? mx1 : mx0, my - 16);
-      ctx.textAlign = rtl ? "left" : "right";
-      ctx.fillStyle = hot ? COL.alert : COL.text;
-      ctx.fillText(
-        status ? `${status} · ${val}` : val,
-        rtl ? mx0 : mx1,
-        my - 16,
-      );
+      if (hot) {
+        ctx.fillStyle = COL.lemon;
+        ctx.textAlign = rtl ? "left" : "right";
+        ctx.fillText(alertLabel, rtl ? mx0 : mx1, my - 16);
+      }
       ctx.direction = "ltr";
       ctx.textAlign = "left";
-
-      ctx.fillStyle = COL.track;
+      ctx.fillStyle = COL.groove;
       ctx.fillRect(mx0, my - 3, mx1 - mx0, 6);
       const fw = (mx1 - mx0) * meter;
-      ctx.fillStyle = accent;
+      const fill = ctx.createLinearGradient(mx0, 0, mx1, 0);
+      fill.addColorStop(0, COL.nacreDeep);
+      fill.addColorStop(1, COL.nacre);
+      ctx.fillStyle = fill;
       ctx.fillRect(rtl ? mx1 - fw : mx0, my - 3, fw, 6);
       const tx = rtl
         ? mx1 - (mx1 - mx0) * THRESHOLD
         : mx0 + (mx1 - mx0) * THRESHOLD;
-      ctx.fillStyle = COL.alert;
+      ctx.fillStyle = COL.lemon;
       ctx.fillRect(tx - 1, my - 8, 2, 16);
     };
 
@@ -489,7 +456,7 @@ export function PoseFigure({
       wrap.addEventListener("pointerleave", onLeave);
       raf = requestAnimationFrame(loop);
     }
-    // Redraw once fonts arrive so the HUD text uses JetBrains Mono.
+    // Redraw once fonts arrive so the label uses Readex Pro.
     document.fonts?.ready.then(() => reduce && still()).catch(() => {});
 
     return () => {

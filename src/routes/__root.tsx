@@ -89,7 +89,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
             "AI engineering portfolio of Hussein Al Herk: computer vision, offline RAG and Android apps.",
         },
         { name: "author", content: "Hussein Al Herk" },
-        { name: "theme-color", content: "#060913" },
+        { name: "theme-color", content: "#22150d" },
         { property: "og:type", content: "website" },
         { name: "twitter:card", content: "summary_large_image" },
       ],
@@ -106,7 +106,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         },
         {
           rel: "stylesheet",
-          href: "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap",
+          href: "https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400..700&family=Readex+Pro:wght@300..700&display=swap",
         },
         { rel: "icon", href: "/favicon.png", type: "image/png" },
       ],

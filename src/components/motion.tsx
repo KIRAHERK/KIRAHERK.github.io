@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type PointerEvent } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export const prefersReducedMotion = () =>
   typeof window !== "undefined" &&
@@ -95,39 +95,6 @@ export function CountUp({ value }: { value: string }) {
   );
 }
 
-/** Cycles through phrases. Screen readers get one full sentence instead. */
-export function Rotator({
-  items,
-  spoken,
-  className = "",
-}: {
-  items: string[];
-  spoken: string;
-  className?: string;
-}) {
-  const [i, setI] = useState(0);
-  useEffect(() => {
-    if (prefersReducedMotion() || items.length < 2) return;
-    const id = window.setInterval(() => {
-      if (!document.hidden) setI((v) => (v + 1) % items.length);
-    }, 2800);
-    return () => window.clearInterval(id);
-  }, [items.length]);
-
-  return (
-    <>
-      <span className="sr-only">{spoken}</span>
-      <span className={`rotor ${className}`} aria-hidden="true">
-        {items.map((it, k) => (
-          <span key={it} data-on={k === i ? "true" : "false"}>
-            {it}
-          </span>
-        ))}
-      </span>
-    </>
-  );
-}
-
 export type Release = { tag: string; at: string };
 
 /**
@@ -189,15 +156,6 @@ export function timeAgo(iso: string, lang: string) {
     if (Math.abs(diff) >= s) return rtf.format(Math.round(diff / s), unit);
   }
   return rtf.format(0, "minute");
-}
-
-/** Pointer position for the .spot hover light. */
-export function spotlight(e: PointerEvent<HTMLElement>) {
-  if (e.pointerType !== "mouse") return;
-  const el = e.currentTarget;
-  const r = el.getBoundingClientRect();
-  el.style.setProperty("--mx", `${e.clientX - r.left}px`);
-  el.style.setProperty("--my", `${e.clientY - r.top}px`);
 }
 
 /** Thin bar under the header that fills as you scroll down the page. */
