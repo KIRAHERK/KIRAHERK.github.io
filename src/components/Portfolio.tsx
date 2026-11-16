@@ -26,6 +26,7 @@ import {
   useReveal,
 } from "@/components/motion";
 import {
+  OrderJourney,
   Pipeline,
   PhoneShowcase,
   ResultBars,
@@ -47,6 +48,7 @@ const ACCENT: Record<ProjectId, string> = {
   forge: "var(--lime)",
   fight: "var(--rose)",
   qgen: "var(--sky)",
+  shop: "var(--gold)",
   todo: "var(--teal)",
   classes: "var(--signal)",
 };
@@ -57,6 +59,7 @@ const LAYOUT: Record<ProjectId, string> = {
   forge: "lg:col-span-6",
   fight: "lg:col-span-3",
   qgen: "lg:col-span-3",
+  shop: "lg:col-span-6",
   todo: "lg:col-span-4",
   classes: "lg:col-span-2",
 };
@@ -244,7 +247,7 @@ export function Portfolio({ lang }: { lang: Lang }) {
               </h3>
               <ol className="relative mt-5 border-s border-line ps-6">
                 {t.about.timeline.map(([when, title, text], i) => {
-                  const now = i === t.about.timeline.length - 1;
+                  const now = when === t.about.nowLabel;
                   return (
                     <li
                       key={`${when}-${title}`}
@@ -439,6 +442,7 @@ function Section({
 function visualsFor(
   p: Project,
   t: Content,
+  lang: Lang,
 ): { side?: ReactNode; inline?: ReactNode } {
   const v = t.visuals;
   switch (p.id) {
@@ -460,6 +464,16 @@ function visualsFor(
     case "qgen":
       return {
         inline: <RetrievalFlow title={v.qgenTitle} steps={v.qgenSteps} />,
+      };
+    case "shop":
+      return {
+        inline: (
+          <OrderJourney
+            title={v.journey.title}
+            steps={v.journey.steps}
+            lang={lang}
+          />
+        ),
       };
     case "todo":
       return {
@@ -500,7 +514,7 @@ function ProjectCard({
   const version = release?.tag ?? p.version;
   const building = p.status === "building";
   const accent = ACCENT[p.id];
-  const { side, inline } = visualsFor(p, t);
+  const { side, inline } = visualsFor(p, t, lang);
 
   return (
     <article
@@ -544,6 +558,17 @@ function ProjectCard({
                 )}
               </span>
             )}
+            {p.flag && (
+              <span
+                className={`inline-flex items-center rounded-full border px-2.5 py-1 font-mono text-[12px] ${
+                  p.flagTone === "amber"
+                    ? "border-amber/35 bg-amber/10 text-amber"
+                    : "border-line-strong bg-surface-2 text-soft"
+                }`}
+              >
+                {p.flag}
+              </span>
+            )}
             <span className="font-mono text-[12.5px] text-faint">{p.meta}</span>
           </div>
 
@@ -556,8 +581,14 @@ function ProjectCard({
           <p className="mt-4 text-[16.5px] leading-[1.75] text-soft">
             {p.text}
           </p>
-          {building && p.note && (
-            <p className="mt-4 self-start rounded-lg border border-amber/30 bg-amber/[0.07] px-3 py-2 text-[14.5px] leading-snug text-amber">
+          {p.note && (
+            <p
+              className={`mt-4 self-start rounded-lg border px-3 py-2 text-[14.5px] leading-snug ${
+                building || p.flagTone === "amber"
+                  ? "border-amber/30 bg-amber/[0.07] text-amber"
+                  : "border-line-strong bg-surface-2/70 text-soft"
+              }`}
+            >
               {p.note}
             </p>
           )}

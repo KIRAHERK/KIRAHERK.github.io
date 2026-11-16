@@ -1,5 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { ChevronRight, Mic } from "lucide-react";
+import {
+  ChevronRight,
+  Globe,
+  LayoutDashboard,
+  Mic,
+  Navigation,
+  Radio,
+} from "lucide-react";
 import { prefersReducedMotion } from "@/components/motion";
 
 /* ------------------------------ Phone frame ------------------------------ */
@@ -414,6 +421,242 @@ export function Pipeline({ title, steps }: { title: string; steps: string[] }) {
           </li>
         ))}
       </ol>
+    </figure>
+  );
+}
+
+/* ------------------------- Shop and delivery system ------------------------ */
+
+type JourneyStep = { label: string; title: string; text: string; alt: string };
+
+const STEP_MS = 5200;
+const STEP_ICONS = [Globe, LayoutDashboard, Navigation, Radio];
+
+function Browser({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="w-full max-w-[820px] overflow-hidden rounded-lg border border-line-strong bg-[#141510] shadow-[0_30px_80px_-40px_rgb(0_0_0/0.9)]">
+      <div
+        aria-hidden="true"
+        className="flex h-7 items-center gap-1.5 border-b border-white/5 bg-[#1d1f19] px-3"
+      >
+        <span className="size-2.5 rounded-full bg-white/15" />
+        <span className="size-2.5 rounded-full bg-white/15" />
+        <span className="size-2.5 rounded-full bg-white/15" />
+      </div>
+      {children}
+    </div>
+  );
+}
+
+function JourneyStage({
+  k,
+  alt,
+  lang,
+}: {
+  k: number;
+  alt: string;
+  lang: "en" | "ar";
+}) {
+  const img = "block h-auto w-full";
+  if (k === 0)
+    return (
+      <Browser>
+        <img
+          src="/work/olive-shop.webp"
+          alt={alt}
+          width={1200}
+          height={578}
+          loading="lazy"
+          decoding="async"
+          className={img}
+        />
+      </Browser>
+    );
+  if (k === 1)
+    return (
+      <img
+        src={`/work/olive-admin-${lang}.webp`}
+        alt={alt}
+        width={1200}
+        height={lang === "ar" ? 700 : 686}
+        loading="lazy"
+        decoding="async"
+        className="block h-auto w-full max-w-[820px] rounded-lg border border-line-strong shadow-[0_30px_80px_-40px_rgb(0_0_0/0.9)]"
+      />
+    );
+  if (k === 2)
+    return (
+      <div className="flex items-end justify-center gap-4 sm:gap-6">
+        {[
+          ["olive-driver-nav", alt],
+          ["olive-driver-area", ""],
+        ].map(([file, a]) => (
+          <Phone key={file} className="w-[136px] sm:w-[178px]">
+            <img
+              src={`/work/${file}.webp`}
+              alt={a}
+              width={390}
+              height={844}
+              loading="lazy"
+              decoding="async"
+              className="absolute inset-0 h-full w-full object-cover object-top"
+            />
+          </Phone>
+        ))}
+      </div>
+    );
+  return (
+    <div className="grid w-full max-w-[820px] items-center justify-items-center gap-5 sm:grid-cols-[auto_1fr]">
+      <Phone className="w-[120px] sm:w-[150px]">
+        <img
+          src="/work/olive-driver-nav.webp"
+          alt=""
+          width={390}
+          height={844}
+          loading="lazy"
+          decoding="async"
+          className="absolute inset-0 h-full w-full object-cover object-top"
+        />
+      </Phone>
+      <img
+        src={`/work/olive-alerts-${lang}.webp`}
+        alt={alt}
+        width={1000}
+        height={lang === "ar" ? 195 : 189}
+        loading="lazy"
+        decoding="async"
+        className="block h-auto w-full rounded-lg border border-line-strong"
+      />
+    </div>
+  );
+}
+
+/**
+ * One order travelling through the website, the admin dashboard and the
+ * driver app. Steps advance by themselves while the figure is on screen
+ * (not with reduced motion); clicking a step stops on it.
+ */
+export function OrderJourney({
+  title,
+  steps,
+  lang,
+}: {
+  title: string;
+  steps: JourneyStep[];
+  lang: "en" | "ar";
+}) {
+  const [i, setI] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [reduced, setReduced] = useState(true);
+  const ref = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    setReduced(prefersReducedMotion());
+    const io = new IntersectionObserver(
+      ([e]) => setVisible(!!e?.isIntersecting),
+      { threshold: 0.35 },
+    );
+    if (ref.current) io.observe(ref.current);
+    return () => io.disconnect();
+  }, []);
+
+  const auto = visible && !paused && !reduced;
+  useEffect(() => {
+    if (!auto) return;
+    const id = window.setTimeout(
+      () => setI((v) => (v + 1) % steps.length),
+      STEP_MS,
+    );
+    return () => window.clearTimeout(id);
+  }, [auto, i, steps.length]);
+
+  return (
+    <figure
+      ref={ref}
+      className="rounded-xl border border-line bg-bg/60 p-4 sm:p-6"
+      onPointerEnter={(e) => e.pointerType === "mouse" && setPaused(true)}
+      onPointerLeave={() => setPaused(false)}
+      onFocus={() => setPaused(true)}
+      onBlur={() => setPaused(false)}
+    >
+      <figcaption className="font-mono text-[12px] uppercase tracking-wider text-faint">
+        {title}
+      </figcaption>
+      <ol className="mt-4 grid grid-cols-4 gap-2">
+        {steps.map((s, k) => {
+          const Icon = STEP_ICONS[k] ?? Globe;
+          const state = k === i ? "on" : k < i ? "done" : "todo";
+          return (
+            <li key={s.label} className="relative">
+              {k < steps.length - 1 && (
+                <span
+                  aria-hidden="true"
+                  className="absolute top-[25px] block h-0.5 overflow-hidden rounded-full bg-line-strong"
+                  style={{
+                    insetInlineStart: "calc(50% + 26px)",
+                    insetInlineEnd: "calc(-50% + 18px)",
+                  }}
+                >
+                  <span
+                    key={`${i}-${auto}`}
+                    className={`block h-full bg-gold ${k < i ? "" : k === i && auto ? "journey-fill" : "scale-x-0"}`}
+                    style={{
+                      transformOrigin: lang === "ar" ? "right" : "left",
+                      ["--dur" as string]: `${STEP_MS}ms`,
+                    }}
+                  />
+                </span>
+              )}
+              <button
+                type="button"
+                aria-pressed={k === i}
+                onClick={() => {
+                  setI(k);
+                  setPaused(true);
+                }}
+                className="relative flex w-full cursor-pointer flex-col items-center gap-2 rounded-lg py-1 text-center"
+              >
+                <span
+                  className={`grid size-10 place-items-center rounded-full border transition-colors duration-300 ${
+                    state === "on"
+                      ? "border-gold bg-gold text-[#1a1405]"
+                      : state === "done"
+                        ? "border-gold/50 bg-gold/15 text-gold"
+                        : "border-line-strong bg-surface text-soft"
+                  }`}
+                >
+                  <Icon className="size-[18px]" aria-hidden="true" />
+                </span>
+                <span
+                  className={`text-[13px] leading-tight sm:text-[14px] ${state === "on" ? "font-semibold text-text" : "text-soft"}`}
+                >
+                  {s.label}
+                </span>
+              </button>
+            </li>
+          );
+        })}
+      </ol>
+
+      {/* Every step sits in the same grid cell, so switching never changes the height. */}
+      <div className="mt-5 grid">
+        {steps.map((s, k) => (
+          <div
+            key={s.label}
+            aria-hidden={k !== i ? true : undefined}
+            className={`flex flex-col transition-opacity duration-500 [grid-area:1/1] ${k === i ? "opacity-100" : "pointer-events-none opacity-0"}`}
+          >
+            <div className="flex flex-1 items-center justify-center">
+              <JourneyStage k={k} alt={s.alt} lang={lang} />
+            </div>
+            <p className="mx-auto mt-4 max-w-[46rem] text-center text-[15px] leading-relaxed text-soft">
+              <span className="font-semibold text-text">{s.title}.</span>{" "}
+              {s.text}
+            </p>
+          </div>
+        ))}
+      </div>
     </figure>
   );
 }

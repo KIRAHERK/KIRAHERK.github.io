@@ -31,6 +31,7 @@ GITHUB_PAGES=true npm run build  # static build, same as CI
 ## Common edits
 
 - **A project is finished:** in `src/content.ts`, change its `status` from `"building"` to `"live"` and delete its `note`. Do it in both the `en` and `ar` blocks.
+- **Badges and notes:** `flag` adds a badge next to a project's meta line ("Paper in progress", "Not adopted"), `flagTone` makes it amber or neutral, and `note` shows a boxed line under the description.
 - **New release:** nothing to do. Cards with a `releaseRepo` fetch the latest GitHub release when the page opens and show its version and date. `version` is only the fallback.
 - **New project:** add an entry to `work.projects` (both languages), give it an `id`, and add that id to `ACCENT` and `LAYOUT` in `Portfolio.tsx` and to `visualsFor` if it has a picture.
 

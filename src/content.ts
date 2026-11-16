@@ -9,7 +9,8 @@
 
 export type Lang = "en" | "ar";
 export type Status = "live" | "building";
-export type ProjectId = "forge" | "fight" | "qgen" | "todo" | "classes";
+export type ProjectId =
+  "forge" | "fight" | "qgen" | "shop" | "todo" | "classes";
 
 export const LINKS = {
   email: "hussenalherk@gmail.com",
@@ -46,6 +47,10 @@ export type Project = {
   links: ProjectLink[];
   releaseRepo?: string;
   version?: string;
+  /** Extra badge next to the meta line, e.g. "Paper in progress" or "Not adopted". */
+  flag?: string;
+  /** "amber" for work in progress, "neutral" for plain facts. Also colours the note. */
+  flagTone?: "amber" | "neutral";
   note?: string;
 };
 
@@ -112,6 +117,10 @@ export type Content = {
     classesCaption: string;
     classesNames: [string, string, string];
     classesAvg: string;
+    journey: {
+      title: string;
+      steps: Array<{ label: string; title: string; text: string; alt: string }>;
+    };
   };
   about: {
     eyebrow: string;
@@ -119,6 +128,8 @@ export type Content = {
     bio: string;
     facts: Array<[string, string]>;
     timelineTitle: string;
+    /** Timeline entries whose "when" equals this get the pulsing "now" dot. */
+    nowLabel: string;
     timeline: Array<[when: string, title: string, text: string]>;
   };
   skills: {
@@ -227,7 +238,7 @@ export const content: Record<Lang, Content> = {
       eyebrow: "01 · Work",
       title: "Selected work",
       intro:
-        "From real-time vision on school cameras to Android apps with regular releases. Version numbers come straight from GitHub.",
+        "From real-time vision on school cameras to a full shop-and-delivery system and Android apps with regular releases. Version numbers come straight from GitHub.",
       released: "Released",
       building: "In progress",
       latest: "Latest",
@@ -271,6 +282,9 @@ export const content: Record<Lang, Content> = {
           ],
           tags: ["PyTorch", "YOLO26-pose", "mLSTM", "FastAPI", "OpenCV"],
           links: [{ label: "Code", href: LINKS.fightRepo, kind: "code" }],
+          flag: "Paper in progress",
+          flagTone: "amber",
+          note: "I'm turning this into a research paper: mLSTM compared with LSTM, GRU and Transformer models on the same keypoints, with a leakage-aware test across datasets.",
         },
         {
           id: "qgen",
@@ -286,6 +300,30 @@ export const content: Record<Lang, Content> = {
           ],
           tags: ["RAG", "Ollama", "Qdrant", "BM25", "FastAPI"],
           links: [{ label: "Code", href: LINKS.qgenRepo, kind: "code" }],
+        },
+        {
+          id: "shop",
+          status: "live",
+          meta: "Personal project · 2026",
+          title: "Olive-oil shop and delivery system",
+          tagline:
+            "A 3D web shop, an admin dashboard and a driver app, working as one",
+          text: "A bilingual online shop where olive-oil bottles, modelled in Blender, turn in 3D in the browser. Orders reach the admin dashboard in real time: the shop accepts them, checks payment and offers them to a driver. The driver's Android app has its own map with turn-by-turn directions, plans routes with several stops, and shows nearby supermarkets to sell to from the truck. As the driver moves, the customer's arrival time and the dashboard update live.",
+          stats: [],
+          tags: [
+            "Next.js",
+            "React Three Fiber",
+            "Blender",
+            "SQLite",
+            "Capacitor",
+            "Leaflet",
+            "OSRM",
+            "Docker",
+          ],
+          links: [],
+          flag: "Not adopted",
+          flagTone: "neutral",
+          note: "I designed and built it on my own initiative for a Syrian olive-oil producer. It was never adopted, the brand is hidden for legal reasons, and the screens use demo data.",
         },
         {
           id: "todo",
@@ -385,17 +423,47 @@ export const content: Record<Lang, Content> = {
       classesCaption: "12 ranked students, dealt in a zigzag",
       classesNames: ["A", "B", "C"],
       classesAvg: "avg rank",
+      journey: {
+        title: "One order, through all three apps",
+        steps: [
+          {
+            label: "Order",
+            title: "The customer orders on the website",
+            text: "A bilingual shop with 3D bottles rendered in Blender. Checkout takes cash on delivery or mobile payment.",
+            alt: "The shop's home page: a 3D olive-oil bottle among floating olives and leaves, with the brand blurred.",
+          },
+          {
+            label: "Dispatch",
+            title: "The dashboard accepts and assigns it",
+            text: "New orders, payments to check and drivers' distances update live. The shop accepts the order and offers it to a nearby driver.",
+            alt: "Admin dashboard: orders to accept, payments to check, alerts and the week's sales.",
+          },
+          {
+            label: "Deliver",
+            title: "The driver app guides the delivery",
+            text: "A built-in map with turn-by-turn directions and routes with several stops, plus nearby shops to sell to from the truck.",
+            alt: "Driver app in Arabic: turn-by-turn directions on a map, and a list of nearby shops.",
+          },
+          {
+            label: "Track",
+            title: "Everyone follows it live",
+            text: "The customer's arrival time follows the road as the driver moves, and the dashboard flags drivers who stop or run late.",
+            alt: "Dashboard alerts: a driver stopped for 9 minutes, and deliveries completed in 24 to 38 minutes.",
+          },
+        ],
+      },
     },
     about: {
       eyebrow: "02 · About",
       title: "About",
-      bio: "I graduated in Information Technology, AI specialization, from Arab International University in 2026. For our senior project, a team of five built an AI-powered school management system (Laravel backend, Flutter app, React dashboard), and I built its three AI services. Outside coursework I build Android apps and run a home lab for network security.",
+      bio: "I graduated in Information Technology, AI specialization, from Arab International University in 2026. For our senior project, a team of five built an AI-powered school management system (Laravel backend, Flutter app, React dashboard), and I built its three AI services. Outside coursework I build Android apps and run a home lab for network security, and I'm now turning my fight detector into a research paper.",
       facts: [
         ["Languages", "Arabic (native), English (excellent)"],
         ["Learning now", "Certifications in AI/ML and cybersecurity"],
         ["Based in", "Damascus, Syria · open to remote"],
       ],
       timelineTitle: "Timeline",
+      nowLabel: "Now",
       timeline: [
         [
           "2021",
@@ -420,10 +488,20 @@ export const content: Record<Lang, Content> = {
         ["2026", "Graduated", "Bachelor of IT, AI specialization."],
         [
           "2026",
+          "Built a shop and delivery system",
+          "A 3D web shop, an admin dashboard and a driver app for an olive-oil producer, on my own initiative. Not adopted.",
+        ],
+        [
+          "2026",
           "Shipped Forge",
           "An Android app in Arabic and English that updates itself.",
         ],
         ["Now", "Building Smart To-Do", "A voice-first to-do app in Arabic."],
+        [
+          "Now",
+          "Writing a research paper",
+          "mLSTM for skeleton-based fight detection, with a leakage-aware evaluation.",
+        ],
       ],
     },
     skills: {
@@ -499,7 +577,7 @@ export const content: Record<Lang, Content> = {
       eyebrow: "01 · الأعمال",
       title: "أبرز الأعمال",
       intro:
-        "من الرؤية الحاسوبية اللحظية في كاميرات المدارس إلى تطبيقات أندرويد بإصدارات منتظمة. أرقام الإصدارات تُجلب مباشرة من GitHub.",
+        "من الرؤية الحاسوبية اللحظية في كاميرات المدارس إلى نظام كامل للبيع والتوصيل وتطبيقات أندرويد بإصدارات منتظمة. أرقام الإصدارات تُجلب مباشرة من GitHub.",
       released: "منشور",
       building: "قيد التطوير",
       latest: "آخر إصدار",
@@ -539,6 +617,9 @@ export const content: Record<Lang, Content> = {
           ],
           tags: ["PyTorch", "YOLO26-pose", "mLSTM", "FastAPI", "OpenCV"],
           links: [{ label: "الكود", href: LINKS.fightRepo, kind: "code" }],
+          flag: "ورقة بحثية قيد العمل",
+          flagTone: "amber",
+          note: "أعمل على تحويله إلى ورقة بحثية: مقارنة mLSTM بنماذج LSTM وGRU وTransformer على النقاط المفصلية نفسها، مع اختبار بين مجموعات البيانات يتجنّب تسرّب البيانات.",
         },
         {
           id: "qgen",
@@ -554,6 +635,30 @@ export const content: Record<Lang, Content> = {
           ],
           tags: ["RAG", "Ollama", "Qdrant", "BM25", "FastAPI"],
           links: [{ label: "الكود", href: LINKS.qgenRepo, kind: "code" }],
+        },
+        {
+          id: "shop",
+          status: "live",
+          meta: "مشروع شخصي · 2026",
+          title: "متجر ونظام توصيل لشركة زيت زيتون",
+          tagline:
+            "متجر إلكتروني ثلاثي الأبعاد ولوحة إدارة وتطبيق مندوب، تعمل كنظام واحد",
+          text: "متجر إلكتروني بلغتين تدور فيه عبوات زيت الزيتون بشكل ثلاثي الأبعاد في المتصفح، صمّمتها في Blender. تصل الطلبات إلى لوحة الإدارة مباشرة: يقبلها المتجر ويتحقق من الدفع ويعرضها على مندوب. لتطبيق المندوب على أندرويد خريطته الخاصة مع إرشادات منعطفاً بمنعطف، ويخطّط مسارات لعدة طلبات، ويعرض المحلات القريبة للبيع لها من السيارة. ومع تحرّك المندوب يتحدّث وقت وصول الطلب للزبون ولوحة الإدارة مباشرة.",
+          stats: [],
+          tags: [
+            "Next.js",
+            "React Three Fiber",
+            "Blender",
+            "SQLite",
+            "Capacitor",
+            "Leaflet",
+            "OSRM",
+            "Docker",
+          ],
+          links: [],
+          flag: "لم يُعتمد",
+          flagTone: "neutral",
+          note: "صمّمته وطوّرته بمبادرة شخصية لشركة سورية لإنتاج زيت الزيتون، ولم يُعتمد. أخفيت العلامة التجارية لأسباب قانونية، والشاشات ببيانات تجريبية.",
         },
         {
           id: "todo",
@@ -650,17 +755,47 @@ export const content: Record<Lang, Content> = {
       classesCaption: "12 طالباً مرتّبين، موزّعين بترتيب متعرّج",
       classesNames: ["أ", "ب", "ج"],
       classesAvg: "متوسط الترتيب",
+      journey: {
+        title: "طلب واحد عبر التطبيقات الثلاثة",
+        steps: [
+          {
+            label: "الطلب",
+            title: "الزبون يطلب من الموقع",
+            text: "متجر بلغتين مع عبوات ثلاثية الأبعاد مصمّمة في Blender. الدفع نقداً عند الاستلام أو عبر الدفع بالموبايل.",
+            alt: "الصفحة الرئيسية للمتجر: عبوة زيت زيتون ثلاثية الأبعاد بين حبات زيتون وأوراق متطايرة، مع إخفاء العلامة التجارية.",
+          },
+          {
+            label: "التوزيع",
+            title: "لوحة الإدارة تقبل الطلب وتوزّعه",
+            text: "الطلبات الجديدة والدفعات بانتظار التحقق وبُعد المندوبين تتحدّث مباشرة. يقبل المتجر الطلب ويعرضه على مندوب قريب.",
+            alt: "لوحة الإدارة: طلبات بانتظار القبول ودفعات بانتظار التحقق وتنبيهات ومبيعات الأسبوع.",
+          },
+          {
+            label: "التوصيل",
+            title: "تطبيق المندوب يقود التوصيل",
+            text: "خريطة مدمجة مع إرشادات منعطفاً بمنعطف ومسارات لعدة طلبات، والمحلات القريبة للبيع لها من السيارة.",
+            alt: "تطبيق المندوب: إرشادات منعطفاً بمنعطف على الخريطة، وقائمة بالمحلات القريبة.",
+          },
+          {
+            label: "المتابعة",
+            title: "الجميع يتابع مباشرة",
+            text: "يتبع وقت وصول الطلب للزبون الطريقَ مع تحرّك المندوب، وتنبّه لوحة الإدارة إلى المندوب المتوقف أو المتأخر.",
+            alt: "تنبيهات لوحة الإدارة: مندوب متوقف منذ 9 دقائق، وطلبات وصلت خلال 24 إلى 38 دقيقة.",
+          },
+        ],
+      },
     },
     about: {
       eyebrow: "02 · نبذة",
       title: "نبذة",
-      bio: "تخرّجت في تقانة المعلومات، اختصاص الذكاء الاصطناعي، من الجامعة العربية الدولية عام 2026. في مشروع التخرج بنى فريق من خمسة طلاب نظاماً ذكياً لإدارة المدارس (خادم Laravel وتطبيق Flutter ولوحة تحكم React)، وبنيت أنا خدمات الذكاء الاصطناعي الثلاث فيه. وخارج الدراسة أبني تطبيقات أندرويد، ولدي مختبر منزلي لأمن الشبكات.",
+      bio: "تخرّجت في تقانة المعلومات، اختصاص الذكاء الاصطناعي، من الجامعة العربية الدولية عام 2026. في مشروع التخرج بنى فريق من خمسة طلاب نظاماً ذكياً لإدارة المدارس (خادم Laravel وتطبيق Flutter ولوحة تحكم React)، وبنيت أنا خدمات الذكاء الاصطناعي الثلاث فيه. وخارج الدراسة أبني تطبيقات أندرويد، ولدي مختبر منزلي لأمن الشبكات، وأعمل الآن على تحويل كاشف الشجار إلى ورقة بحثية.",
       facts: [
         ["اللغات", "العربية (اللغة الأم) والإنجليزية (ممتازة)"],
         ["أتعلّم حالياً", "شهادات في الذكاء الاصطناعي وأمن المعلومات"],
         ["المكان", "دمشق، سوريا · متاح للعمل عن بُعد"],
       ],
       timelineTitle: "المسيرة",
+      nowLabel: "الآن",
       timeline: [
         [
           "2021",
@@ -685,6 +820,11 @@ export const content: Record<Lang, Content> = {
         ],
         [
           "2026",
+          "بنيت متجراً ونظام توصيل",
+          "متجر ثلاثي الأبعاد ولوحة إدارة وتطبيق مندوب لشركة زيت زيتون، بمبادرة شخصية. لم يُعتمد.",
+        ],
+        [
+          "2026",
           "إطلاق Forge",
           "تطبيق أندرويد بالعربية والإنجليزية يحدّث نفسه.",
         ],
@@ -692,6 +832,11 @@ export const content: Record<Lang, Content> = {
           "الآن",
           "أعمل على مهامي الذكية",
           "تطبيق مهام بالعربية يعتمد على الصوت.",
+        ],
+        [
+          "الآن",
+          "أكتب ورقة بحثية",
+          "نموذج mLSTM لكشف الشجار من الهياكل العظمية، مع تقييم يتجنّب تسرّب البيانات.",
         ],
       ],
     },

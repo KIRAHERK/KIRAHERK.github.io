@@ -31,6 +31,7 @@
   --color-teal: var(--teal);
   --color-sky: var(--sky);
   --color-rose: var(--rose);
+  --color-gold: var(--gold);
 
   /* shadcn token names kept so the 404/error screens and ui/* still work */
   --color-background: var(--bg);
@@ -78,6 +79,7 @@
   --teal: #2dd4bf;
   --sky: #60a5fa;
   --rose: #fb7185;
+  --gold: #e0b44c;
   color-scheme: dark;
 }
 
@@ -380,6 +382,19 @@
       opacity 0.35s ease,
       transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
     transition-delay: calc(0.3s + var(--i, 0) * 110ms);
+  }
+
+  /* Order journey: the line to the next step fills while a step is shown. */
+  @keyframes journey-fill {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+  .journey-fill {
+    animation: journey-fill var(--dur, 5s) linear forwards;
   }
 
   /* Timeline dots light up as they scroll in. */
