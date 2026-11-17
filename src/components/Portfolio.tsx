@@ -1,13 +1,13 @@
 import { Link } from "@tanstack/react-router";
-import { useState, type ReactNode } from "react";
+import { useState, type CSSProperties, type ReactNode } from "react";
 import {
   ArrowDown,
   ArrowUpRight,
   Check,
+  ChevronDown,
   Copy,
   Download,
   Github,
-  Languages,
   Linkedin,
   Mail,
 } from "lucide-react";
@@ -22,13 +22,11 @@ import {
 } from "@/components/motion";
 import {
   OrderJourney,
-  Pins,
   Pipeline,
   PhoneShowcase,
   ResultBars,
   RetrievalFlow,
   SnakeDraft,
-  Star,
   TodoPhone,
   VoiceNote,
 } from "@/components/WorkVisuals";
@@ -38,145 +36,152 @@ import {
   type Content,
   type Lang,
   type Project,
-  type ProjectId,
 } from "@/content";
-
-// How wide each panel is on large screens (a six-column grid).
-const LAYOUT: Record<ProjectId, string> = {
-  forge: "lg:col-span-6",
-  fight: "lg:col-span-3",
-  qgen: "lg:col-span-3",
-  shop: "lg:col-span-6",
-  todo: "lg:col-span-4",
-  classes: "lg:col-span-2",
-};
 
 const SECTIONS = ["work", "about", "skills", "contact"] as const;
 
+/** Text in the other language: tagged so it is read, and shaped, correctly. */
+function Other({
+  lang,
+  className = "",
+  children,
+}: {
+  lang: Lang;
+  className?: string;
+  children: ReactNode;
+}) {
+  return (
+    <span lang={lang} dir={lang === "ar" ? "rtl" : "ltr"} className={className}>
+      {children}
+    </span>
+  );
+}
+
+const noStop = (s: string) => s.replace(/[.。]\s*$/, "");
+
 export function Portfolio({ lang }: { lang: Lang }) {
   const t = content[lang];
+  const otherLang: Lang = lang === "ar" ? "en" : "ar";
+  const o = content[otherLang];
   const rtl = lang === "ar";
   useReveal();
   const active = useActiveSection(["top", ...SECTIONS]);
 
   return (
-    <div
-      lang={lang}
-      dir={rtl ? "rtl" : "ltr"}
-      className="min-h-screen text-nacre"
-    >
+    <div lang={lang} dir={rtl ? "rtl" : "ltr"} className="min-h-screen">
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:fixed focus:start-3 focus:top-3 focus:z-50 focus:bg-brass focus:px-4 focus:py-2 focus:text-walnut"
+        className="sr-only focus:not-sr-only focus:fixed focus:start-3 focus:top-3 focus:z-50 focus:rounded-[6px] focus:bg-cobalt focus:px-4 focus:py-2 focus:text-enamel"
       >
         {t.skip}
       </a>
 
-      <header className="sticky top-0 z-40 bg-walnut [background-image:var(--grain-h)]">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2.5 sm:px-8">
+      <header className="sticky top-0 z-40 border-b border-ink/15 bg-wall [background-image:var(--plaster)]">
+        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-4 sm:px-8">
           <a
             href="#top"
-            className="flex min-h-11 items-center gap-2.5"
+            className="sign-type hidden min-h-11 items-center text-[21px] text-ink sm:inline-flex"
             lang="en"
             dir="ltr"
           >
-            <Star className="size-6" />
-            <span className="font-display text-[19px] text-nacre">
-              <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                Hussein Al Herk
-              </span>
-            </span>
+            Hussein Al Herk
           </a>
           <nav
             aria-label={rtl ? "الأقسام" : "Sections"}
-            className="flex items-center"
+            className="flex w-full items-center justify-between gap-1 sm:w-auto sm:justify-end"
           >
-            {SECTIONS.map((id) => (
-              <a
-                key={id}
-                href={`#${id}`}
-                aria-current={active === id ? "true" : undefined}
-                className={`min-h-11 items-center px-2 text-[15px] underline-offset-[7px] transition-colors duration-200 sm:px-3 ${
-                  id === "skills" ? "hidden sm:inline-flex" : "inline-flex"
-                } ${active === id ? "text-nacre underline decoration-brass" : "text-nacre-faint hover:text-nacre"}`}
-              >
-                {t.nav[id]}
-              </a>
-            ))}
+            <span className="flex items-center">
+              {SECTIONS.map((id) => (
+                <a
+                  key={id}
+                  href={`#${id}`}
+                  aria-current={active === id ? "true" : undefined}
+                  className={`label-type min-h-11 items-center px-2.5 text-[17px] underline-offset-[8px] transition-colors duration-200 sm:px-3 ${
+                    id === "skills" ? "hidden sm:inline-flex" : "inline-flex"
+                  } ${active === id ? "text-ink underline decoration-cobalt decoration-2" : "text-ink-2 hover:text-ink"}`}
+                >
+                  {t.nav[id]}
+                </a>
+              ))}
+            </span>
             <Link
               to={t.nav.switchTo}
-              className="ms-1 inline-flex min-h-11 items-center gap-1.5 px-2 text-[15px] text-brass-bright hover:text-nacre"
-              lang={rtl ? "en" : "ar"}
+              className="group ms-2 inline-flex min-h-11 items-center"
+              lang={otherLang}
             >
-              <Languages className="size-4" aria-hidden="true" />
-              {t.nav.switchLabel}
+              <span className="plate plate-sm sign-type px-3.5 py-1 text-[17px] font-semibold transition-colors duration-200 group-hover:[--plate:var(--cobalt-deep)]">
+                {t.nav.switchLabel}
+              </span>
             </Link>
           </nav>
         </div>
-        <span aria-hidden="true" className="band" />
         <ScrollProgress rtl={rtl} />
       </header>
 
       <main id="main">
-        <Hero t={t} rtl={rtl} />
+        <Hero t={t} o={o} otherLang={otherLang} rtl={rtl} />
 
-        <Section id="work" title={t.work.title} intro={t.work.intro}>
-          <div className="grid gap-7 lg:grid-cols-6">
+        <Section
+          id="work"
+          title={t.work.title}
+          otherTitle={o.work.title}
+          otherLang={otherLang}
+          intro={t.work.intro}
+        >
+          <div className="space-y-24 sm:space-y-32">
             {t.work.projects.map((p) => (
-              <ProjectPanel key={p.id} p={p} t={t} lang={lang} />
+              <Shop
+                key={p.id}
+                p={p}
+                t={t}
+                o={o}
+                lang={lang}
+                otherLang={otherLang}
+              />
             ))}
           </div>
-
-          <h3 className="mt-16 text-[24px] text-nacre">{t.work.moreTitle}</h3>
-          <ul className="mt-4 border-t border-brass/40">
-            {t.work.more.map((m) => (
-              <li
-                key={m.title}
-                data-reveal
-                className="grid gap-x-6 gap-y-1 border-b border-brass/40 py-4 sm:grid-cols-[4rem_minmax(0,16rem)_1fr] sm:items-baseline"
-              >
-                <span className="text-[14px] text-nacre-faint tnum">
-                  {m.year}
-                </span>
-                <span className="text-[17px] text-nacre">{m.title}</span>
-                <span className="text-[15.5px] leading-relaxed text-nacre-soft">
-                  {m.text}
-                </span>
-              </li>
-            ))}
-          </ul>
+          <Directory t={t} />
         </Section>
 
-        <Section id="about" title={t.about.title}>
-          <div className="grid gap-12 lg:grid-cols-[1.25fr_1fr] lg:items-start">
-            <div data-reveal>
-              <p className="max-w-[60ch] text-[18px] leading-[1.75] text-nacre-soft">
+        <Section
+          id="about"
+          title={t.about.title}
+          otherTitle={o.about.title}
+          otherLang={otherLang}
+        >
+          <div className="grid gap-12 lg:grid-cols-[1.3fr_1fr] lg:items-start lg:gap-16">
+            <div>
+              <p className="max-w-[60ch] text-[18.5px] leading-[1.7] text-ink">
                 {t.about.bio}
               </p>
-              <dl className="mt-8 border-t border-brass/40">
+              <dl className="mt-9 border-t border-ink/15">
                 {t.about.facts.map(([k, v]) => (
                   <div
                     key={k}
-                    className="grid gap-1 border-b border-brass/40 py-3.5 sm:grid-cols-[11rem_1fr] sm:gap-6"
+                    className="grid gap-1 border-b border-ink/15 py-3.5 sm:grid-cols-[11rem_1fr] sm:gap-6"
                   >
-                    <dt className="text-[15px] text-brass-bright">{k}</dt>
-                    <dd className="text-[16px] text-nacre">{v}</dd>
+                    <dt className="label-type text-[17px] text-cobalt">{k}</dt>
+                    <dd className="text-[16.5px] text-ink">{v}</dd>
                   </div>
                 ))}
               </dl>
             </div>
-            <aside data-reveal className="inlay p-7 sm:p-8">
-              <Pins />
-              <h3 className="text-[24px] text-nacre">{t.about.nowTitle}</h3>
-              <ul className="mt-5 space-y-5">
+            <aside className="plate plate-taxi screws px-9 pb-8 pt-7 sm:px-11">
+              <h3 className="sign-type text-[2rem] leading-none text-ink">
+                {t.about.nowTitle}
+              </h3>
+              <div
+                aria-hidden="true"
+                className="mt-3 h-[2px] rounded-full bg-ink/80"
+              />
+              <ul className="mt-5 space-y-4">
                 {t.about.now.map(([what, detail]) => (
-                  <li key={what} className="flex gap-3">
-                    <span
-                      className="mark mt-[9px] bg-lemonwood"
-                      aria-hidden="true"
-                    />
-                    <p className="text-[16.5px] leading-relaxed text-nacre-soft">
-                      <span className="text-lemonwood">{what}</span> · {detail}
+                  <li key={what}>
+                    <p className="text-[16.5px] leading-relaxed text-ink">
+                      <span className="label-type me-2 text-[18px] font-bold">
+                        {what}
+                      </span>
+                      {detail}
                     </p>
                   </li>
                 ))}
@@ -185,105 +190,117 @@ export function Portfolio({ lang }: { lang: Lang }) {
           </div>
         </Section>
 
-        <Section id="skills" title={t.skills.title} intro={t.skills.intro}>
-          <div data-reveal className="inlay p-7 sm:p-9">
-            <Pins />
-            <div className="grid gap-x-8 gap-y-8 sm:grid-cols-2 lg:grid-cols-5">
-              {t.skills.groups.map(([label, items]) => (
-                <div key={label}>
-                  <h3 className="text-[18px] leading-snug text-brass-bright">
-                    {label}
-                  </h3>
-                  <ul className="mt-3 space-y-1.5">
-                    {items.map((it) => (
-                      <li
-                        key={it}
-                        className="text-[15.5px] text-nacre-soft"
-                        dir="auto"
-                      >
-                        {it}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
+        <Section
+          id="skills"
+          title={t.skills.title}
+          otherTitle={o.skills.title}
+          otherLang={otherLang}
+          intro={t.skills.intro}
+        >
+          <div className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-5">
+            {t.skills.groups.map(([label, items]) => (
+              <div key={label} className="border-t-2 border-ink pt-4">
+                <h3 className="label-type text-[19px] font-bold leading-snug text-cobalt">
+                  {label}
+                </h3>
+                <ul className="mt-3 space-y-1.5">
+                  {items.map((it) => (
+                    <li key={it} className="text-[16px] text-ink-2" dir="auto">
+                      {it}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </Section>
 
-        <Contact t={t} />
+        <Contact t={t} o={o} otherLang={otherLang} />
       </main>
     </div>
   );
 }
 
-function Hero({ t, rtl }: { t: Content; rtl: boolean }) {
+function Hero({
+  t,
+  o,
+  otherLang,
+  rtl,
+}: {
+  t: Content;
+  o: Content;
+  otherLang: Lang;
+  rtl: boolean;
+}) {
   return (
     <section
       id="top"
-      className="mx-auto grid max-w-6xl gap-x-12 gap-y-6 px-4 pb-4 pt-7 [grid-template-areas:'name'_'fig'_'cta'_'intro'] sm:px-8 md:grid-cols-[1.05fr_1fr] md:items-center md:pb-8 md:pt-16 md:[grid-template-areas:'name_fig'_'intro_fig'_'cta_fig']"
+      aria-label={t.hero.name}
+      className="mx-auto max-w-6xl px-4 pt-6 sm:px-8 sm:pt-10"
     >
-      <div className="[grid-area:name] md:self-end">
+      {/* The street sign: the name, then the role in both scripts. */}
+      <div className="plate screws hang px-8 pb-6 pt-6 sm:px-12 sm:pb-8 sm:pt-8">
         <h1
-          className="rise text-[clamp(2.9rem,8.4vw,5.6rem)] leading-[0.98] tracking-[-0.015em] text-nacre rtl:text-right"
+          className="sign-type text-[clamp(3.3rem,10.5vw,6rem)] leading-[0.9] text-enamel rtl:text-right"
           lang="en"
           dir="ltr"
         >
           Hussein Al Herk
         </h1>
-        <p className="rise d1 mt-4 text-[17px] text-nacre-faint">
-          {t.hero.lead}
-        </p>
-        <p className="rise d1 mt-2 max-w-[22ch] font-display text-[clamp(1.4rem,2.6vw,1.95rem)] leading-snug text-brass-bright md:max-w-[26ch]">
+        <div
+          aria-hidden="true"
+          className="mt-4 h-[2px] rounded-full bg-enamel/90 sm:mt-5"
+        />
+        <div className="mt-3 flex flex-wrap items-baseline justify-between gap-x-8 gap-y-1">
+          <p className="sign-type text-[clamp(1.2rem,2.4vw,1.75rem)] font-semibold leading-tight text-enamel">
+            {noStop(t.hero.lead)}
+          </p>
+          <Other
+            lang={otherLang}
+            className="sign-type block text-[clamp(1.05rem,1.9vw,1.4rem)] font-semibold leading-tight text-cobalt-ink"
+          >
+            {noStop(o.hero.lead)}
+          </Other>
+        </div>
+      </div>
+
+      {/* The shop window: the claim painted on the glass, the detector behind it. */}
+      <div className="window on-dark rise mt-5 grid px-6 pb-6 pt-7 [grid-template-areas:'line'_'cta'_'fig'_'intro'] sm:mt-6 sm:px-9 sm:pb-8 sm:pt-9 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.08fr)] lg:grid-rows-[1fr_auto_auto_auto_1fr] lg:gap-x-12 lg:px-11 lg:py-8 lg:[grid-template-areas:'._fig'_'line_fig'_'intro_fig'_'cta_fig'_'._fig']">
+        <p className="sign-type text-[clamp(1.75rem,3.4vw,2.75rem)] font-semibold leading-[1.04] text-enamel [grid-area:line]">
           {t.hero.line}
         </p>
-      </div>
-
-      <p className="rise d2 max-w-[34rem] text-[17px] leading-[1.7] text-nacre-soft [grid-area:intro]">
-        {t.hero.intro}
-      </p>
-
-      <div className="rise d2 flex flex-wrap items-center gap-x-6 gap-y-3 [grid-area:cta] md:self-start">
-        <a href={`mailto:${LINKS.email}`} className="plaque text-[16px]">
-          <Mail className="size-[18px]" aria-hidden="true" />
-          {t.hero.emailMe}
-        </a>
-        <a
-          href="#work"
-          className="inline-flex min-h-11 items-center gap-1.5 text-[16px] text-nacre underline decoration-brass"
-        >
-          {t.hero.seeWork}
-          <ArrowDown className="size-4" aria-hidden="true" />
-        </a>
-        <span className="flex gap-4">
-          <IconLink
-            href={LINKS.github}
-            label="GitHub"
-            icon={<Github className="size-[17px]" aria-hidden="true" />}
-          />
-          <IconLink
-            href={LINKS.linkedin}
-            label="LinkedIn"
-            icon={<Linkedin className="size-[17px]" aria-hidden="true" />}
-          />
-        </span>
-      </div>
-
-      <figure className="rise d3 min-w-0 [grid-area:fig]">
-        <div className="inlay">
-          <Pins />
+        <p className="mt-6 max-w-[46ch] text-[17px] leading-[1.65] text-glass-ink [grid-area:intro] lg:mt-5">
+          {t.hero.intro}
+        </p>
+        <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 [grid-area:cta] lg:mt-8">
+          <a
+            href={`mailto:${LINKS.email}`}
+            className="enamel-btn enamel-btn-red"
+          >
+            <Mail className="size-[18px]" aria-hidden="true" />
+            {t.hero.emailMe}
+          </a>
+          <a
+            href="#work"
+            className="inline-flex min-h-11 items-center gap-1.5 text-[16.5px] font-medium text-enamel underline decoration-enamel/50 transition-colors duration-200 hover:decoration-enamel"
+          >
+            {t.hero.seeWork}
+            <ArrowDown className="size-4" aria-hidden="true" />
+          </a>
+        </div>
+        <figure className="mt-7 min-w-0 [grid-area:fig] lg:mt-0">
           <PoseFigure
-            className="h-[280px] sm:h-[380px] md:h-[470px]"
+            className="h-[290px] sm:h-[360px] lg:h-[390px]"
             label={t.pose.label}
             motionLabel={t.pose.motion}
             alertLabel={t.pose.alert}
             rtl={rtl}
           />
-        </div>
-        <figcaption className="mt-3 text-[14px] leading-relaxed text-nacre-faint">
-          {t.pose.caption}
-        </figcaption>
-      </figure>
+          <figcaption className="mt-2 text-[14px] leading-relaxed text-glass-ink">
+            {t.pose.caption}
+          </figcaption>
+        </figure>
+      </div>
     </section>
   );
 }
@@ -291,11 +308,15 @@ function Hero({ t, rtl }: { t: Content; rtl: boolean }) {
 function Section({
   id,
   title,
+  otherTitle,
+  otherLang,
   intro,
   children,
 }: {
   id: string;
   title: string;
+  otherTitle: string;
+  otherLang: Lang;
   intro?: string;
   children: ReactNode;
 }) {
@@ -303,18 +324,25 @@ function Section({
     <section
       id={id}
       aria-labelledby={`${id}-title`}
-      className="mx-auto max-w-6xl px-4 pb-8 pt-16 sm:px-8 sm:pt-24"
+      className="mx-auto max-w-6xl px-4 pt-24 sm:px-8 sm:pt-32"
     >
-      <div data-reveal className="mb-9 max-w-[46rem]">
-        <h2
-          id={`${id}-title`}
-          className="text-[clamp(2.1rem,4.6vw,3.2rem)] leading-[1.05] text-nacre"
-        >
-          {title}
-        </h2>
-        <span aria-hidden="true" className="rule band mt-4 w-40" />
+      <div className="mb-12 flex flex-wrap items-end gap-x-10 gap-y-5 sm:mb-14">
+        <div className="plate screws px-10 pb-3.5 pt-4 sm:px-12">
+          <h2
+            id={`${id}-title`}
+            className="sign-type text-[clamp(2.1rem,4.6vw,3.2rem)] leading-none text-enamel"
+          >
+            {title}
+          </h2>
+          <Other
+            lang={otherLang}
+            className="sign-type mt-2.5 block border-t-2 border-enamel/90 pt-1.5 text-[clamp(1.05rem,1.8vw,1.3rem)] font-semibold text-cobalt-ink"
+          >
+            {otherTitle}
+          </Other>
+        </div>
         {intro && (
-          <p className="mt-4 text-[17px] leading-[1.7] text-nacre-soft">
+          <p className="max-w-[46ch] pb-1 text-[17px] leading-[1.65] text-ink-2">
             {intro}
           </p>
         )}
@@ -324,23 +352,21 @@ function Section({
   );
 }
 
-function visualsFor(
-  p: Project,
-  t: Content,
-  lang: Lang,
-): { side?: ReactNode; inline?: ReactNode } {
+type Visuals = { aside?: ReactNode; lead?: ReactNode; wide?: ReactNode };
+
+function visualsFor(p: Project, t: Content, lang: Lang): Visuals {
   const v = t.visuals;
   switch (p.id) {
     case "forge":
       return {
-        side: (
+        aside: (
           <PhoneShowcase screens={v.forgeScreens} label={v.forgeScreensLabel} />
         ),
       };
     case "fight":
       return {
-        inline: (
-          <div className="space-y-6">
+        aside: (
+          <div className="space-y-9">
             <Pipeline title={v.fightStepsTitle} steps={v.fightSteps} />
             <ResultBars title={v.fightTitle} rows={v.fightRows} />
           </div>
@@ -348,11 +374,11 @@ function visualsFor(
       };
     case "qgen":
       return {
-        inline: <RetrievalFlow title={v.qgenTitle} steps={v.qgenSteps} />,
+        aside: <RetrievalFlow title={v.qgenTitle} steps={v.qgenSteps} />,
       };
     case "shop":
       return {
-        inline: (
+        wide: (
           <OrderJourney
             title={v.journey.title}
             steps={v.journey.steps}
@@ -362,18 +388,18 @@ function visualsFor(
       };
     case "todo":
       return {
-        side: <TodoPhone />,
-        inline: (
+        lead: (
           <VoiceNote
             listening={v.todoListening}
             said={v.todoSaid}
             meaning={v.todoMeaning}
           />
         ),
+        aside: <TodoPhone />,
       };
     case "classes":
       return {
-        inline: (
+        aside: (
           <SnakeDraft
             caption={v.classesCaption}
             names={v.classesNames}
@@ -384,95 +410,109 @@ function visualsFor(
   }
 }
 
-function ProjectPanel({ p, t, lang }: { p: Project; t: Content; lang: Lang }) {
+/** One project as a shop: its sign, its status tags, and its window. */
+function Shop({
+  p,
+  t,
+  o,
+  lang,
+  otherLang,
+}: {
+  p: Project;
+  t: Content;
+  o: Content;
+  lang: Lang;
+  otherLang: Lang;
+}) {
   const release = useLatestRelease(p.releaseRepo);
   const version = release?.tag ?? p.version;
   const building = p.status === "building";
-  const { side, inline } = visualsFor(p, t, lang);
-  const statusWord = building
-    ? t.work.building
-    : p.releaseRepo
-      ? t.work.released
-      : null;
-  const amberNote = building || p.flagTone === "amber";
+  const otherTitle = o.work.projects.find((q) => q.id === p.id)?.title;
+  const { aside, lead, wide } = visualsFor(p, t, lang);
+  const phoneAside = p.id === "forge" || p.id === "todo";
+
+  const tags: Array<{ text: string; taxi: boolean }> = [];
+  if (building) tags.push({ text: t.work.building, taxi: true });
+  else if (p.releaseRepo) tags.push({ text: t.work.released, taxi: false });
+  if (p.flag) tags.push({ text: p.flag, taxi: p.flagTone === "amber" });
 
   return (
-    <article
-      data-reveal
-      className={`inlay flex flex-col p-6 sm:p-9 ${LAYOUT[p.id]}`}
-    >
-      <Pins />
+    <article data-reveal aria-labelledby={`p-${p.id}`}>
+      <div className="plate screws flex flex-wrap items-baseline justify-between gap-x-8 gap-y-1 px-9 py-4 sm:px-12 sm:py-5">
+        <h3
+          id={`p-${p.id}`}
+          className="sign-type text-[clamp(1.75rem,3.6vw,2.6rem)] leading-[1.02] text-enamel"
+        >
+          {p.title}
+        </h3>
+        {otherTitle && otherTitle !== p.title && (
+          <Other
+            lang={otherLang}
+            className="sign-type block text-[clamp(1.05rem,2vw,1.45rem)] font-semibold leading-tight text-cobalt-ink"
+          >
+            {otherTitle}
+          </Other>
+        )}
+      </div>
+
+      <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-3 ps-6 sm:ps-9">
+        {tags.map((g, k) => (
+          <span
+            key={g.text}
+            className={`tag ${g.taxi ? "tag-taxi" : ""}`}
+            style={{ "--k": k } as CSSProperties}
+          >
+            {g.text}
+          </span>
+        ))}
+        <span className="text-[15px] text-ink-2">
+          {version && (
+            <>
+              <span dir="ltr" className="tnum font-medium text-ink">
+                {version}
+              </span>
+              {release && <> · {timeAgo(release.at, lang)}</>}
+              {" · "}
+            </>
+          )}
+          {p.meta}
+        </span>
+      </div>
+
       <div
-        className={
-          side
-            ? "grid flex-1 gap-9 md:grid-cols-[minmax(0,1fr)_auto] md:items-center md:gap-12"
-            : "flex flex-1 flex-col"
-        }
+        className={`mt-9 grid gap-12 ${
+          aside
+            ? phoneAside
+              ? "md:grid-cols-[minmax(0,1fr)_auto] md:items-start lg:gap-20"
+              : "lg:grid-cols-[minmax(0,1fr)_minmax(0,0.92fr)] lg:gap-16"
+            : ""
+        }`}
       >
-        <div className="flex min-w-0 flex-1 flex-col">
-          <h3 className="text-[clamp(1.75rem,3.2vw,2.4rem)] leading-[1.1] text-nacre">
-            {p.title}
-          </h3>
-          <p className="mt-3 max-w-[58ch] text-[17px] leading-[1.6] text-nacre-soft">
+        <div className="min-w-0">
+          <p className="max-w-[54ch] text-[19px] leading-[1.6] text-ink">
             {p.summary}
           </p>
-
-          <p className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[14px] text-nacre-faint">
-            {statusWord && (
-              <span
-                className={`inline-flex items-center gap-2 ${building ? "text-lemonwood" : "text-brass-bright"}`}
-              >
-                <span
-                  className={`mark ${building ? "bg-lemonwood" : "bg-brass"}`}
-                  aria-hidden="true"
-                />
-                {statusWord}
-              </span>
-            )}
-            {version && (
-              <span className="tnum">
-                <span dir="ltr">{version}</span>
-                {release && <> · {timeAgo(release.at, lang)}</>}
-              </span>
-            )}
-            {p.flag && (
-              <span
-                className={`inline-flex items-center gap-2 ${p.flagTone === "amber" ? "text-lemonwood" : "text-rosewood"}`}
-              >
-                <span
-                  className={`mark ${p.flagTone === "amber" ? "bg-lemonwood" : "bg-rosewood"}`}
-                  aria-hidden="true"
-                />
-                {p.flag}
-              </span>
-            )}
-            <span>{p.meta}</span>
-          </p>
-
           {p.note && (
-            <p
-              className={`mt-3 max-w-[62ch] text-[15px] leading-relaxed ${amberNote ? "text-lemonwood" : "text-nacre-soft"}`}
-            >
+            <p className="mt-4 max-w-[60ch] text-[16px] leading-relaxed text-ink-2">
               {p.note}
             </p>
           )}
-
-          {inline && <div className="mt-7">{inline}</div>}
+          {lead && <div className="mt-7 max-w-[34rem]">{lead}</div>}
 
           {p.stats.length > 0 && (
-            <dl className="mt-7 grid border-y border-brass/40 sm:grid-cols-3 [&>div+div]:border-t [&>div+div]:border-brass/40 sm:[&>div+div]:border-s sm:[&>div+div]:border-t-0">
+            <dl className="mt-8 grid max-w-[38rem] border-y border-ink/15 sm:grid-cols-3 [&>div+div]:border-t [&>div+div]:border-ink/15 sm:[&>div+div]:border-s sm:[&>div+div]:border-t-0">
               {p.stats.map(([v, l]) => (
-                <div key={l} className="py-3 sm:px-4 sm:first:ps-0">
+                <div key={l} className="py-3.5 sm:px-5 sm:first:ps-0">
                   <dt className="sr-only">{l}</dt>
                   <dd className="flex items-baseline gap-4 sm:block">
                     <span
-                      className="block min-w-[4.5rem] shrink-0 font-display text-[clamp(1.5rem,3vw,2.1rem)] leading-none text-brass-bright"
+                      className="block min-w-[4.5rem] shrink-0 font-sign text-[clamp(1.75rem,3.2vw,2.3rem)] font-bold leading-none text-cobalt"
                       dir="ltr"
                     >
                       <CountUp value={v} />
                     </span>
                     <span
-                      className="block text-[14px] leading-snug text-nacre-soft sm:mt-1.5 sm:text-[13.5px]"
+                      className="block text-[14.5px] leading-snug text-ink-2 sm:mt-1.5"
                       aria-hidden="true"
                     >
                       {l}
@@ -484,17 +524,18 @@ function ProjectPanel({ p, t, lang }: { p: Project; t: Content; lang: Lang }) {
           )}
 
           <details className="group mt-6">
-            <summary className="inline-flex min-h-11 cursor-pointer items-center gap-2 text-[15px] text-brass-bright">
-              <Star className="size-3 transition-transform duration-300 group-open:rotate-45" />
+            <summary className="label-type inline-flex min-h-11 cursor-pointer items-center gap-2 text-[17px] text-cobalt hover:text-cobalt-deep">
               {t.work.details}
+              <ChevronDown
+                className="size-4 transition-transform duration-300 group-open:rotate-180"
+                aria-hidden="true"
+              />
             </summary>
             <div className="mt-2 max-w-[62ch] space-y-3 pb-1">
-              <p className="text-[15.5px] leading-[1.7] text-nacre-soft">
-                {p.text}
-              </p>
-              <p className="text-[14px] leading-relaxed text-nacre-faint">
+              <p className="text-[16.5px] leading-[1.7] text-ink-2">{p.text}</p>
+              <p className="text-[15px] leading-relaxed text-ink-3">
                 {t.work.builtWith}:{" "}
-                <span dir="ltr" className="text-nacre-soft">
+                <span dir="ltr" className="text-ink-2">
                   {p.tags.join(" · ")}
                 </span>
               </p>
@@ -502,11 +543,11 @@ function ProjectPanel({ p, t, lang }: { p: Project; t: Content; lang: Lang }) {
           </details>
 
           {p.links.length > 0 && (
-            <div className="mt-auto flex flex-wrap items-center gap-x-6 gap-y-3 pt-5">
+            <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-3">
               {p.links.map((l) =>
                 l.kind === "download" && p.id === "forge" ? (
-                  <a key={l.href} href={l.href} className="plaque text-[15px]">
-                    <Download className="size-4" aria-hidden="true" />
+                  <a key={l.href} href={l.href} className="enamel-btn">
+                    <Download className="size-[18px]" aria-hidden="true" />
                     {l.label}
                   </a>
                 ) : (
@@ -518,13 +559,55 @@ function ProjectPanel({ p, t, lang }: { p: Project; t: Content; lang: Lang }) {
             </div>
           )}
         </div>
-        {side && <div className="flex justify-center">{side}</div>}
+        {aside && (
+          <div className={phoneAside ? "flex justify-center" : "min-w-0"}>
+            {aside}
+          </div>
+        )}
       </div>
+      {wide && <div className="mt-12">{wide}</div>}
     </article>
   );
 }
 
-function Contact({ t }: { t: Content }) {
+/** Smaller projects, as the name plates by a building's door. */
+function Directory({ t }: { t: Content }) {
+  return (
+    <div className="mt-28 sm:mt-36">
+      <h3 className="sign-type text-[clamp(1.6rem,3vw,2.1rem)] text-ink">
+        {t.work.moreTitle}
+      </h3>
+      <ul className="mt-6 max-w-4xl space-y-4">
+        {t.work.more.map((m) => (
+          <li
+            key={m.title}
+            className="grid gap-x-6 gap-y-1.5 rounded-[9px] bg-enamel px-6 py-4 shadow-[inset_0_0_0_5px_var(--enamel),inset_0_0_0_6.5px_rgb(31_65_153/0.8),0_12px_18px_-14px_rgb(21_24_30/0.55),0_1px_2px_rgb(21_24_30/0.12)] sm:grid-cols-[3.4rem_minmax(0,15rem)_1fr] sm:items-baseline sm:px-7"
+          >
+            <span className="font-sign text-[17px] font-semibold text-ink-3 tnum">
+              {m.year}
+            </span>
+            <span className="label-type text-[19px] font-bold leading-snug text-cobalt">
+              {m.title}
+            </span>
+            <span className="text-[15.5px] leading-relaxed text-ink-2">
+              {m.text}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function Contact({
+  t,
+  o,
+  otherLang,
+}: {
+  t: Content;
+  o: Content;
+  otherLang: Lang;
+}) {
   const c = t.contact;
   const [copied, setCopied] = useState(false);
   const copy = async () => {
@@ -541,25 +624,35 @@ function Contact({ t }: { t: Content }) {
     <section
       id="contact"
       aria-labelledby="contact-title"
-      className="mx-auto max-w-6xl px-4 pb-10 pt-16 sm:px-8 sm:pt-24"
+      className="mx-auto max-w-6xl px-4 pb-10 pt-24 sm:px-8 sm:pt-32"
     >
-      <div data-reveal className="inlay px-7 py-10 sm:px-12 sm:py-14">
-        <Pins />
-        <h2
-          id="contact-title"
-          className="text-[clamp(2.4rem,6vw,4.2rem)] leading-[1.02] text-nacre"
-        >
-          {c.title}
-        </h2>
-        <span aria-hidden="true" className="rule band mt-5 w-40" />
-        <p className="mt-5 max-w-[40ch] text-[18px] leading-[1.7] text-nacre-soft">
+      <div className="plate plate-red screws on-dark px-9 py-10 sm:px-14 sm:py-14">
+        <div className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-2">
+          <h2
+            id="contact-title"
+            className="sign-type text-[clamp(2.8rem,7vw,5.4rem)] leading-[0.92] text-enamel"
+          >
+            {c.title}
+          </h2>
+          <Other
+            lang={otherLang}
+            className="sign-type block text-[clamp(1.5rem,3vw,2.4rem)] font-semibold text-[#fbe3e0]"
+          >
+            {o.contact.title}
+          </Other>
+        </div>
+        <div
+          aria-hidden="true"
+          className="mt-6 h-[2px] rounded-full bg-enamel/90"
+        />
+        <p className="mt-6 max-w-[44ch] text-[18px] leading-[1.65] text-[#fdecea]">
           {c.text}
         </p>
         <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
           <a
             href={`mailto:${LINKS.email}`}
             dir="ltr"
-            className="plaque text-[16px]"
+            className="enamel-btn enamel-btn-white normal-case"
           >
             <Mail className="size-[18px]" aria-hidden="true" />
             {LINKS.email}
@@ -568,7 +661,7 @@ function Contact({ t }: { t: Content }) {
             type="button"
             onClick={copy}
             aria-live="polite"
-            className="inline-flex min-h-11 cursor-pointer items-center gap-2 text-[16px] text-brass-bright hover:text-nacre"
+            className="inline-flex min-h-11 cursor-pointer items-center gap-2 text-[16.5px] font-medium text-enamel underline decoration-enamel/50 underline-offset-[6px] hover:decoration-enamel"
           >
             {copied ? (
               <Check className="size-4" aria-hidden="true" />
@@ -578,26 +671,28 @@ function Contact({ t }: { t: Content }) {
             {copied ? c.copied : c.copy}
           </button>
         </div>
-        <div className="mt-6 flex gap-6">
+        <div className="mt-5 flex gap-6">
           <IconLink
             href={LINKS.github}
             label="GitHub"
-            icon={<Github className="size-[17px]" aria-hidden="true" />}
+            className="text-[#fdecea] hover:text-enamel"
+            icon={<Github className="size-[18px]" aria-hidden="true" />}
           />
           <IconLink
             href={LINKS.linkedin}
             label="LinkedIn"
-            icon={<Linkedin className="size-[17px]" aria-hidden="true" />}
+            className="text-[#fdecea] hover:text-enamel"
+            icon={<Linkedin className="size-[18px]" aria-hidden="true" />}
           />
         </div>
       </div>
-      <footer className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-brass/40 pt-6 text-[14px] text-nacre-faint">
+      <footer className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-ink/15 pt-6 text-[15px] text-ink-2">
         <p>{c.footer}</p>
         <a
           href={LINKS.source}
           target="_blank"
           rel="noreferrer"
-          className="inline-flex min-h-11 items-center underline decoration-brass/60 hover:text-nacre"
+          className="inline-flex min-h-11 items-center underline decoration-ink/30 hover:text-ink hover:decoration-cobalt"
         >
           {c.built}
         </a>
@@ -610,17 +705,19 @@ function IconLink({
   href,
   label,
   icon,
+  className = "text-ink-2 hover:text-ink",
 }: {
   href: string;
   label: string;
   icon: ReactNode;
+  className?: string;
 }) {
   return (
     <a
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="inline-flex min-h-11 items-center gap-2 text-[15px] text-nacre-soft transition-colors duration-200 hover:text-nacre"
+      className={`inline-flex min-h-11 items-center gap-2 text-[16px] font-medium transition-colors duration-200 ${className}`}
     >
       {icon}
       {label}
@@ -634,11 +731,11 @@ function ExtLink({ href, children }: { href: string; children: ReactNode }) {
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="group inline-flex min-h-11 items-center gap-1 text-[15px] text-nacre underline decoration-brass underline-offset-[6px] transition-colors duration-200 hover:text-brass-bright"
+      className="group inline-flex min-h-11 items-center gap-1 text-[16.5px] font-medium text-ink underline decoration-cobalt decoration-2 underline-offset-[6px] transition-colors duration-200 hover:text-cobalt"
     >
       {children}
       <ArrowUpRight
-        className="size-4 text-brass transition-transform duration-200 group-hover:-translate-y-0.5 rtl:-scale-x-100"
+        className="size-4 text-cobalt transition-transform duration-200 group-hover:-translate-y-0.5 rtl:-scale-x-100"
         aria-hidden="true"
       />
     </a>

@@ -7,7 +7,7 @@ related_targets: ["src/routes/index.tsx","src/routes/ar.tsx"]
 
 ## Scope
 
-Portfolio home, English `/` and Arabic `/ar` (src/components/Portfolio.tsx and its parts). Visitor mode: Experience, with Persuade's one action (email). Code-led build (no image generation in this environment).
+Portfolio home, English `/` and Arabic `/ar` (src/components/Portfolio.tsx and its parts). Visitor mode: Experience, with Persuade's one action (email). Code-led build (no image generation in this environment). Replaces the rejected Damascene inlay world wholesale; product truth, copy and behaviour carry over.
 
 ## Audience and job
 
@@ -15,18 +15,18 @@ Employers first (hiring managers and recruiters for junior AI/ML or software rol
 
 ## Direction contract
 
-THESIS: The portfolio is one Damascene inlay panel. Every project is set into the same walnut as precise geometry drawn from its own system diagram. It refuses the dark-neon developer portfolio (glows, mono labels, bento cards) and its cream editorial opposite.
+THESIS: The portfolio is one Damascus street read in two scripts. Every name hangs on a cobalt enamel plate like the Old City's street signs, Arabic and Latin on the same plate, and each project is a shop under its own sign with its working system in the window. It refuses the dark-neon developer portfolio, the cream editorial page, and the split hero over a card grid.
 
-OWN-WORLD: Walnut ground with drawn grain; mother-of-pearl type and figures with a faint iridescent sheen; brass hairlines, links and one primary plaque; rosewood and lemonwood only for status. Panels framed by double brass lines with eight-point star corner pins; nothing boxed inside a panel. Reem Kufi for display, Readex Pro for text, both covering Arabic and Latin.
+OWN-WORLD: Limewashed plaster wall as the ground. Cobalt enamel plates with a white keyline set in from a rounded edge and two screw heads. Enamel-white and taxi-yellow hanging tags for status. One signal-red enamel plaque for the primary action and the detector's alert. Dark shop-window glass in a painted steel frame for the live figure. House-number plates number sequences. Barlow Condensed caps for Latin signage, Aref Ruqaa for Arabic signage, Barlow with Noto Sans Arabic for text.
 
-STORY: In one screen: a junior AI engineer in Damascus who builds AI that runs on real hardware and ships it whole. The panels are the proof; the action is email.
+STORY: The visitor reads one sign (the name, the role in both scripts), sees the fight detector's input moving in the window, and the red plaque to email. Down the street, six shops prove AI on real hardware and complete products; the street ends at a red door plate: let's talk.
 
-FIRST VIEWPORT: Desktop: the name large at left over one role sentence and the brass "Email me" plaque; at right, the pose skeleton inlaid in nacre and brass inside a star-cornered frame, following the pointer. Phone: name, role, figure, plaque, and the first panel's top edge.
+FIRST VIEWPORT: Desktop: header on the wall; a full-width cobalt plate with HUSSEIN AL HERK at 6rem, the role in the page language at the start and in the other script at the end; under it one wide shop window, the positioning line painted on the glass at the start with the intro and the red Email me plaque, the live pose figure at the end. Phone: the plate (name on two lines, both roles), the painted line, the red plaque, then the figure.
 
-FORM: Damascene inlay, position 5 of 7 on the grounded list; seed:a6e69928e8715a53. Signature interaction: the figure's nacre sheen brightens with movement speed; each panel assembles once (brass rules draw in, star pins set) and then rests.
+FORM: Bilingual shop signs, Impeccable's pick, position 1 of 7 on the grounded list, locked by the user over the dealt direction ("do your pick now forget about my pick"); seed:a6e69928e8715a53. Signature interaction: the figure in the window follows the pointer and trips a red FAST alert when moved quickly; the street sign hangs into place once on load, and each shop's status tag swings once on its string when the shop comes into view, then rests.
 
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
 
 ## Unresolved
 
-None blocking. Stats strip and timeline are merged into the panels; restore them if the user asks.
+None blocking. The private financial reporting app keeps its generic, unnamed entry under More projects.

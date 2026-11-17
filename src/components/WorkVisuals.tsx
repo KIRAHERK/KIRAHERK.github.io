@@ -10,46 +10,9 @@ import { prefersReducedMotion } from "@/components/motion";
 
 const css = (vars: Record<string, string | number>) => vars as CSSProperties;
 
-/* ------------------------------ Inlay parts ------------------------------ */
+/* ------------------------------- Shared parts ------------------------------ */
 
-/** An eight-pointed star (khatam), the inlay's corner pin and bullet. */
-export function Star({
-  className = "",
-  style,
-}: {
-  className?: string;
-  style?: CSSProperties;
-}) {
-  return (
-    <svg
-      viewBox="0 0 20 20"
-      aria-hidden="true"
-      className={className}
-      style={style}
-    >
-      <path
-        d="M10 0.8 12.6 4.6 17 3 15.4 7.4 19.2 10 15.4 12.6 17 17 12.6 15.4 10 19.2 7.4 15.4 3 17 4.6 12.6 0.8 10 4.6 7.4 3 3 7.4 4.6Z"
-        fill="var(--nacre)"
-        stroke="var(--brass)"
-        strokeWidth="1.2"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-/** Star pins on the four corners of an .inlay panel. */
-export function Pins() {
-  return (
-    <>
-      {(["tl", "tr", "bl", "br"] as const).map((c, k) => (
-        <Star key={c} className={`pin pin-${c}`} style={css({ "--k": k })} />
-      ))}
-    </>
-  );
-}
-
-/** A phone set into the panel with a brass bezel. */
+/** A phone with a painted-black bezel, standing in the shop window. */
 function Phone({
   children,
   className = "",
@@ -59,12 +22,21 @@ function Phone({
 }) {
   return (
     <div
-      className={`relative aspect-[9/19.5] rounded-[1.9rem] border border-brass bg-grain p-[6px] shadow-[0_24px_40px_-24px_rgb(0_0_0/0.9)] ${className}`}
+      className={`relative aspect-[9/19.5] rounded-[1.9rem] bg-ink p-[6px] shadow-[0_26px_40px_-24px_rgb(21_24_30/0.75)] ${className}`}
     >
       <div className="relative h-full w-full overflow-hidden rounded-[1.55rem] bg-black">
         {children}
       </div>
     </div>
+  );
+}
+
+/** A small caption lettered like a sign. */
+function Caption({ children }: { children: ReactNode }) {
+  return (
+    <figcaption className="label-type text-[15px] text-ink-2">
+      {children}
+    </figcaption>
   );
 }
 
@@ -107,10 +79,10 @@ export function PhoneShowcase({
             type="button"
             aria-pressed={k === i}
             onClick={() => setI(k)}
-            className={`min-h-11 cursor-pointer px-2 text-[14px] underline-offset-[6px] transition-colors duration-200 ${
+            className={`label-type min-h-11 cursor-pointer px-2 text-[16px] underline-offset-[7px] transition-colors duration-200 ${
               k === i
-                ? "text-brass-bright underline decoration-brass"
-                : "text-nacre-faint hover:text-nacre"
+                ? "text-cobalt underline decoration-2 decoration-cobalt"
+                : "text-ink-3 hover:text-ink"
             }`}
           >
             {name}
@@ -123,24 +95,30 @@ export function PhoneShowcase({
 
 /* ---------------------------- Fight detection ---------------------------- */
 
-/** The decision chain: nacre nodes joined by brass. */
+/** The decision chain, numbered with house-number plates. */
 export function Pipeline({ title, steps }: { title: string; steps: string[] }) {
   return (
     <figure>
-      <figcaption className="text-[14px] text-nacre-faint">{title}</figcaption>
+      <Caption>{title}</Caption>
       <ol className="relative mt-3 space-y-2.5">
         <span
           aria-hidden="true"
-          className="absolute bottom-2 start-[6px] top-2 w-px bg-brass/70"
+          className="absolute bottom-3 start-[0.9rem] top-3 w-px bg-ink/25"
         />
         {steps.map((s, i) => (
           <li
             key={s}
-            className="relative flex items-center gap-3 text-[15px] text-nacre"
+            className="relative flex items-center gap-3 text-[16px] text-ink"
             dir="auto"
           >
-            <Star className="relative size-[13px] shrink-0" />
-            <span className={i === steps.length - 1 ? "text-brass-bright" : ""}>
+            <span className="house-no tnum" aria-hidden="true">
+              {i + 1}
+            </span>
+            <span
+              className={
+                i === steps.length - 1 ? "font-semibold text-cobalt" : ""
+              }
+            >
               {s}
             </span>
           </li>
@@ -150,7 +128,7 @@ export function Pipeline({ title, steps }: { title: string; steps: string[] }) {
   );
 }
 
-/** Accuracy as inlaid strips: a groove in the wood, filled with nacre. */
+/** Accuracy as enamel strips in a groove. */
 export function ResultBars({
   title,
   rows,
@@ -160,29 +138,23 @@ export function ResultBars({
 }) {
   return (
     <figure>
-      <figcaption className="text-[14px] text-nacre-faint">{title}</figcaption>
+      <Caption>{title}</Caption>
       <ul className="mt-3 space-y-3">
         {rows.map(([label, v], idx) => (
           <li key={label}>
-            <div className="flex items-baseline justify-between gap-3 text-[15px]">
-              <span className="text-nacre-soft">{label}</span>
+            <div className="flex items-baseline justify-between gap-3 text-[15.5px]">
+              <span className="text-ink-2">{label}</span>
               <span
-                className={`font-display text-[18px] tnum ${idx === 0 ? "text-brass-bright" : "text-nacre"}`}
+                className={`font-sign text-[22px] font-bold leading-none tnum ${idx === 0 ? "text-cobalt" : "text-ink"}`}
                 dir="ltr"
               >
                 {v}%
               </span>
             </div>
-            <div className="mt-1.5 h-[7px] overflow-hidden rounded-[1px] bg-grain shadow-[inset_0_1px_2px_rgb(0_0_0/0.6)]">
+            <div className="mt-1.5 h-2 overflow-hidden rounded-full bg-wall-deep shadow-[inset_0_1px_2px_rgb(21_24_30/0.22)]">
               <div
-                className="bar-fill h-full"
-                style={{
-                  width: `${v}%`,
-                  background:
-                    idx === 0
-                      ? "linear-gradient(90deg, var(--nacre-soft), var(--nacre))"
-                      : "var(--nacre-faint)",
-                }}
+                className={`bar-fill h-full rounded-full ${idx === 0 ? "bg-cobalt" : "bg-ink-3"}`}
+                style={{ width: `${v}%` }}
               />
             </div>
           </li>
@@ -204,16 +176,21 @@ function Node({
   strong?: boolean;
 }) {
   return (
-    <div className="flex flex-col items-center px-2 text-center">
-      <Star className={strong ? "size-4" : "size-3"} />
+    <div
+      className={`mx-auto w-full max-w-[13.5rem] rounded-[7px] px-3 py-2 text-center ${
+        strong
+          ? "plate plate-sm"
+          : "bg-enamel shadow-[inset_0_0_0_1px_rgb(21_24_30/0.16),0_6px_12px_-10px_rgb(21_24_30/0.5)]"
+      }`}
+    >
       <div
-        className={`mt-1.5 text-[15px] leading-tight ${strong ? "text-brass-bright" : "text-nacre"}`}
+        className={`text-[15.5px] font-semibold leading-tight ${strong ? "text-enamel" : "text-ink"}`}
         dir="auto"
       >
         {title}
       </div>
       <div
-        className="mt-0.5 text-[13px] leading-tight text-nacre-faint"
+        className={`mt-0.5 text-[13.5px] leading-tight ${strong ? "text-cobalt-ink" : "text-ink-2"}`}
         dir="auto"
       >
         {sub}
@@ -223,7 +200,7 @@ function Node({
 }
 
 function Down() {
-  return <div aria-hidden="true" className="mx-auto my-2 h-5 w-px bg-brass" />;
+  return <div aria-hidden="true" className="mx-auto h-4 w-px bg-ink/40" />;
 }
 
 export function RetrievalFlow({
@@ -241,23 +218,23 @@ export function RetrievalFlow({
 }) {
   return (
     <figure>
-      <figcaption className="text-[14px] text-nacre-faint">{title}</figcaption>
+      <Caption>{title}</Caption>
       <div className="mt-4">
-        <div className="grid grid-cols-2">
+        <div className="grid grid-cols-2 gap-3">
           <Node title={steps.lexical[0]} sub={steps.lexical[1]} />
           <Node title={steps.dense[0]} sub={steps.dense[1]} />
         </div>
-        {/* Two brass lines meeting in one: symmetric, so it reads the same in RTL. */}
+        {/* Two lines meeting in one: symmetric, so it reads the same in RTL. */}
         <svg
           viewBox="0 0 200 26"
-          className="mx-auto block h-6 w-1/2"
+          className="mx-auto block h-5 w-1/2"
           aria-hidden="true"
           preserveAspectRatio="none"
         >
           <path
             d="M2 0 V9 Q2 13 6 13 H194 Q198 13 198 9 V0 M100 13 V26"
             fill="none"
-            stroke="var(--brass)"
+            stroke="rgb(21 24 30 / 0.4)"
             strokeWidth="1"
             vectorEffect="non-scaling-stroke"
           />
@@ -291,10 +268,10 @@ export function VoiceNote({
   return (
     <div>
       <div className="flex items-center gap-3">
-        <span className="grid size-9 shrink-0 place-items-center rounded-full border border-brass bg-raised text-brass-bright">
+        <span className="grid size-10 shrink-0 place-items-center rounded-full bg-cobalt text-enamel shadow-[inset_0_0_0_2px_var(--cobalt),inset_0_0_0_3px_rgb(248_248_244/0.85)]">
           <Mic className="size-[17px]" aria-hidden="true" />
         </span>
-        <span className="text-[15px] text-nacre-soft">{listening}</span>
+        <span className="text-[15.5px] text-ink-2">{listening}</span>
         <div
           aria-hidden="true"
           className="ms-auto flex h-7 items-center gap-[3px]"
@@ -302,7 +279,7 @@ export function VoiceNote({
           {BARS.map((b, i) => (
             <span
               key={i}
-              className="voice-bar block w-[3px] rounded-full bg-brass"
+              className="voice-bar block w-[3px] rounded-full bg-cobalt"
               style={css({
                 height: `${Math.round(b * 26)}px`,
                 "--d": `${(i % 6) * -0.17}s`,
@@ -315,12 +292,12 @@ export function VoiceNote({
       <p
         lang="ar"
         dir="rtl"
-        className="mt-3 font-arabic text-[18px] leading-relaxed text-nacre"
+        className="mt-3 font-arabic text-[18px] leading-relaxed text-ink"
       >
         «{said}»
       </p>
       {meaning && (
-        <p className="mt-1 text-[15px] leading-relaxed text-nacre-soft">
+        <p className="mt-1 text-[15.5px] leading-relaxed text-ink-2">
           {meaning}
         </p>
       )}
@@ -346,7 +323,7 @@ export function TodoPhone() {
 
 /* ---------------------------- Class distributor --------------------------- */
 
-/** 12 ranked students dealt into 3 classes in zigzag (snake) order, as inlaid pieces. */
+/** 12 ranked students dealt into 3 classes in zigzag (snake) order, as house-number plates. */
 export function SnakeDraft({
   caption,
   names,
@@ -362,29 +339,29 @@ export function SnakeDraft({
     const pos = i % 3;
     cols[round % 2 === 0 ? pos : 2 - pos]?.push(i);
   }
-  // Rank 1 is pure nacre; lower ranks move through lemonwood into darker woods.
-  const wood = (r: number) =>
+  // Ranks 1–3 in full cobalt, fading through lighter enamels to white.
+  const tone = (r: number) =>
     r < 3
-      ? ["var(--nacre)", "var(--walnut)"]
+      ? ["var(--cobalt)", "var(--enamel)"]
       : r < 6
-        ? ["var(--lemonwood)", "var(--walnut)"]
+        ? ["#4a68b8", "var(--enamel)"]
         : r < 9
-          ? ["#845530", "var(--nacre)"]
-          : ["#5e3a22", "var(--nacre)"];
+          ? ["#bccae9", "var(--ink)"]
+          : ["var(--enamel)", "var(--ink)"];
   return (
     <figure>
       <div className="grid grid-cols-3 gap-3">
         {cols.map((ranks, c) => (
           <div key={c} className="flex flex-col items-center gap-2">
-            <span className="font-display text-[16px] text-brass-bright">
+            <span className="sign-type text-[18px] text-cobalt">
               {names[c]}
             </span>
             {ranks.map((r) => {
-              const [bg, fg] = wood(r);
+              const [bg, fg] = tone(r);
               return (
                 <span
                   key={r}
-                  className="draft-dot grid size-8 place-items-center rounded-full border border-brass/70 text-[13px] font-semibold tnum"
+                  className="draft-dot grid h-7 w-10 place-items-center rounded-[5px] font-sign text-[15px] font-semibold tnum shadow-[inset_0_0_0_1px_rgb(21_24_30/0.14),0_4px_8px_-6px_rgb(21_24_30/0.5)]"
                   style={css({
                     background: bg ?? "",
                     color: fg ?? "",
@@ -395,13 +372,13 @@ export function SnakeDraft({
                 </span>
               );
             })}
-            <span className="mt-1 text-[13px] text-nacre-soft tnum" dir="ltr">
+            <span className="mt-1 text-[14px] text-ink-2 tnum" dir="ltr">
               {(ranks.reduce((a, b) => a + b + 1, 0) / ranks.length).toFixed(1)}
             </span>
           </div>
         ))}
       </div>
-      <figcaption className="mt-3 text-[14px] leading-snug text-nacre-faint">
+      <figcaption className="mt-3 text-[14.5px] leading-snug text-ink-2">
         {caption} · {avgLabel} <span dir="ltr">6.5</span>
       </figcaption>
     </figure>
@@ -417,14 +394,11 @@ const STEP_ICONS = [Globe, LayoutDashboard, Navigation, Radio];
 
 function Browser({ children }: { children: ReactNode }) {
   return (
-    <div className="w-full max-w-[820px] overflow-hidden rounded-[3px] border border-brass bg-grain shadow-[0_24px_48px_-28px_rgb(0_0_0/0.9)]">
-      <div
-        aria-hidden="true"
-        className="flex h-6 items-center gap-1.5 border-b border-brass/40 px-3"
-      >
-        <span className="size-2 rounded-full bg-brass/50" />
-        <span className="size-2 rounded-full bg-brass/50" />
-        <span className="size-2 rounded-full bg-brass/50" />
+    <div className="w-full max-w-[820px] overflow-hidden rounded-[6px] bg-steel shadow-[0_26px_44px_-28px_rgb(21_24_30/0.75)]">
+      <div aria-hidden="true" className="flex h-6 items-center gap-1.5 px-3">
+        <span className="size-2 rounded-full bg-enamel/35" />
+        <span className="size-2 rounded-full bg-enamel/35" />
+        <span className="size-2 rounded-full bg-enamel/35" />
       </div>
       {children}
     </div>
@@ -463,7 +437,7 @@ function JourneyStage({
         height={lang === "ar" ? 700 : 686}
         loading="lazy"
         decoding="async"
-        className="block h-auto w-full max-w-[820px] rounded-[3px] border border-brass shadow-[0_24px_48px_-28px_rgb(0_0_0/0.9)]"
+        className="block h-auto w-full max-w-[820px] rounded-[6px] shadow-[0_0_0_1px_rgb(21_24_30/0.12),0_26px_44px_-28px_rgb(21_24_30/0.75)]"
       />
     );
   if (k === 2)
@@ -507,7 +481,7 @@ function JourneyStage({
         height={lang === "ar" ? 195 : 189}
         loading="lazy"
         decoding="async"
-        className="block h-auto w-full rounded-[3px] border border-brass"
+        className="block h-auto w-full rounded-[6px] shadow-[0_0_0_1px_rgb(21_24_30/0.12),0_18px_30px_-22px_rgb(21_24_30/0.6)]"
       />
     </div>
   );
@@ -555,7 +529,7 @@ export function OrderJourney({
 
   return (
     <figure ref={ref}>
-      <figcaption className="text-[14px] text-nacre-faint">{title}</figcaption>
+      <Caption>{title}</Caption>
       <ol className="mt-4 grid grid-cols-4 gap-2">
         {steps.map((s, k) => {
           const Icon = STEP_ICONS[k] ?? Globe;
@@ -565,7 +539,7 @@ export function OrderJourney({
               {k < steps.length - 1 && (
                 <span
                   aria-hidden="true"
-                  className="absolute top-[25px] block h-px overflow-hidden bg-brass/35"
+                  className="absolute top-[24px] block h-[2px] overflow-hidden rounded-full bg-ink/15"
                   style={{
                     insetInlineStart: "calc(50% + 26px)",
                     insetInlineEnd: "calc(-50% + 18px)",
@@ -573,7 +547,7 @@ export function OrderJourney({
                 >
                   <span
                     key={`${i}-${auto}`}
-                    className={`block h-full bg-brass-bright ${k < i ? "" : k === i && auto ? "journey-fill" : "scale-x-0"}`}
+                    className={`block h-full bg-cobalt ${k < i ? "" : k === i && auto ? "journey-fill" : "scale-x-0"}`}
                     style={css({
                       transformOrigin: lang === "ar" ? "right" : "left",
                       "--dur": `${STEP_MS}ms`,
@@ -588,21 +562,21 @@ export function OrderJourney({
                   setI(k);
                   setHeld(true);
                 }}
-                className="relative flex w-full cursor-pointer flex-col items-center gap-2 rounded-[2px] py-1 text-center"
+                className="relative flex w-full cursor-pointer flex-col items-center gap-2 rounded-[4px] py-1 text-center"
               >
                 <span
-                  className={`grid size-10 place-items-center rounded-full border transition-colors duration-300 ${
+                  className={`grid size-10 place-items-center rounded-full transition-colors duration-300 ${
                     on
-                      ? "border-brass-bright bg-brass text-walnut"
+                      ? "bg-cobalt text-enamel shadow-[inset_0_0_0_2px_var(--cobalt),inset_0_0_0_3.5px_rgb(248_248_244/0.9),0_6px_12px_-8px_rgb(21_24_30/0.6)]"
                       : k < i
-                        ? "border-brass bg-raised text-brass-bright"
-                        : "border-brass/50 bg-panel text-nacre-faint"
+                        ? "bg-enamel text-cobalt shadow-[inset_0_0_0_2px_var(--cobalt)]"
+                        : "bg-enamel text-ink-3 shadow-[inset_0_0_0_1px_rgb(21_24_30/0.2)]"
                   }`}
                 >
                   <Icon className="size-[18px]" aria-hidden="true" />
                 </span>
                 <span
-                  className={`text-[14px] leading-tight ${on ? "text-nacre" : "text-nacre-faint"}`}
+                  className={`label-type text-[15px] leading-tight ${on ? "text-cobalt" : "text-ink-2"}`}
                 >
                   {s.label}
                 </span>
@@ -623,8 +597,9 @@ export function OrderJourney({
             <div className="flex flex-1 items-center justify-center">
               <JourneyStage k={k} alt={s.alt} lang={lang} />
             </div>
-            <p className="mx-auto mt-4 max-w-[60ch] text-center text-[15px] leading-relaxed text-nacre-soft">
-              <span className="text-nacre">{s.title}.</span> {s.text}
+            <p className="mx-auto mt-4 max-w-[60ch] text-center text-[15.5px] leading-relaxed text-ink-2">
+              <span className="font-semibold text-ink">{s.title}.</span>{" "}
+              {s.text}
             </p>
           </div>
         ))}

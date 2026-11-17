@@ -1,13 +1,13 @@
 import { useEffect, useRef } from "react";
 
 /*
-  Hero illustration of the fight detector's input, set as Damascene inlay:
-  the COCO-17 pose skeleton (what YOLO26-pose returns) as brass wire and
-  mother-of-pearl joints inside a star-pinned frame. It is drawn, not inferred.
-  Idle, one arm waves. Move a mouse over it and the nearest arm reaches for
-  the cursor; tap or click and it jabs at that point. The faster the wrists
-  move, the more the nacre catches an iridescent sheen, and the strip along
-  the bottom fills: the same kind of velocity feature the real model reads.
+  Hero illustration of the fight detector's input, behind the shop window:
+  the COCO-17 pose skeleton (what YOLO26-pose returns) painted in enamel
+  white on dark glass. It is drawn, not inferred. Idle, one arm waves. Move a
+  mouse over it and the nearest arm reaches for the cursor; tap or click and
+  it jabs at that point. The speed strip along the bottom fills as the wrists
+  move, the same kind of velocity feature the real model reads, and past the
+  threshold the alert trips in signal red.
 */
 
 type Pt = [number, number];
@@ -42,13 +42,14 @@ const FORE = 70;
 const THRESHOLD = 0.6;
 
 const COL = {
-  brass: "#d2a957",
-  brassBright: "#e7c477",
-  groove: "rgba(12,7,3,0.62)",
-  nacre: "#fffaf2",
-  nacreDeep: "#cdbfae",
-  faint: "#b8a998",
-  lemon: "#ead58c",
+  line: "#eef1f7",
+  hot: "#ff5d52",
+  shade: "rgba(6,10,20,0.55)",
+  joint: "#ffffff",
+  ring: "#0f1626",
+  track: "rgba(255,255,255,0.16)",
+  label: "#c4ccdb",
+  taxi: "#f0c02f",
 };
 
 const at = (pts: Pt[], i: number): Pt => pts[i] as Pt;
@@ -133,25 +134,6 @@ function arrow(ctx: CanvasRenderingContext2D, from: Pt, to: Pt) {
   ctx.stroke();
 }
 
-/** An eight-pointed star (khatam) centred on x, y. */
-function star(ctx: CanvasRenderingContext2D, x: number, y: number, r: number) {
-  ctx.beginPath();
-  for (let i = 0; i < 16; i++) {
-    const a = (Math.PI / 8) * i - Math.PI / 2;
-    const rr = i % 2 === 0 ? r : r * 0.62;
-    const px = x + rr * Math.cos(a);
-    const py = y + rr * Math.sin(a);
-    if (i === 0) ctx.moveTo(px, py);
-    else ctx.lineTo(px, py);
-  }
-  ctx.closePath();
-  ctx.fillStyle = COL.nacre;
-  ctx.fill();
-  ctx.strokeStyle = COL.brass;
-  ctx.lineWidth = 1;
-  ctx.stroke();
-}
-
 type Props = {
   className?: string;
   label: string;
@@ -225,7 +207,7 @@ export function PoseFigure({
       lastT = t;
       ctx.clearRect(0, 0, w, h);
 
-      const padTop = 22;
+      const padTop = 16;
       const padBottom = 50;
       const bw = BOUNDS.x1 - BOUNDS.x0;
       const bh = BOUNDS.y1 - BOUNDS.y0;
@@ -287,27 +269,12 @@ export function PoseFigure({
 
       const P = pose.map(([x, y]) => [ox + x * k, oy + y * k] as Pt);
 
-      // A thin brass frame around the figure, pinned with stars at its corners.
-      const xs = P.map((p) => p[0]);
-      const ys = P.map((p) => p[1]);
-      const bx0 = Math.min(...xs) - 18 * k;
-      const by0 = Math.min(...ys) - 18 * k;
-      const bx1 = Math.max(...xs) + 18 * k;
-      const by1 = Math.max(...ys) + 12 * k;
-      for (const [x, y] of [
-        [bx0, by0],
-        [bx1, by0],
-        [bx0, by1],
-        [bx1, by1],
-      ] as const)
-        star(ctx, x, y, 6);
-
-      // Skeleton: brass wire set into a dark groove cut in the wood.
+      // Skeleton: enamel-white strokes with a soft shadow on the glass.
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
       for (const [stroke, width] of [
-        [COL.groove, Math.max(6, 8 * k)],
-        [hot ? COL.brassBright : COL.brass, Math.max(2.6, 3.4 * k)],
+        [COL.shade, Math.max(6, 7.5 * k)],
+        [hot ? COL.hot : COL.line, Math.max(2.8, 3.6 * k)],
       ] as const) {
         ctx.strokeStyle = stroke;
         ctx.lineWidth = width;
@@ -321,9 +288,9 @@ export function PoseFigure({
         ctx.stroke();
       }
 
-      // Brass arrows showing where fast wrists are heading.
+      // Arrows showing where fast wrists are heading.
       if (prevPose) {
-        ctx.strokeStyle = COL.brassBright;
+        ctx.strokeStyle = hot ? COL.hot : COL.taxi;
         ctx.lineWidth = 1.5;
         for (const [i, q] of [
           [9, prevPose[0]],
@@ -340,65 +307,54 @@ export function PoseFigure({
         }
       }
 
-      // Joints: mother-of-pearl that catches an iridescent sheen as speed rises.
-      const sheen = 0.18 + meter * 0.82;
+      // Joints: white enamel dots; the wrists turn red once the alert trips.
       for (let i = 0; i < P.length; i++) {
         const moving = i >= 7 && i <= 10;
         const p = at(P, i);
-        const r = (moving ? 7.5 : 6) * Math.max(0.8, Math.min(1.3, k * 1.5));
-        const hue = (t * 90 + i * 37) % 360;
-        const g = ctx.createRadialGradient(
-          p[0] - r * 0.35,
-          p[1] - r * 0.4,
-          r * 0.1,
-          p[0],
-          p[1],
-          r,
-        );
-        g.addColorStop(0, COL.nacre);
-        g.addColorStop(
-          0.55,
-          `hsl(${hue} ${Math.round(25 + 55 * sheen)}% ${Math.round(90 - 10 * sheen)}%)`,
-        );
-        g.addColorStop(1, COL.nacreDeep);
+        const r = (moving ? 6.5 : 5) * Math.max(0.8, Math.min(1.3, k * 1.5));
         ctx.beginPath();
         ctx.arc(p[0], p[1], r, 0, Math.PI * 2);
-        ctx.fillStyle = g;
+        ctx.fillStyle = hot && (i === 9 || i === 10) ? COL.hot : COL.joint;
         ctx.fill();
-        ctx.strokeStyle = COL.brass;
-        ctx.lineWidth = 1;
+        ctx.strokeStyle = COL.ring;
+        ctx.lineWidth = 1.5;
         ctx.stroke();
       }
 
-      // Speed strip along the bottom: a groove that fills with nacre in reading direction.
+      // Speed strip along the bottom, filling in reading direction.
       const mx0 = 16;
       const mx1 = w - 16;
       const my = h - 20;
-      ctx.font = "400 13px 'Readex Pro', system-ui, sans-serif";
+      ctx.font = "600 14px 'Barlow Condensed', 'Noto Sans Arabic', sans-serif";
       ctx.textBaseline = "middle";
       ctx.direction = rtl ? "rtl" : "ltr";
-      ctx.fillStyle = COL.faint;
+      ctx.fillStyle = COL.label;
       ctx.textAlign = rtl ? "right" : "left";
-      ctx.fillText(motionLabel, rtl ? mx1 : mx0, my - 16);
+      ctx.fillText(
+        rtl ? motionLabel : motionLabel.toUpperCase(),
+        rtl ? mx1 : mx0,
+        my - 16,
+      );
       if (hot) {
-        ctx.fillStyle = COL.lemon;
+        ctx.fillStyle = COL.hot;
         ctx.textAlign = rtl ? "left" : "right";
-        ctx.fillText(alertLabel, rtl ? mx0 : mx1, my - 16);
+        ctx.fillText(
+          rtl ? alertLabel : alertLabel.toUpperCase(),
+          rtl ? mx0 : mx1,
+          my - 16,
+        );
       }
       ctx.direction = "ltr";
       ctx.textAlign = "left";
-      ctx.fillStyle = COL.groove;
+      ctx.fillStyle = COL.track;
       ctx.fillRect(mx0, my - 3, mx1 - mx0, 6);
       const fw = (mx1 - mx0) * meter;
-      const fill = ctx.createLinearGradient(mx0, 0, mx1, 0);
-      fill.addColorStop(0, COL.nacreDeep);
-      fill.addColorStop(1, COL.nacre);
-      ctx.fillStyle = fill;
+      ctx.fillStyle = hot ? COL.hot : COL.line;
       ctx.fillRect(rtl ? mx1 - fw : mx0, my - 3, fw, 6);
       const tx = rtl
         ? mx1 - (mx1 - mx0) * THRESHOLD
         : mx0 + (mx1 - mx0) * THRESHOLD;
-      ctx.fillStyle = COL.lemon;
+      ctx.fillStyle = COL.taxi;
       ctx.fillRect(tx - 1, my - 8, 2, 16);
     };
 
@@ -456,7 +412,7 @@ export function PoseFigure({
       wrap.addEventListener("pointerleave", onLeave);
       raf = requestAnimationFrame(loop);
     }
-    // Redraw once fonts arrive so the label uses Readex Pro.
+    // Redraw once fonts arrive so the label uses Barlow Condensed.
     document.fonts?.ready.then(() => reduce && still()).catch(() => {});
 
     return () => {
