@@ -85,7 +85,6 @@ export type Content = {
   pose: { caption: string; label: string; motion: string; alert: string };
   work: {
     title: string;
-    intro: string;
     details: string;
     builtWith: string;
     released: string;
@@ -204,7 +203,7 @@ export const content: Record<Lang, Content> = {
       lead: "Junior AI engineer in Damascus, Syria.",
       line: "I build AI that runs on real hardware, and ship it as finished products.",
       intro:
-        "Computer vision on school cameras, AI on servers with no cloud, and Android apps people install. I'm looking for a junior AI or software role, in Damascus or remote.",
+        "Computer vision on school cameras, AI on servers with no cloud, and Android apps people install. I'm looking for a junior AI or software role, on site or remote.",
       seeWork: "See my work",
       emailMe: "Email me",
     },
@@ -218,8 +217,6 @@ export const content: Record<Lang, Content> = {
     },
     work: {
       title: "Selected work",
-      intro:
-        "Six projects, each drawn as the system it is. Version numbers come straight from GitHub.",
       details: "How it works",
       builtWith: "Built with",
       released: "Released",
@@ -236,7 +233,7 @@ export const content: Record<Lang, Content> = {
           text: "Logs every set with progression hints, tracks calories, protein and morning weight, and reads nutrition labels live with the camera, on the phone. Skip a session and the streak resets and a penalty lands, due in 24 hours. Works offline with no account, in full Arabic or English, and updates itself from GitHub Releases.",
           stats: [
             ["85", "exercises with form guides"],
-            ["35", "Syrian dishes with lab-measured values"],
+            ["35", "Syrian dishes with sourced nutrition values"],
             ["0", "accounts, ads or analytics"],
           ],
           tags: ["Kotlin", "Jetpack Compose", "Room", "CameraX", "ML Kit"],
@@ -501,7 +498,7 @@ export const content: Record<Lang, Content> = {
       lead: "مهندس ذكاء اصطناعي مبتدئ في دمشق، سوريا.",
       line: "أبني ذكاءً اصطناعياً يعمل على أجهزة حقيقية، وأسلّمه منتجات مكتملة.",
       intro:
-        "رؤية حاسوبية على كاميرات المدارس، وذكاء اصطناعي على خوادم دون خدمات سحابية، وتطبيقات أندرويد يثبّتها الناس. أبحث عن وظيفة مبتدئة في الذكاء الاصطناعي أو البرمجيات، في دمشق أو عن بُعد.",
+        "رؤية حاسوبية على كاميرات المدارس، وذكاء اصطناعي على خوادم دون خدمات سحابية، وتطبيقات أندرويد يثبّتها الناس. أبحث عن وظيفة مبتدئة في الذكاء الاصطناعي أو البرمجيات، حضورياً أو عن بُعد.",
       seeWork: "شاهد أعمالي",
       emailMe: "راسلني",
     },
@@ -515,8 +512,6 @@ export const content: Record<Lang, Content> = {
     },
     work: {
       title: "أبرز الأعمال",
-      intro:
-        "ستة مشاريع، كلٌّ منها مرسوم كما يعمل فعلاً. أرقام الإصدارات تُجلب مباشرة من GitHub.",
       details: "كيف يعمل",
       builtWith: "التقنيات",
       released: "منشور",
@@ -533,7 +528,7 @@ export const content: Record<Lang, Content> = {
           text: "يسجّل كل مجموعة مع اقتراحات لزيادة الحِمل، ويتابع السعرات والبروتين ووزن الصباح، ويقرأ جداول القيم الغذائية مباشرة بالكاميرا على الهاتف نفسه. إن فاتك تمرين ينقطع تتابع الأيام وتُفرض عليك عقوبة خلال 24 ساعة. يعمل دون إنترنت ودون حساب، بالعربية أو الإنجليزية بالكامل، ويحدّث نفسه من GitHub Releases.",
           stats: [
             ["85", "تمريناً مع شرح الأداء الصحيح"],
-            ["35", "طبقاً سورياً بقيم غذائية مقيسة مخبرياً"],
+            ["35", "طبقاً سورياً بقيم غذائية موثّقة المصدر"],
             ["0", "حسابات أو إعلانات أو تتبّع"],
           ],
           tags: ["Kotlin", "Jetpack Compose", "Room", "CameraX", "ML Kit"],

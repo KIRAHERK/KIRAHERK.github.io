@@ -13,7 +13,6 @@ import {
 } from "lucide-react";
 import { PoseFigure } from "@/components/PoseFigure";
 import {
-  CountUp,
   timeAgo,
   useActiveSection,
   useLatestRelease,
@@ -62,7 +61,7 @@ export function Portfolio({ lang }: { lang: Lang }) {
         <main id="main" className="pb-10 lg:w-[52%] lg:py-20">
           <Opening t={t} rtl={rtl} />
 
-          <Section id="work" title={t.work.title} intro={t.work.intro}>
+          <Section id="work" title={t.work.title} emailLabel={t.hero.emailMe}>
             <div className="space-y-16">
               {t.work.projects.map((p) => (
                 <ProjectEntry key={p.id} p={p} t={t} lang={lang} />
@@ -94,7 +93,7 @@ export function Portfolio({ lang }: { lang: Lang }) {
             </ul>
           </Section>
 
-          <Section id="about" title={t.about.title}>
+          <Section id="about" title={t.about.title} emailLabel={t.hero.emailMe}>
             <p className="text-[16.5px] leading-[1.75] text-text-2">
               {t.about.bio}
             </p>
@@ -131,7 +130,12 @@ export function Portfolio({ lang }: { lang: Lang }) {
             </ul>
           </Section>
 
-          <Section id="skills" title={t.skills.title} intro={t.skills.intro}>
+          <Section
+            id="skills"
+            title={t.skills.title}
+            intro={t.skills.intro}
+            emailLabel={t.hero.emailMe}
+          >
             <dl className="divide-y divide-line border-y border-line">
               {t.skills.groups.map(([label, items]) => (
                 <div
@@ -175,7 +179,6 @@ function Identity({
   active: string | null;
   rtl: boolean;
 }) {
-  const location = t.about.facts[2]?.[1];
   return (
     <header className="pt-8 lg:sticky lg:top-0 lg:flex lg:max-h-screen lg:w-[42%] lg:flex-col lg:justify-between lg:py-20">
       <div>
@@ -265,12 +268,6 @@ function Identity({
           </ul>
         </nav>
       </div>
-
-      {location && (
-        <p className="mt-10 hidden text-[13.5px] text-text-3 lg:block">
-          {location}
-        </p>
-      )}
     </header>
   );
 }
@@ -302,11 +299,13 @@ function Section({
   id,
   title,
   intro,
+  emailLabel,
   children,
 }: {
   id: string;
   title: string;
   intro?: string;
+  emailLabel: string;
   children: ReactNode;
 }) {
   return (
@@ -315,12 +314,21 @@ function Section({
       aria-labelledby={`${id}-title`}
       className="scroll-mt-4 pt-20 lg:pt-28"
     >
-      <h2
-        id={`${id}-title`}
-        className="sticky top-0 z-20 -mx-6 bg-bg px-6 py-4 text-[1.35rem] font-semibold tracking-[-0.025em] text-text sm:-mx-10 sm:px-10 lg:static lg:mx-0 lg:px-0 lg:py-0"
-      >
-        {title}
-      </h2>
+      <div className="sticky top-0 z-20 -mx-6 flex items-center justify-between gap-4 bg-bg px-6 py-3 sm:-mx-10 sm:px-10 lg:static lg:mx-0 lg:px-0 lg:py-0">
+        <h2
+          id={`${id}-title`}
+          className="text-[1.75rem] font-semibold tracking-[-0.03em] text-text"
+        >
+          {title}
+        </h2>
+        <a
+          href={`mailto:${LINKS.email}`}
+          aria-label={emailLabel}
+          className="btn-quiet px-0 lg:hidden"
+        >
+          <Mail className="size-[18px]" aria-hidden="true" />
+        </a>
+      </div>
       {intro && (
         <p className="mt-1 max-w-[52ch] text-[15px] leading-relaxed text-text-2 lg:mt-3">
           {intro}
@@ -407,7 +415,7 @@ function ProjectEntry({ p, t, lang }: { p: Project; t: Content; lang: Lang }) {
       <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
         <h3
           id={`p-${p.id}`}
-          className="text-[1.3rem] font-semibold leading-snug tracking-[-0.02em] text-text"
+          className="text-[1.2rem] font-semibold leading-snug tracking-[-0.02em] text-text"
         >
           {p.title}
         </h3>
@@ -450,20 +458,15 @@ function ProjectEntry({ p, t, lang }: { p: Project; t: Content; lang: Lang }) {
       </div>
 
       {p.stats.length > 0 && (
-        <dl className="mt-6 flex flex-wrap gap-x-7 gap-y-3">
+        <dl className="mt-6 grid gap-2 sm:flex sm:flex-wrap sm:gap-x-7 sm:gap-y-2">
           {p.stats.map(([v, l]) => (
             <div key={l} className="flex items-baseline gap-2">
-              <dt className="sr-only">{l}</dt>
-              <dd className="flex items-baseline gap-2">
-                <span
-                  className="font-mono text-[15px] font-medium text-text"
-                  dir="ltr"
-                >
-                  <CountUp value={v} />
-                </span>
-                <span className="text-[13.5px] text-text-2" aria-hidden="true">
-                  {l}
-                </span>
+              <dt className="text-[13.5px] text-text-2">{l}</dt>
+              <dd
+                className="order-first font-mono text-[15px] font-medium text-text"
+                dir="ltr"
+              >
+                {v}
               </dd>
             </div>
           ))}
@@ -475,7 +478,7 @@ function ProjectEntry({ p, t, lang }: { p: Project; t: Content; lang: Lang }) {
           <li
             key={tag}
             dir="ltr"
-            className="rounded-full bg-accent-soft px-2.5 py-1 text-[12px] font-medium text-accent"
+            className="rounded-full border border-line bg-surface px-2.5 py-1 text-[12px] font-medium text-text-2"
           >
             {tag}
           </li>
@@ -536,7 +539,7 @@ function Contact({ t }: { t: Content }) {
     >
       <h2
         id="contact-title"
-        className="text-[2rem] font-semibold leading-tight tracking-[-0.035em] text-text"
+        className="text-[1.75rem] font-semibold leading-tight tracking-[-0.03em] text-text"
       >
         {c.title}
       </h2>

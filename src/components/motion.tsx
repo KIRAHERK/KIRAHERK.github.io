@@ -41,60 +41,6 @@ export function useReveal() {
   }, []);
 }
 
-/** Counts a stat such as "81%", "23+" or "15,596" up from zero when it scrolls into view. */
-export function CountUp({ value }: { value: string }) {
-  const ref = useRef<HTMLSpanElement>(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    const m = value.match(/^(\D*)(\d[\d,]*)(.*)$/);
-    if (!el || !m || prefersReducedMotion()) return;
-    const [, pre = "", num = "0", post = ""] = m;
-    const target = Number(num.replace(/,/g, ""));
-    if (!Number.isFinite(target) || target === 0) return;
-    const r = el.getBoundingClientRect();
-    if (r.top < window.innerHeight && r.bottom > 0) return; // already seen: leave it
-
-    const fmt = (n: number) =>
-      num.includes(",")
-        ? Math.round(n).toLocaleString("en-US")
-        : String(Math.round(n));
-    el.textContent = pre + fmt(0) + post;
-    let raf = 0;
-    const io = new IntersectionObserver(
-      ([e]) => {
-        if (!e?.isIntersecting) return;
-        io.disconnect();
-        const start = performance.now();
-        const dur = 1100 + Math.min(target, 400) * 2;
-        const tick = (now: number) => {
-          const p = Math.min(1, (now - start) / dur);
-          const eased = 1 - Math.pow(1 - p, 4);
-          el.textContent = pre + fmt(target * eased) + post;
-          if (p < 1) raf = requestAnimationFrame(tick);
-        };
-        raf = requestAnimationFrame(tick);
-      },
-      { threshold: 0.6 },
-    );
-    io.observe(el);
-    return () => {
-      io.disconnect();
-      cancelAnimationFrame(raf);
-      el.textContent = value;
-    };
-  }, [value]);
-
-  return (
-    <>
-      <span ref={ref} aria-hidden="true" className="tnum">
-        {value}
-      </span>
-      <span className="sr-only">{value}</span>
-    </>
-  );
-}
-
 export type Release = { tag: string; at: string };
 
 /**

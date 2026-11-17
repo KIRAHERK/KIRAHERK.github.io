@@ -286,12 +286,8 @@ export function VoiceNote({
           {BARS.map((b, i) => (
             <span
               key={i}
-              className="voice-bar block w-[3px] rounded-full bg-accent"
-              style={css({
-                height: `${Math.round(b * 26)}px`,
-                "--d": `${(i % 6) * -0.17}s`,
-                "--t": `${0.8 + (i % 4) * 0.18}s`,
-              })}
+              className="block w-[3px] rounded-full bg-accent"
+              style={{ height: `${Math.round(b * 26)}px` }}
             />
           ))}
         </div>
@@ -368,12 +364,8 @@ export function SnakeDraft({
               return (
                 <span
                   key={r}
-                  className="draft-dot grid size-8 place-items-center rounded-full border border-line-strong font-mono text-[12.5px] font-medium tnum"
-                  style={css({
-                    background: bg ?? "",
-                    color: fg ?? "",
-                    "--i": r,
-                  })}
+                  className="grid size-8 place-items-center rounded-full border border-line-strong font-mono text-[12.5px] font-medium tnum"
+                  style={{ background: bg ?? "", color: fg ?? "" }}
                 >
                   {r + 1}
                 </span>

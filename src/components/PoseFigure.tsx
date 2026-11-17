@@ -39,6 +39,8 @@ const BOUNDS = { x0: -70, y0: -60, x1: 370, y1: 490 };
 const UPPER = 78;
 const FORE = 70;
 const THRESHOLD = 0.6;
+// Below this meter level the direction arrows stay hidden.
+const ARROW_MIN = 0.35;
 
 // Colours come from CSS custom properties (--fig-*) so the figure follows the
 // light or dark theme; these are the light-theme fallbacks.
@@ -313,8 +315,9 @@ export function PoseFigure({
         ctx.stroke();
       }
 
-      // Arrows showing where fast wrists are heading.
-      if (prevPose) {
+      // Arrows showing where wrists are heading, only once they move fast
+      // (never on a still frame).
+      if (prevPose && meter > ARROW_MIN) {
         ctx.strokeStyle = hot ? COL.hot : COL.mark;
         ctx.lineWidth = 1.5;
         for (const [i, q] of [
@@ -332,11 +335,20 @@ export function PoseFigure({
         }
       }
 
-      // Joints: hollow rings; the wrists fill red once the alert trips.
+      // Joints: hollow rings for the body, small filled dots for the five face
+      // points; the wrists fill red once the alert trips.
       for (let i = 0; i < P.length; i++) {
         const moving = i >= 7 && i <= 10;
         const p = at(P, i);
-        const r = (moving ? 5.5 : 4.2) * Math.max(0.8, Math.min(1.3, k * 1.5));
+        const scale = Math.max(0.8, Math.min(1.3, k * 1.5));
+        if (i <= 4) {
+          ctx.beginPath();
+          ctx.arc(p[0], p[1], 2.1 * scale, 0, Math.PI * 2);
+          ctx.fillStyle = hot ? COL.hot : COL.line;
+          ctx.fill();
+          continue;
+        }
+        const r = (moving ? 5.5 : 4.2) * scale;
         const wristHot = hot && (i === 9 || i === 10);
         ctx.beginPath();
         ctx.arc(p[0], p[1], r, 0, Math.PI * 2);
@@ -411,7 +423,9 @@ export function PoseFigure({
       prevWrists = null;
       lastT = 0.55;
       draw(0.583, 0);
+      meter = 0;
       draw(0.6, 0);
+      meter = 0;
       // Don't let the jump back to live time read as a fast movement.
       prevWrists = null;
       meter = 0;

@@ -46,7 +46,7 @@ What a visitor should remember after 30 seconds, in this order:
 ## Evidence on Hand
 
 - Repositories and releases: Forge (Android, released), Smart To-Do (Android, in progress), fight detection, exam question generator, and the team's senior-project repository (class distributor).
-- Numbers with sources: fight detection 81% on the held-out SCVD real-CCTV test split (87.9% when scored per video; the split has only 12 fight videos, so give context), 73% and 71% on RWF-2000 test and validation, 15,596 training sequences; exam generator 23+ indexed books, 5 question types, 6 Bloom levels.
+- Numbers with sources: fight detection 81% on the held-out SCVD real-CCTV test split (87.9% when scored per video; the split has only 12 fight videos, so give context), 73% and 71% on RWF-2000 test and validation, 15,596 training sequences; exam generator 23+ indexed books, 5 question types, 6 Bloom levels. Forge (from its README): 85 gym and home exercises; 35 Syrian dishes with sourced nutrition values, 30 of them measured in an accredited lab (Hoteit et al., F1000Research 2021).
 - Screenshots in `public/work/`: Forge, Smart To-Do, and the anonymised shop system.
 - Absent, and not to be invented: testimonials, client logos, employment history beyond projects.
 
