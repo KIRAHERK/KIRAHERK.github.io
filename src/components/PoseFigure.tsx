@@ -46,8 +46,8 @@ const ARROW_MIN = 0.35;
 // light or dark theme; these are the light-theme fallbacks.
 const COL = {
   line: "#1f1f23",
-  joint: "#fbfbfa",
-  hot: "#dc2626",
+  joint: "#f3f3f1",
+  hot: "#c81e1e",
   track: "#e2e1de",
   label: "#5b5b63",
   mark: "#d97706",

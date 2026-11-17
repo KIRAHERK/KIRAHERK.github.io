@@ -2,7 +2,7 @@
 @source "../src";
 @import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (@media (prefers-color-scheme: dark));
 
 /*
   A clean, professional portfolio: near-white in light mode, near-black in
@@ -26,7 +26,6 @@
   --color-text-2: var(--text-2);
   --color-text-3: var(--text-3);
   --color-accent: var(--accent);
-  --color-accent-soft: var(--accent-soft);
   --color-ok: var(--ok);
   --color-wip: var(--wip);
   --color-alert: var(--alert);
@@ -53,7 +52,9 @@
 
   --font-sans: "Schibsted Grotesk", "Noto Sans Arabic", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
-  --font-arabic: "Noto Sans Arabic", "Schibsted Grotesk", system-ui, sans-serif;
+  /* Latin first so Latin runs on the Arabic page stay in Schibsted Grotesk;
+     Arabic letters fall through to Noto Sans Arabic. */
+  --font-arabic: "Schibsted Grotesk", "Noto Sans Arabic", system-ui, sans-serif;
 }
 
 :root {
@@ -66,14 +67,13 @@
   --text-2: #52525b;
   --text-3: #63636b;
   --accent: #2550d6;
-  --accent-soft: rgb(37 80 214 / 0.08);
   --ok: #15803d;
   --wip: #b45309;
-  --alert: #dc2626;
+  --alert: #c81e1e;
 
   /* Hero figure (read by the canvas). */
   --fig-line: #1f1f23;
-  --fig-joint: #fbfbfa;
+  --fig-joint: #f3f3f1;
   --fig-track: #e2e1de;
   --fig-label: #5b5b63;
   --fig-mark: #d97706;
@@ -92,7 +92,6 @@
     --text-2: #a6a6ae;
     --text-3: #92929a;
     --accent: #8db0ff;
-    --accent-soft: rgb(141 176 255 / 0.1);
     --ok: #4ade80;
     --wip: #fbbf24;
     --alert: #f87171;

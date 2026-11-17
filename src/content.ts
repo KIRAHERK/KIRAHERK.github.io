@@ -51,7 +51,7 @@ export type Project = {
   version?: string;
   /** Extra badge next to the meta line, e.g. "Paper in progress" or "Not adopted". */
   flag?: string;
-  /** "amber" for work in progress, "neutral" for plain facts. Also colours the note. */
+  /** "amber" for work in progress, "neutral" for plain facts: the colour of the badge's dot. */
   flagTone?: "amber" | "neutral";
   note?: string;
 };
