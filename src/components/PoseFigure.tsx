@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 /*
   Hero illustration of the fight detector's input, behind the shop window:
   the COCO-17 pose skeleton (what YOLO26-pose returns) painted in enamel
-  white on dark glass. It is drawn, not inferred. Idle, one arm waves. Move a
+  white on dark glass. It is drawn, not inferred. It waves once, then rests. Move a
   mouse over it and the nearest arm reaches for the cursor; tap or click and
   it jabs at that point. The speed strip along the bottom fills as the wrists
   move, the same kind of velocity feature the real model reads, and past the
@@ -59,27 +59,36 @@ const lerpPt = (a: Pt, b: Pt, t: number): Pt => [
   lerp(a[1], b[1], t),
 ];
 
-/** Idle pose: gentle sway, image-left arm waving, image-right arm hanging. */
-function idlePose(t: number): Pt[] {
-  const sway = Math.sin(t * 0.9) * 5;
-  const bob = Math.sin(t * 1.8) * 2;
+// The figure waves once on arrival, then lowers its arm and rests.
+const WAVE_END = 2.4;
+const SETTLE = 0.9;
+const smooth = (a: number, b: number, x: number) => {
+  const u = Math.min(1, Math.max(0, (x - a) / (b - a)));
+  return u * u * (3 - 2 * u);
+};
+
+/** Idle pose: gentle sway, image-left arm waving, image-right arm hanging.
+ *  `amp` scales every idle movement; at 0 the figure stands still. */
+function idlePose(t: number, amp = 1): Pt[] {
+  const sway = Math.sin(t * 0.9) * 5 * amp;
+  const bob = Math.sin(t * 1.8) * 2 * amp;
   const s = (k: number, x: number, y: number): Pt => [
     x + sway * k,
     y + bob * Math.min(k, 1),
   ];
 
   const rShoulder = s(1, 105, 122);
-  const upper = ((-150 + 6 * Math.sin(t * 3.1)) * Math.PI) / 180;
+  const upper = ((-150 + 6 * amp * Math.sin(t * 3.1)) * Math.PI) / 180;
   const rElbow: Pt = [
     rShoulder[0] + UPPER * Math.cos(upper),
     rShoulder[1] + UPPER * Math.sin(upper),
   ];
-  const fore = ((-100 + 32 * Math.sin(t * 6.2)) * Math.PI) / 180;
+  const fore = ((-100 + 32 * amp * Math.sin(t * 6.2)) * Math.PI) / 180;
   const rWrist: Pt = [
     rElbow[0] + FORE * Math.cos(fore),
     rElbow[1] + FORE * Math.sin(fore),
   ];
-  const lSwing = Math.sin(t * 1.8) * 3;
+  const lSwing = Math.sin(t * 1.8) * 3 * amp;
 
   return [
     s(1.1, 150, 66), // nose
@@ -217,7 +226,8 @@ export function PoseFigure({
 
       // Pose: idle, with the arm nearest the pointer reaching for it. When the
       // pointer crosses the body the other arm takes over, smoothly.
-      const base = idlePose(t);
+      const rest = smooth(WAVE_END, WAVE_END + SETTLE, t);
+      const base = idlePose(t, 1 - rest);
       const jabbing = now < jabUntil;
       const active = !!pointer && (jabbing || now - lastMove < 2200);
       if (pointer) {
@@ -225,10 +235,12 @@ export function PoseFigure({
         else if (side === 5 && pointer[0] < 110) side = 6;
       }
       const pose = base.slice();
-      // The waving arm settles to hang while the other arm reaches.
+      // The waving arm lowers to hang once the wave is over, or while the
+      // other arm reaches.
       const rs = at(base, 6);
-      pose[8] = lerpPt(at(base, 8), [rs[0] - 16, rs[1] + 74], reachW[5]);
-      pose[10] = lerpPt(at(base, 10), [rs[0] - 21, rs[1] + 146], reachW[5]);
+      const hang = Math.max(rest, reachW[5]);
+      pose[8] = lerpPt(at(base, 8), [rs[0] - 16, rs[1] + 74], hang);
+      pose[10] = lerpPt(at(base, 10), [rs[0] - 21, rs[1] + 146], hang);
       for (const s of [5, 6] as const) {
         const want = active && side === s ? 1 : 0;
         if (want && reachW[s] < 0.02) hands[s] = at(pose, s + 4);
@@ -358,9 +370,32 @@ export function PoseFigure({
       ctx.fillRect(tx - 1, my - 8, 2, 16);
     };
 
+    // Frames run only while something moves: the opening wave, a pointer,
+    // an arm returning to rest, or the speed strip draining. Then it stops.
+    let running = false;
+    const needsFrame = (now: number) =>
+      (now - start) / 1000 < WAVE_END + SETTLE + 0.3 ||
+      (!!pointer && now - lastMove < 2200) ||
+      now < jabUntil ||
+      reachW[5] > 0.002 ||
+      reachW[6] > 0.002 ||
+      meter > 0.004;
     const loop = (now: number) => {
-      if (visible && !document.hidden) draw((now - start) / 1000, now);
+      if (!visible || document.hidden) {
+        running = false;
+        return;
+      }
+      draw((now - start) / 1000, now);
+      if (needsFrame(now)) raf = requestAnimationFrame(loop);
+      else running = false;
+    };
+    const kick = () => {
+      if (running || reduce) return;
+      running = true;
       raf = requestAnimationFrame(loop);
+    };
+    const onVisibility = () => {
+      if (!document.hidden) kick();
     };
 
     // A still frame (two draws so the arrows show). Used for reduced motion and
@@ -381,6 +416,7 @@ export function PoseFigure({
       pointer = toFigure(e.clientX, e.clientY);
       lastMove = performance.now();
       if (reachW[5] < 0.05 && reachW[6] < 0.05) side = pointer[0] < 150 ? 6 : 5;
+      kick();
     };
     const onDown = (e: PointerEvent) => {
       const now = performance.now();
@@ -389,6 +425,7 @@ export function PoseFigure({
       pointer = p;
       lastMove = now;
       jabUntil = now + 450;
+      kick();
     };
     const onLeave = () => {
       lastMove = Math.min(lastMove, performance.now() - 1600);
@@ -398,11 +435,17 @@ export function PoseFigure({
     still();
     const ro = new ResizeObserver(() => {
       resize();
-      still();
+      if (reduce) still();
+      else {
+        const now = performance.now();
+        draw((now - start) / 1000, now);
+        kick();
+      }
     });
     ro.observe(wrap);
     const io = new IntersectionObserver(([e]) => {
       visible = e?.isIntersecting ?? true;
+      if (visible) kick();
     });
     io.observe(wrap);
 
@@ -410,7 +453,8 @@ export function PoseFigure({
       wrap.addEventListener("pointermove", onMove);
       wrap.addEventListener("pointerdown", onDown);
       wrap.addEventListener("pointerleave", onLeave);
-      raf = requestAnimationFrame(loop);
+      document.addEventListener("visibilitychange", onVisibility);
+      kick();
     }
     // Redraw once fonts arrive so the label uses Barlow Condensed.
     document.fonts?.ready.then(() => reduce && still()).catch(() => {});
@@ -422,6 +466,7 @@ export function PoseFigure({
       wrap.removeEventListener("pointermove", onMove);
       wrap.removeEventListener("pointerdown", onDown);
       wrap.removeEventListener("pointerleave", onLeave);
+      document.removeEventListener("visibilitychange", onVisibility);
     };
   }, [alertLabel, motionLabel, rtl]);
 

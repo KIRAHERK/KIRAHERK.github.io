@@ -102,6 +102,8 @@ export type Content = {
     fightSteps: string[];
     fightTitle: string;
     fightRows: Array<[label: string, value: number]>;
+    /** Context for the first row, shown under the bars. */
+    fightNote: string;
     qgenTitle: string;
     qgenSteps: {
       lexical: [string, string];
@@ -395,6 +397,8 @@ export const content: Record<Lang, Content> = {
         ["RWF-2000 · test", 73],
         ["RWF-2000 · validation", 71],
       ],
+      fightNote:
+        "The SCVD test split has only 12 fight videos; scored per video instead of per clip, it reaches 87.9%.",
       qgenTitle: "How a question is grounded",
       qgenSteps: {
         lexical: ["BM25", "exact terms"],
@@ -684,6 +688,8 @@ export const content: Record<Lang, Content> = {
         ["RWF-2000 · اختبار", 73],
         ["RWF-2000 · تحقق", 71],
       ],
+      fightNote:
+        "قسم الاختبار في SCVD يضم 12 مقطع شجار فقط؛ وعند التقييم لكل مقطع فيديو بدل كل جزء تصل الدقة إلى 87.9%.",
       qgenTitle: "كيف يستند كل سؤال إلى الكتاب",
       qgenSteps: {
         lexical: ["BM25", "مطابقة حرفية"],

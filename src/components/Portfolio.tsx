@@ -205,8 +205,8 @@ export function Portfolio({ lang }: { lang: Lang }) {
                 </h3>
                 <ul className="mt-3 space-y-1.5">
                   {items.map((it) => (
-                    <li key={it} className="text-[16px] text-ink-2" dir="auto">
-                      {it}
+                    <li key={it} className="text-[16px] text-ink-2">
+                      <bdi>{it}</bdi>
                     </li>
                   ))}
                 </ul>
@@ -368,7 +368,11 @@ function visualsFor(p: Project, t: Content, lang: Lang): Visuals {
         aside: (
           <div className="space-y-9">
             <Pipeline title={v.fightStepsTitle} steps={v.fightSteps} />
-            <ResultBars title={v.fightTitle} rows={v.fightRows} />
+            <ResultBars
+              title={v.fightTitle}
+              rows={v.fightRows}
+              note={v.fightNote}
+            />
           </div>
         ),
       };
@@ -480,19 +484,21 @@ function Shop({
       </div>
 
       <div
-        className={`mt-9 grid gap-12 ${
+        className={`mt-9 grid gap-10 ${
           aside
             ? phoneAside
-              ? "md:grid-cols-[minmax(0,1fr)_auto] md:items-start lg:gap-20"
-              : "lg:grid-cols-[minmax(0,1fr)_minmax(0,0.92fr)] lg:gap-16"
-            : ""
+              ? "md:grid-cols-[minmax(0,1fr)_auto] md:items-start lg:gap-14"
+              : "lg:grid-cols-2 lg:gap-14"
+            : wide && p.note
+              ? "lg:grid-cols-2 lg:gap-14"
+              : ""
         }`}
       >
         <div className="min-w-0">
           <p className="max-w-[54ch] text-[19px] leading-[1.6] text-ink">
             {p.summary}
           </p>
-          {p.note && (
+          {p.note && !wide && (
             <p className="mt-4 max-w-[60ch] text-[16px] leading-relaxed text-ink-2">
               {p.note}
             </p>
@@ -500,27 +506,18 @@ function Shop({
           {lead && <div className="mt-7 max-w-[34rem]">{lead}</div>}
 
           {p.stats.length > 0 && (
-            <dl className="mt-8 grid max-w-[38rem] border-y border-ink/15 sm:grid-cols-3 [&>div+div]:border-t [&>div+div]:border-ink/15 sm:[&>div+div]:border-s sm:[&>div+div]:border-t-0">
+            <ul className="mt-7 space-y-2.5">
               {p.stats.map(([v, l]) => (
-                <div key={l} className="py-3.5 sm:px-5 sm:first:ps-0">
-                  <dt className="sr-only">{l}</dt>
-                  <dd className="flex items-baseline gap-4 sm:block">
-                    <span
-                      className="block min-w-[4.5rem] shrink-0 font-sign text-[clamp(1.75rem,3.2vw,2.3rem)] font-bold leading-none text-cobalt"
-                      dir="ltr"
-                    >
-                      <CountUp value={v} />
-                    </span>
-                    <span
-                      className="block text-[14.5px] leading-snug text-ink-2 sm:mt-1.5"
-                      aria-hidden="true"
-                    >
-                      {l}
-                    </span>
-                  </dd>
-                </div>
+                <li key={l} className="flex items-center gap-3.5">
+                  <span className="house-no house-no-lg tnum" dir="ltr">
+                    <CountUp value={v} />
+                  </span>
+                  <span className="text-[16px] leading-snug text-ink-2">
+                    {l}
+                  </span>
+                </li>
               ))}
-            </dl>
+            </ul>
           )}
 
           <details className="group mt-6">
@@ -560,12 +557,21 @@ function Shop({
           )}
         </div>
         {aside && (
-          <div className={phoneAside ? "flex justify-center" : "min-w-0"}>
+          <div
+            className={`window-lit min-w-0 ${phoneAside ? "flex justify-center px-4 py-7 sm:px-8" : "px-5 py-6 sm:px-8 sm:py-8"}`}
+          >
             {aside}
           </div>
         )}
+        {wide && p.note && (
+          <p className="max-w-[60ch] text-[16px] leading-relaxed text-ink-2 lg:pt-1">
+            {p.note}
+          </p>
+        )}
       </div>
-      {wide && <div className="mt-12">{wide}</div>}
+      {wide && (
+        <div className="window-lit mt-10 px-4 py-6 sm:px-8 sm:py-8">{wide}</div>
+      )}
     </article>
   );
 }

@@ -52,8 +52,8 @@ export function PhoneShowcase({
 }) {
   const [i, setI] = useState(0);
   return (
-    <div className="flex flex-col items-center gap-4">
-      <Phone className="w-[188px] sm:w-[206px]">
+    <div className="flex items-center gap-4 sm:gap-6">
+      <Phone className="w-[176px] shrink-0 sm:w-[206px]">
         {screens.map(([file, name], k) => (
           <img
             key={file}
@@ -71,7 +71,7 @@ export function PhoneShowcase({
       <div
         role="group"
         aria-label={label}
-        className="flex max-w-[260px] flex-wrap justify-center gap-x-1"
+        className="flex flex-col items-start"
       >
         {screens.map(([file, name], k) => (
           <button
@@ -79,7 +79,7 @@ export function PhoneShowcase({
             type="button"
             aria-pressed={k === i}
             onClick={() => setI(k)}
-            className={`label-type min-h-11 cursor-pointer px-2 text-[16px] underline-offset-[7px] transition-colors duration-200 ${
+            className={`label-type min-h-11 cursor-pointer px-1 text-start text-[16px] underline-offset-[7px] transition-colors duration-200 ${
               k === i
                 ? "text-cobalt underline decoration-2 decoration-cobalt"
                 : "text-ink-3 hover:text-ink"
@@ -109,18 +109,17 @@ export function Pipeline({ title, steps }: { title: string; steps: string[] }) {
           <li
             key={s}
             className="relative flex items-center gap-3 text-[16px] text-ink"
-            dir="auto"
           >
             <span className="house-no tnum" aria-hidden="true">
               {i + 1}
             </span>
-            <span
+            <bdi
               className={
                 i === steps.length - 1 ? "font-semibold text-cobalt" : ""
               }
             >
               {s}
-            </span>
+            </bdi>
           </li>
         ))}
       </ol>
@@ -132,9 +131,11 @@ export function Pipeline({ title, steps }: { title: string; steps: string[] }) {
 export function ResultBars({
   title,
   rows,
+  note,
 }: {
   title: string;
   rows: Array<[string, number]>;
+  note?: string;
 }) {
   return (
     <figure>
@@ -160,6 +161,11 @@ export function ResultBars({
           </li>
         ))}
       </ul>
+      {note && (
+        <p className="mt-3 max-w-[52ch] text-[14.5px] leading-relaxed text-ink-2">
+          {note}
+        </p>
+      )}
     </figure>
   );
 }
