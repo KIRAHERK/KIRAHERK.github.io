@@ -1,0 +1,963 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-17T02:27:33Z",
+  "title": "Design System: Hussein Al Herk",
+  "extensions": {
+    "colorMeta": {
+      "bg": {
+        "role": "neutral",
+        "displayName": "Off-White Ground",
+        "canonical": "#fbfbfa",
+        "oklch": "oklch(98.8% 0.001 106.4)",
+        "cssVar": "--bg",
+        "scheme": "light",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424241",
+          "#616160",
+          "#828281",
+          "#a5a5a4",
+          "#c9c9c8",
+          "#eeeeee"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Pure White Surface",
+        "canonical": "#ffffff",
+        "oklch": "oklch(100.0% 0.000 89.9)",
+        "cssVar": "--surface",
+        "scheme": "light",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ]
+      },
+      "sunken": {
+        "role": "neutral",
+        "displayName": "Soft Stone",
+        "canonical": "#f3f3f1",
+        "oklch": "oklch(96.4% 0.003 106.4)",
+        "cssVar": "--sunken",
+        "scheme": "light",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252524",
+          "#424241",
+          "#616160",
+          "#828281",
+          "#a5a5a3",
+          "#c9c9c8",
+          "#eeeeed"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "#e6e5e2",
+        "oklch": "oklch(92.2% 0.004 91.4)",
+        "cssVar": "--line",
+        "scheme": "light",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252524",
+          "#434240",
+          "#62615f",
+          "#83827f",
+          "#a6a5a2",
+          "#cac9c7",
+          "#efeeed"
+        ]
+      },
+      "line-strong": {
+        "role": "neutral",
+        "displayName": "Firm Hairline",
+        "canonical": "#d3d2ce",
+        "oklch": "oklch(86.3% 0.006 95.1)",
+        "cssVar": "--line-strong",
+        "scheme": "light",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252523",
+          "#43423f",
+          "#62615e",
+          "#83827f",
+          "#a6a5a1",
+          "#cac9c6",
+          "#efeeec"
+        ]
+      },
+      "text": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#18181b",
+        "oklch": "oklch(21.0% 0.006 285.9)",
+        "cssVar": "--text",
+        "scheme": "light",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#252527",
+          "#424244",
+          "#616164",
+          "#828286",
+          "#a4a4a8",
+          "#c9c9cc",
+          "#eeeef0"
+        ]
+      },
+      "text-2": {
+        "role": "neutral",
+        "displayName": "Graphite",
+        "canonical": "#52525b",
+        "oklch": "oklch(44.2% 0.015 285.8)",
+        "cssVar": "--text-2",
+        "scheme": "light",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#252529",
+          "#414148",
+          "#606069",
+          "#81818b",
+          "#a4a4ae",
+          "#c8c8d0",
+          "#eeeef3"
+        ]
+      },
+      "text-3": {
+        "role": "neutral",
+        "displayName": "Slate",
+        "canonical": "#63636b",
+        "oklch": "oklch(50.2% 0.013 285.9)",
+        "cssVar": "--text-3",
+        "scheme": "light",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#252528",
+          "#414147",
+          "#606068",
+          "#81818a",
+          "#a4a4ac",
+          "#c8c8cf",
+          "#eeeef3"
+        ]
+      },
+      "accent": {
+        "role": "primary",
+        "displayName": "Cobalt Link Blue",
+        "canonical": "#2550d6",
+        "oklch": "oklch(49.2% 0.211 265.3)",
+        "cssVar": "--accent",
+        "scheme": "light",
+        "tonalRamp": [
+          "#040a1c",
+          "#091d5c",
+          "#15349a",
+          "#2852d1",
+          "#4376fe",
+          "#79a1ff",
+          "#b0c9ff",
+          "#e7efff"
+        ]
+      },
+      "ok": {
+        "role": "status",
+        "displayName": "Release Green",
+        "canonical": "#15803d",
+        "oklch": "oklch(52.7% 0.137 150.1)",
+        "cssVar": "--ok",
+        "scheme": "light",
+        "tonalRamp": [
+          "#040e06",
+          "#002e10",
+          "#005121",
+          "#0d7536",
+          "#379954",
+          "#63bc79",
+          "#96dda4",
+          "#cefcd6"
+        ]
+      },
+      "wip": {
+        "role": "status",
+        "displayName": "Work Amber",
+        "canonical": "#b45309",
+        "oklch": "oklch(55.5% 0.146 49.0)",
+        "cssVar": "--wip",
+        "scheme": "light",
+        "tonalRamp": [
+          "#140703",
+          "#3f1800",
+          "#6b2d00",
+          "#9a4500",
+          "#c56323",
+          "#e98952",
+          "#ffb68f",
+          "#ffeadf"
+        ]
+      },
+      "alert": {
+        "role": "status",
+        "displayName": "Alert Red",
+        "canonical": "#dc2626",
+        "oklch": "oklch(57.7% 0.215 27.3)",
+        "cssVar": "--alert",
+        "scheme": "light",
+        "tonalRamp": [
+          "#190403",
+          "#4d0003",
+          "#810008",
+          "#b80010",
+          "#e73430",
+          "#ff7367",
+          "#ffb3a9",
+          "#ffe9e5"
+        ]
+      },
+      "fig-line": {
+        "role": "figure",
+        "displayName": "Skeleton Ink",
+        "canonical": "#1f1f23",
+        "oklch": "oklch(24.1% 0.008 285.8)",
+        "cssVar": "--fig-line",
+        "scheme": "light",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#252527",
+          "#414245",
+          "#616165",
+          "#828287",
+          "#a4a4a9",
+          "#c9c9cd",
+          "#eeeef1"
+        ]
+      },
+      "fig-joint": {
+        "role": "figure",
+        "displayName": "Joint Fill",
+        "canonical": "#fbfbfa",
+        "oklch": "oklch(98.8% 0.001 106.4)",
+        "cssVar": "--fig-joint",
+        "scheme": "light",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424241",
+          "#616160",
+          "#828281",
+          "#a5a5a4",
+          "#c9c9c8",
+          "#eeeeee"
+        ]
+      },
+      "fig-track": {
+        "role": "figure",
+        "displayName": "Meter Track",
+        "canonical": "#e2e1de",
+        "oklch": "oklch(91.0% 0.004 91.4)",
+        "cssVar": "--fig-track",
+        "scheme": "light",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252524",
+          "#434240",
+          "#62615f",
+          "#83827f",
+          "#a6a5a2",
+          "#cac9c7",
+          "#efeeed"
+        ]
+      },
+      "fig-label": {
+        "role": "figure",
+        "displayName": "Meter Label",
+        "canonical": "#5b5b63",
+        "oklch": "oklch(47.4% 0.013 285.9)",
+        "cssVar": "--fig-label",
+        "scheme": "light",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#252528",
+          "#414147",
+          "#606068",
+          "#81818a",
+          "#a4a4ac",
+          "#c8c8cf",
+          "#eeeef3"
+        ]
+      },
+      "fig-mark": {
+        "role": "figure",
+        "displayName": "Threshold Amber",
+        "canonical": "#d97706",
+        "oklch": "oklch(66.6% 0.157 58.3)",
+        "cssVar": "--fig-mark",
+        "scheme": "light",
+        "tonalRamp": [
+          "#140801",
+          "#3b1c00",
+          "#643300",
+          "#914d00",
+          "#c06800",
+          "#e88b37",
+          "#ffb780",
+          "#ffeadb"
+        ]
+      },
+      "device-bezel": {
+        "role": "device",
+        "displayName": "Device Bezel",
+        "canonical": "#161618",
+        "oklch": "oklch(20.1% 0.004 286.0)",
+        "scheme": "both",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252526",
+          "#424244",
+          "#616163",
+          "#828285",
+          "#a5a5a7",
+          "#c9c9cb",
+          "#eeeef0"
+        ]
+      },
+      "bg-dark": {
+        "role": "neutral",
+        "displayName": "Near-Black Ground",
+        "canonical": "#0b0b0d",
+        "oklch": "oklch(15.1% 0.004 285.9)",
+        "cssVar": "--bg",
+        "scheme": "dark",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252526",
+          "#424244",
+          "#616163",
+          "#828285",
+          "#a5a5a7",
+          "#c9c9cb",
+          "#eeeef0"
+        ]
+      },
+      "surface-dark": {
+        "role": "neutral",
+        "displayName": "Raised Charcoal",
+        "canonical": "#141417",
+        "oklch": "oklch(19.3% 0.006 285.8)",
+        "cssVar": "--surface",
+        "scheme": "dark",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#252527",
+          "#424244",
+          "#616164",
+          "#828286",
+          "#a4a4a8",
+          "#c9c9cc",
+          "#eeeef0"
+        ]
+      },
+      "sunken-dark": {
+        "role": "neutral",
+        "displayName": "Panel Charcoal",
+        "canonical": "#111114",
+        "oklch": "oklch(17.9% 0.006 285.8)",
+        "cssVar": "--sunken",
+        "scheme": "dark",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#252527",
+          "#424245",
+          "#616164",
+          "#828286",
+          "#a4a4a8",
+          "#c9c9cc",
+          "#eeeef0"
+        ]
+      },
+      "line-dark": {
+        "role": "neutral",
+        "displayName": "Hairline (dark)",
+        "canonical": "#25252b",
+        "oklch": "oklch(26.7% 0.011 285.6)",
+        "cssVar": "--line",
+        "scheme": "dark",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#252528",
+          "#414147",
+          "#606067",
+          "#818189",
+          "#a4a4ab",
+          "#c8c8cf",
+          "#eeeef2"
+        ]
+      },
+      "line-strong-dark": {
+        "role": "neutral",
+        "displayName": "Firm Hairline (dark)",
+        "canonical": "#34343b",
+        "oklch": "oklch(32.8% 0.012 285.7)",
+        "cssVar": "--line-strong",
+        "scheme": "dark",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#252528",
+          "#414147",
+          "#606068",
+          "#81818a",
+          "#a4a4ac",
+          "#c8c8cf",
+          "#eeeef3"
+        ]
+      },
+      "text-dark": {
+        "role": "neutral",
+        "displayName": "Ink (dark)",
+        "canonical": "#ececef",
+        "oklch": "oklch(94.4% 0.004 286.3)",
+        "cssVar": "--text",
+        "scheme": "dark",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252526",
+          "#424244",
+          "#616163",
+          "#828285",
+          "#a5a5a7",
+          "#c9c9cb",
+          "#eeeef0"
+        ]
+      },
+      "text-2-dark": {
+        "role": "neutral",
+        "displayName": "Graphite (dark)",
+        "canonical": "#a6a6ae",
+        "oklch": "oklch(72.8% 0.011 286.1)",
+        "cssVar": "--text-2",
+        "scheme": "dark",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#252528",
+          "#414147",
+          "#606067",
+          "#818189",
+          "#a4a4ac",
+          "#c8c8cf",
+          "#eeeef2"
+        ]
+      },
+      "text-3-dark": {
+        "role": "neutral",
+        "displayName": "Slate (dark)",
+        "canonical": "#92929a",
+        "oklch": "oklch(66.3% 0.012 286.1)",
+        "cssVar": "--text-3",
+        "scheme": "dark",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#252528",
+          "#414147",
+          "#606067",
+          "#818189",
+          "#a4a4ac",
+          "#c8c8cf",
+          "#eeeef2"
+        ]
+      },
+      "accent-dark": {
+        "role": "primary",
+        "displayName": "Cobalt Link Blue (dark)",
+        "canonical": "#8db0ff",
+        "oklch": "oklch(76.3% 0.120 265.4)",
+        "cssVar": "--accent",
+        "scheme": "dark",
+        "tonalRamp": [
+          "#070b15",
+          "#152345",
+          "#293f75",
+          "#415ea2",
+          "#5f7fca",
+          "#83a3ed",
+          "#b0c9ff",
+          "#e7efff"
+        ]
+      },
+      "ok-dark": {
+        "role": "status",
+        "displayName": "Release Green (dark)",
+        "canonical": "#4ade80",
+        "oklch": "oklch(80.0% 0.182 151.7)",
+        "cssVar": "--ok",
+        "scheme": "dark",
+        "tonalRamp": [
+          "#010f05",
+          "#002e12",
+          "#005025",
+          "#007539",
+          "#009c4e",
+          "#36c26c",
+          "#7ce39a",
+          "#c6ffd4"
+        ]
+      },
+      "wip-dark": {
+        "role": "status",
+        "displayName": "Work Amber (dark)",
+        "canonical": "#fbbf24",
+        "oklch": "oklch(83.7% 0.164 84.4)",
+        "cssVar": "--wip",
+        "scheme": "dark",
+        "tonalRamp": [
+          "#110a00",
+          "#312200",
+          "#553e00",
+          "#7c5b00",
+          "#a57b00",
+          "#d09c00",
+          "#f0c25f",
+          "#ffecc8"
+        ]
+      },
+      "alert-dark": {
+        "role": "status",
+        "displayName": "Alert Red (dark)",
+        "canonical": "#f87171",
+        "oklch": "oklch(71.1% 0.166 22.2)",
+        "cssVar": "--alert",
+        "scheme": "dark",
+        "tonalRamp": [
+          "#160606",
+          "#480a0f",
+          "#79151f",
+          "#a92e35",
+          "#d35053",
+          "#f77877",
+          "#ffb2ae",
+          "#ffe8e7"
+        ]
+      },
+      "fig-line-dark": {
+        "role": "figure",
+        "displayName": "Skeleton Ink (dark)",
+        "canonical": "#e6e6ea",
+        "oklch": "oklch(92.6% 0.005 286.3)",
+        "cssVar": "--fig-line",
+        "scheme": "dark",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#252526",
+          "#424244",
+          "#616164",
+          "#828285",
+          "#a5a5a8",
+          "#c9c9cc",
+          "#eeeef0"
+        ]
+      },
+      "fig-joint-dark": {
+        "role": "figure",
+        "displayName": "Joint Fill (dark)",
+        "canonical": "#111114",
+        "oklch": "oklch(17.9% 0.006 285.8)",
+        "cssVar": "--fig-joint",
+        "scheme": "dark",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#252527",
+          "#424245",
+          "#616164",
+          "#828286",
+          "#a4a4a8",
+          "#c9c9cc",
+          "#eeeef0"
+        ]
+      },
+      "fig-track-dark": {
+        "role": "figure",
+        "displayName": "Meter Track (dark)",
+        "canonical": "#2a2a30",
+        "oklch": "oklch(28.7% 0.011 285.7)",
+        "cssVar": "--fig-track",
+        "scheme": "dark",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#252528",
+          "#414147",
+          "#606067",
+          "#818189",
+          "#a4a4ab",
+          "#c8c8ce",
+          "#eeeef2"
+        ]
+      },
+      "fig-label-dark": {
+        "role": "figure",
+        "displayName": "Meter Label (dark)",
+        "canonical": "#a6a6ae",
+        "oklch": "oklch(72.8% 0.011 286.1)",
+        "cssVar": "--fig-label",
+        "scheme": "dark",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#252528",
+          "#414147",
+          "#606067",
+          "#818189",
+          "#a4a4ac",
+          "#c8c8cf",
+          "#eeeef2"
+        ]
+      },
+      "fig-mark-dark": {
+        "role": "figure",
+        "displayName": "Threshold Amber (dark)",
+        "canonical": "#fbbf24",
+        "oklch": "oklch(83.7% 0.164 84.4)",
+        "cssVar": "--fig-mark",
+        "scheme": "dark",
+        "tonalRamp": [
+          "#110a00",
+          "#312200",
+          "#553e00",
+          "#7c5b00",
+          "#a57b00",
+          "#d09c00",
+          "#f0c25f",
+          "#ffecc8"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The name in the identity column, once per page; 3.2rem from 640px."
+      },
+      "display-phone": {
+        "displayName": "Display (phone)",
+        "purpose": "The name below 640px."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section titles: Selected work, About, Skills, Let's talk."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Project names."
+      },
+      "subtitle": {
+        "displayName": "Subtitle",
+        "purpose": "Sub-lists inside a section: More projects, Now."
+      },
+      "lead": {
+        "displayName": "Lead",
+        "purpose": "The role line under the name, in Ink."
+      },
+      "body-large": {
+        "displayName": "Body large",
+        "purpose": "Intro, bio and contact text, in Graphite."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Each project's one-sentence summary; the hero line at 32ch."
+      },
+      "body-small": {
+        "displayName": "Body small",
+        "purpose": "Row text, notes, diagram copy; expanded 'How it works' text at 15px/1.75."
+      },
+      "meta": {
+        "displayName": "Meta",
+        "purpose": "The line under a project title, in Slate."
+      },
+      "caption": {
+        "displayName": "Caption",
+        "purpose": "Diagram titles; the figure's caption strip uses 13px at 400."
+      },
+      "nav": {
+        "displayName": "Nav",
+        "purpose": "Desktop section nav only, uppercase. Tracking resets to 0 on Arabic."
+      },
+      "button": {
+        "displayName": "Button",
+        "purpose": "Primary and quiet pill labels."
+      },
+      "link": {
+        "displayName": "Link",
+        "purpose": "Outbound links and the 'How it works' disclosure."
+      },
+      "pill": {
+        "displayName": "Pill",
+        "purpose": "Status pill labels."
+      },
+      "tag": {
+        "displayName": "Tag",
+        "purpose": "'Built with' tags."
+      },
+      "data": {
+        "displayName": "Data",
+        "purpose": "Stat values and result percentages; standalone figures only."
+      },
+      "data-small": {
+        "displayName": "Data small",
+        "purpose": "Version tags, list years, ranks, step numbers, averages (11.5-13px)."
+      },
+      "arabic": {
+        "displayName": "Arabic",
+        "purpose": "All Arabic text; same sizes as the Latin roles, never letter-spaced."
+      }
+    },
+    "shadows": [
+      {
+        "name": "device-lift",
+        "value": "0 0 0 1px rgb(0 0 0 / 0.08), 0 22px 40px -24px rgb(0 0 0 / 0.45)",
+        "purpose": "Phone frames around app screenshots. The only shadow besides window-lift."
+      },
+      {
+        "name": "window-lift",
+        "value": "0 18px 40px -28px rgb(0 0 0 / 0.35)",
+        "purpose": "Browser-window frame and the admin-dashboard screenshot in the order journey."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Load rise and result-bar fill."
+      },
+      {
+        "name": "rise",
+        "value": "0.8s cubic-bezier(0.16, 1, 0.3, 1); translateY(8px) and opacity 0 to rest; delays 0.06s, 0.12s, 0.2s",
+        "purpose": "Identity column entrance on load, once."
+      },
+      {
+        "name": "hover-colour",
+        "value": "0.2s ease-out",
+        "purpose": "Colour, background and border changes on hover."
+      },
+      {
+        "name": "primary-hover",
+        "value": "opacity 0.2s ease-out to 0.86",
+        "purpose": "Primary pill hover."
+      },
+      {
+        "name": "press",
+        "value": "transform 0.15s ease-out, translateY(1px)",
+        "purpose": "Primary pill active state."
+      },
+      {
+        "name": "nav-line",
+        "value": "all 0.3s ease-out, width 2rem to 4rem",
+        "purpose": "Section nav marker for hover and the section in view."
+      },
+      {
+        "name": "disclosure",
+        "value": "transform 0.3s, rotate(180deg)",
+        "purpose": "'How it works' chevron."
+      },
+      {
+        "name": "bar-fill",
+        "value": "transform 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s, scaleX(0) to 1 from the reading start",
+        "purpose": "Result bars fill once when their project scrolls into view."
+      },
+      {
+        "name": "screen-crossfade",
+        "value": "opacity 0.3s",
+        "purpose": "Forge showcase screen switch (visitor-driven)."
+      },
+      {
+        "name": "journey-crossfade",
+        "value": "opacity 0.5s",
+        "purpose": "Order journey stage switch."
+      },
+      {
+        "name": "journey-step",
+        "value": "5.2s linear per step, plays through once while on screen",
+        "purpose": "Order journey track fill; a tap holds the step."
+      },
+      {
+        "name": "figure-wave",
+        "value": "2.4s wave, 0.9s settle, then rest; alert at 60% of the speed meter",
+        "purpose": "Pose figure: the one signature motion. Pointer-driven after the wave; frames stop when still."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one solid ink pill per view region: Email me, the contact address, Download for Android.",
+      "html": "<a class=\"ds-btn-primary\" href=\"#\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect width=\"20\" height=\"16\" x=\"2\" y=\"4\" rx=\"2\"/><path d=\"m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7\"/></svg>Email me</a>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; gap: 0.5rem; min-height: 2.75rem; padding: 0 1.15rem; border-radius: 999px; background: var(--text, #18181b); color: var(--bg, #fbfbfa); font-family: var(--font-sans, \"Schibsted Grotesk\", \"Noto Sans Arabic\", system-ui, sans-serif); font-size: 0.95rem; font-weight: 500; text-decoration: none; transition: opacity 0.2s ease-out, transform 0.15s ease-out; } .ds-btn-primary:hover { opacity: 0.86; } .ds-btn-primary:active { transform: translateY(1px); } .ds-btn-primary:focus-visible { outline: 2px solid var(--accent, #2550d6); outline-offset: 3px; }"
+    },
+    {
+      "name": "Quiet Button",
+      "kind": "button",
+      "refersTo": "button-quiet",
+      "description": "Hairline pill for the secondary action beside the primary (Copy).",
+      "html": "<button type=\"button\" class=\"ds-btn-quiet\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect width=\"14\" height=\"14\" x=\"8\" y=\"8\" rx=\"2\" ry=\"2\"/><path d=\"M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2\"/></svg>Copy</button>",
+      "css": ".ds-btn-quiet { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; min-height: 2.75rem; min-width: 2.75rem; padding: 0 1rem; border-radius: 999px; border: 1px solid var(--line-strong, #d3d2ce); background: transparent; color: var(--text, #18181b); font-family: var(--font-sans, \"Schibsted Grotesk\", \"Noto Sans Arabic\", system-ui, sans-serif); font-size: 0.95rem; font-weight: 500; cursor: pointer; transition: background-color 0.2s ease-out, border-color 0.2s ease-out; } .ds-btn-quiet:hover { background: var(--sunken, #f3f3f1); border-color: var(--text-3, #63636b); } .ds-btn-quiet:focus-visible { outline: 2px solid var(--accent, #2550d6); outline-offset: 3px; }"
+    },
+    {
+      "name": "Icon Button",
+      "kind": "button",
+      "refersTo": "button-icon",
+      "description": "44px hairline circle with an 18px icon: GitHub, LinkedIn, and the phone section-bar mail button.",
+      "html": "<a class=\"ds-btn-icon\" href=\"#\" aria-label=\"GitHub\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4\"/><path d=\"M9 18c-4.51 2-5-2-7-2\"/></svg></a><a class=\"ds-btn-icon\" href=\"#\" aria-label=\"Email me\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect width=\"20\" height=\"16\" x=\"2\" y=\"4\" rx=\"2\"/><path d=\"m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7\"/></svg></a>",
+      "css": ".ds-btn-icon { display: inline-flex; align-items: center; justify-content: center; width: 2.75rem; height: 2.75rem; margin-inline-end: 0.625rem; border-radius: 999px; border: 1px solid var(--line-strong, #d3d2ce); color: var(--text, #18181b); transition: background-color 0.2s ease-out, border-color 0.2s ease-out; } .ds-btn-icon:hover { background: var(--sunken, #f3f3f1); border-color: var(--text-3, #63636b); } .ds-btn-icon:focus-visible { outline: 2px solid var(--accent, #2550d6); outline-offset: 3px; }"
+    },
+    {
+      "name": "Status Pill",
+      "kind": "chip",
+      "refersTo": "status-pill",
+      "description": "Project status at the end of the title row; the 6px dot carries the status colour.",
+      "html": "<span class=\"ds-pill ds-pill--ok\">Released</span> <span class=\"ds-pill ds-pill--wip\">In progress</span> <span class=\"ds-pill\">Not adopted</span>",
+      "css": ".ds-pill { display: inline-flex; align-items: center; gap: 0.45rem; min-height: 1.65rem; padding: 0 0.65rem; border-radius: 999px; border: 1px solid var(--line, #e6e5e2); background: var(--surface, #ffffff); color: var(--text-2, #52525b); font-family: var(--font-sans, \"Schibsted Grotesk\", \"Noto Sans Arabic\", system-ui, sans-serif); font-size: 0.8rem; font-weight: 500; white-space: nowrap; } .ds-pill::before { content: \"\"; width: 6px; height: 6px; border-radius: 50%; background: var(--text-3, #63636b); } .ds-pill--ok::before { background: var(--ok, #15803d); } .ds-pill--wip::before { background: var(--wip, #b45309); }"
+    },
+    {
+      "name": "Tag",
+      "kind": "chip",
+      "refersTo": "tag",
+      "description": "Non-interactive 'Built with' list item; always left-to-right.",
+      "html": "<ul class=\"ds-tags\" aria-label=\"Built with\"><li class=\"ds-tag\" dir=\"ltr\">Kotlin</li><li class=\"ds-tag\" dir=\"ltr\">Jetpack Compose</li><li class=\"ds-tag\" dir=\"ltr\">CameraX</li></ul>",
+      "css": ".ds-tags { display: flex; flex-wrap: wrap; gap: 0.375rem; margin: 0; padding: 0; list-style: none; } .ds-tag { padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line, #e6e5e2); background: var(--surface, #ffffff); color: var(--text-2, #52525b); font-family: var(--font-sans, \"Schibsted Grotesk\", \"Noto Sans Arabic\", system-ui, sans-serif); font-size: 12px; font-weight: 500; }"
+    },
+    {
+      "name": "Outbound Link",
+      "kind": "custom",
+      "refersTo": "text-link",
+      "description": "Ink link with an up-right arrow; both turn blue on hover and the arrow lifts. Arrow mirrors in RTL.",
+      "html": "<a class=\"ds-link\" href=\"#\">Code<span class=\"ds-link-arrow\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M7 7h10v10\"/><path d=\"M7 17 17 7\"/></svg></span></a>",
+      "css": ".ds-link { display: inline-flex; align-items: center; gap: 0.25rem; min-height: 2.75rem; color: var(--text, #18181b); font-family: var(--font-sans, \"Schibsted Grotesk\", \"Noto Sans Arabic\", system-ui, sans-serif); font-size: 14.5px; font-weight: 500; text-decoration: none; transition: color 0.2s ease-out; } .ds-link-arrow { display: inline-flex; color: var(--text-3, #63636b); transition: transform 0.2s ease-out, color 0.2s ease-out; } .ds-link:hover { color: var(--accent, #2550d6); } .ds-link:hover .ds-link-arrow { color: var(--accent, #2550d6); transform: translateY(-2px); } .ds-link:focus-visible { outline: 2px solid var(--accent, #2550d6); outline-offset: 3px; border-radius: 6px; } [dir=\"rtl\"] .ds-link-arrow svg { transform: scaleX(-1); }"
+    },
+    {
+      "name": "Section Nav",
+      "kind": "nav",
+      "refersTo": "nav-item",
+      "description": "Desktop identity-column nav: a hairline that grows from 32px to 64px for the section in view.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Sections\"><ul><li><a href=\"#\" aria-current=\"true\"><span class=\"ds-nav-line\"></span><span class=\"ds-nav-label\">Work</span></a></li><li><a href=\"#\"><span class=\"ds-nav-line\"></span><span class=\"ds-nav-label\">About</span></a></li><li><a href=\"#\"><span class=\"ds-nav-line\"></span><span class=\"ds-nav-label\">Skills</span></a></li><li><a href=\"#\"><span class=\"ds-nav-line\"></span><span class=\"ds-nav-label\">Contact</span></a></li></ul></nav>",
+      "css": ".ds-nav ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.25rem; } .ds-nav a { display: inline-flex; align-items: center; gap: 1rem; min-height: 2.5rem; text-decoration: none; } .ds-nav-line { height: 1px; width: 2rem; background: var(--text-3, #63636b); transition: all 0.3s ease-out; } .ds-nav-label { font-family: var(--font-sans, \"Schibsted Grotesk\", \"Noto Sans Arabic\", system-ui, sans-serif); font-size: 12.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-3, #63636b); transition: color 0.2s; } .ds-nav a:hover .ds-nav-line, .ds-nav a[aria-current] .ds-nav-line { width: 4rem; background: var(--text, #18181b); } .ds-nav a:hover .ds-nav-label, .ds-nav a[aria-current] .ds-nav-label { color: var(--text, #18181b); } .ds-nav a:focus-visible { outline: 2px solid var(--accent, #2550d6); outline-offset: 3px; border-radius: 6px; } .ds-nav-label:lang(ar) { letter-spacing: 0; }"
+    },
+    {
+      "name": "Phone Section Bar",
+      "kind": "nav",
+      "refersTo": "section-bar",
+      "description": "Below 1024px each section title sticks to the top on the ground colour, with a round mail button at its end.",
+      "html": "<div class=\"ds-section-bar\"><h2>Selected work</h2><a class=\"ds-section-mail\" href=\"#\" aria-label=\"Email me\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect width=\"20\" height=\"16\" x=\"2\" y=\"4\" rx=\"2\"/><path d=\"m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7\"/></svg></a></div>",
+      "css": ".ds-section-bar { position: sticky; top: 0; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 12px 24px; background: var(--bg, #fbfbfa); } .ds-section-bar h2 { margin: 0; font-family: var(--font-sans, \"Schibsted Grotesk\", \"Noto Sans Arabic\", system-ui, sans-serif); font-size: 1.75rem; font-weight: 600; letter-spacing: -0.03em; color: var(--text, #18181b); } .ds-section-mail { display: inline-flex; align-items: center; justify-content: center; width: 2.75rem; height: 2.75rem; border-radius: 999px; border: 1px solid var(--line-strong, #d3d2ce); color: var(--text, #18181b); transition: background-color 0.2s ease-out, border-color 0.2s ease-out; } .ds-section-mail:hover { background: var(--sunken, #f3f3f1); border-color: var(--text-3, #63636b); } .ds-section-mail:focus-visible { outline: 2px solid var(--accent, #2550d6); outline-offset: 3px; }"
+    },
+    {
+      "name": "Panel with Result Bars",
+      "kind": "card",
+      "refersTo": "panel",
+      "description": "Sunken hairline panel holding a diagram; the headline result is blue, the rest Slate, numbers in mono.",
+      "html": "<figure class=\"ds-panel\"><figcaption class=\"ds-panel-cap\">Accuracy on held-out data</figcaption><ul class=\"ds-bars\"><li><div class=\"ds-bar-row\"><span>SCVD · real CCTV</span><span class=\"ds-bar-val ds-bar-val--lead\" dir=\"ltr\">81%</span></div><div class=\"ds-bar-track\"><div class=\"ds-bar-fill ds-bar-fill--lead\" style=\"width:81%\"></div></div></li><li><div class=\"ds-bar-row\"><span>RWF-2000 · test</span><span class=\"ds-bar-val\" dir=\"ltr\">73%</span></div><div class=\"ds-bar-track\"><div class=\"ds-bar-fill\" style=\"width:73%\"></div></div></li><li><div class=\"ds-bar-row\"><span>RWF-2000 · validation</span><span class=\"ds-bar-val\" dir=\"ltr\">71%</span></div><div class=\"ds-bar-track\"><div class=\"ds-bar-fill\" style=\"width:71%\"></div></div></li></ul></figure>",
+      "css": ".ds-panel { margin: 0; padding: 24px 28px; border-radius: 14px; border: 1px solid var(--line, #e6e5e2); background: var(--sunken, #f3f3f1); font-family: var(--font-sans, \"Schibsted Grotesk\", \"Noto Sans Arabic\", system-ui, sans-serif); } .ds-panel-cap { font-size: 13px; font-weight: 500; color: var(--text-2, #52525b); } .ds-bars { margin: 12px 0 0; padding: 0; list-style: none; display: grid; gap: 12px; } .ds-bar-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; font-size: 15.5px; color: var(--text-2, #52525b); } .ds-bar-val { font-family: \"JetBrains Mono\", ui-monospace, \"SFMono-Regular\", monospace; font-size: 15px; font-weight: 500; line-height: 1; font-variant-numeric: tabular-nums; color: var(--text, #18181b); } .ds-bar-val--lead { color: var(--accent, #2550d6); } .ds-bar-track { margin-top: 8px; height: 6px; border-radius: 999px; overflow: hidden; background: var(--line, #e6e5e2); } .ds-bar-fill { height: 100%; border-radius: 999px; background: var(--text-3, #63636b); } .ds-bar-fill--lead { background: var(--accent, #2550d6); }"
+    },
+    {
+      "name": "Pose Figure Panel",
+      "kind": "custom",
+      "refersTo": "figure-caption",
+      "description": "Signature component. A still of the live canvas at rest: hairline COCO-17 skeleton, hollow joints, speed strip with an amber threshold tick at 60%, and a white caption strip. The live version is a canvas that waves once, follows the pointer and trips Alert Red past the threshold.",
+      "html": "<figure class=\"ds-fig\"><div class=\"ds-fig-stage\"><svg class=\"ds-fig-svg\" viewBox=\"60 40 180 430\" role=\"img\" aria-label=\"Pose skeleton at rest\"><path d=\"M184 455L182 360 M182 360L178 262 M116 455L118 360 M118 360L122 262 M178 262L122 262 M195 122L178 262 M105 122L122 262 M195 122L105 122 M195 122L211 196 M105 122L89 196 M211 196L216 268 M89 196L84 268 M160 58L140 58 M150 66L160 58 M150 66L140 58 M160 58L173 64 M140 58L127 64 M173 64L195 122 M127 64L105 122\" class=\"ds-fig-bones\" vector-effect=\"non-scaling-stroke\"/><circle cx=\"150\" cy=\"66\" r=\"4\" class=\"ds-fig-face\"/><circle cx=\"160\" cy=\"58\" r=\"4\" class=\"ds-fig-face\"/><circle cx=\"140\" cy=\"58\" r=\"4\" class=\"ds-fig-face\"/><circle cx=\"173\" cy=\"64\" r=\"4\" class=\"ds-fig-face\"/><circle cx=\"127\" cy=\"64\" r=\"4\" class=\"ds-fig-face\"/><circle cx=\"195\" cy=\"122\" r=\"8\" class=\"ds-fig-joint\" vector-effect=\"non-scaling-stroke\"/><circle cx=\"105\" cy=\"122\" r=\"8\" class=\"ds-fig-joint\" vector-effect=\"non-scaling-stroke\"/><circle cx=\"211\" cy=\"196\" r=\"10\" class=\"ds-fig-joint\" vector-effect=\"non-scaling-stroke\"/><circle cx=\"89\" cy=\"196\" r=\"10\" class=\"ds-fig-joint\" vector-effect=\"non-scaling-stroke\"/><circle cx=\"216\" cy=\"268\" r=\"10\" class=\"ds-fig-joint\" vector-effect=\"non-scaling-stroke\"/><circle cx=\"84\" cy=\"268\" r=\"10\" class=\"ds-fig-joint\" vector-effect=\"non-scaling-stroke\"/><circle cx=\"178\" cy=\"262\" r=\"8\" class=\"ds-fig-joint\" vector-effect=\"non-scaling-stroke\"/><circle cx=\"122\" cy=\"262\" r=\"8\" class=\"ds-fig-joint\" vector-effect=\"non-scaling-stroke\"/><circle cx=\"182\" cy=\"360\" r=\"8\" class=\"ds-fig-joint\" vector-effect=\"non-scaling-stroke\"/><circle cx=\"118\" cy=\"360\" r=\"8\" class=\"ds-fig-joint\" vector-effect=\"non-scaling-stroke\"/><circle cx=\"184\" cy=\"455\" r=\"8\" class=\"ds-fig-joint\" vector-effect=\"non-scaling-stroke\"/><circle cx=\"116\" cy=\"455\" r=\"8\" class=\"ds-fig-joint\" vector-effect=\"non-scaling-stroke\"/></svg><div class=\"ds-fig-strip\"><span class=\"ds-fig-label\">Speed</span><div class=\"ds-fig-track\"><div class=\"ds-fig-fill\"></div><div class=\"ds-fig-mark\"></div></div></div></div><figcaption class=\"ds-fig-cap\">What my fight detector reads: 17 body keypoints and how fast they move.</figcaption></figure>",
+      "css": ".ds-fig { margin: 0; overflow: hidden; border-radius: 14px; border: 1px solid var(--line, #e6e5e2); background: var(--sunken, #f3f3f1); font-family: var(--font-sans, \"Schibsted Grotesk\", \"Noto Sans Arabic\", system-ui, sans-serif); } .ds-fig-stage { height: 250px; display: flex; flex-direction: column; align-items: center; padding: 16px 16px 14px; box-sizing: border-box; } .ds-fig-svg { height: 172px; width: auto; flex: none; } .ds-fig-bones { fill: none; stroke: var(--fig-line, #1f1f23); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; } .ds-fig-joint { fill: var(--fig-joint, #fbfbfa); stroke: var(--fig-line, #1f1f23); stroke-width: 1.6; } .ds-fig-face { fill: var(--fig-line, #1f1f23); } .ds-fig-strip { margin-top: auto; width: 100%; } .ds-fig-label { display: block; font-size: 12.5px; font-weight: 500; color: var(--fig-label, #5b5b63); } .ds-fig-track { position: relative; margin-top: 8px; height: 4px; background: var(--fig-track, #e2e1de); } .ds-fig-fill { position: absolute; inset-block: 0; inset-inline-start: 0; width: 8%; background: var(--fig-line, #1f1f23); } .ds-fig-mark { position: absolute; top: -5px; inset-inline-start: calc(60% - 1px); width: 2px; height: 14px; background: var(--fig-mark, #d97706); } .ds-fig-cap { padding: 12px 16px; border-top: 1px solid var(--line, #e6e5e2); background: var(--surface, #ffffff); font-size: 13px; line-height: 1.625; color: var(--text-2, #52525b); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Standard, Played Straight",
+    "overview": "This is the engineer-portfolio grammar every recruiter already knows: a pinned identity column beside a scrolling column of work. It is executed with restraint, not reinvented. There is no theme and no costume. The page is near-white, or near-black when the system is dark, with one grotesque typeface, neutral greys and a single blue. The interest comes from the work itself: real screenshots in device frames, small diagrams that show how each system decides, and numbers set in mono so they read as data.\n\nDensity is calm. Desktop has one reading column at about half the container. Sections are well apart (80 to 112px), hairlines separate rows instead of boxes, and soft sunken panels appear only where there is something to look at. Every surface flips with `prefers-color-scheme` through the same named tokens. The Arabic page at /ar mirrors the English one completely; it is not a translation dropped into a left-to-right layout.\n\nOne element is allowed to perform: the live pose figure at the top of the work column. It is a canvas skeleton that waves once, rests, reaches for the pointer, and trips a red alert when moved fast. Everything else is quiet and moves once at most. The look stays professional and familiar, as PRODUCT.md commits, and never becomes a themed or costume world.",
+    "keyCharacteristics": [
+      "Sticky identity column on desktop; a single column with sticky section bars on phones.",
+      "Near-white or near-black ground, neutral greys, one blue accent, and an ink-coloured primary pill.",
+      "Schibsted Grotesk for every Latin word, JetBrains Mono only for standalone data, and Noto Sans Arabic for Arabic.",
+      "A flat page: tone and 1px hairlines make the depth, and only device frames cast shadows.",
+      "Full pills for actions and chips; soft 14px panels for screenshots and diagrams.",
+      "English and Arabic as equals, with logical properties and mirrored motion.",
+      "One signature motion, the pose figure; everything else moves once or not at all."
+    ],
+    "rules": [
+      {
+        "name": "The One Blue Rule",
+        "body": "Blue is the only hue that is not a status colour. It marks links, highlights and focus, always as small marks. It never fills a section, a panel or a button.",
+        "section": "colors"
+      },
+      {
+        "name": "The Ink Pill Rule",
+        "body": "The primary action is ink on the ground: a `text` fill with a `bg` label. It inverts with the theme and is never blue.",
+        "section": "colors"
+      },
+      {
+        "name": "The Dots-Only Rule",
+        "body": "Green, amber and red appear as 6px status dots and inside the pose figure, and nowhere else. They are never text colour, fills or decoration on the page.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Typeface Rule",
+        "body": "Every Latin word on both pages is set in Schibsted Grotesk. Hierarchy comes from size, weight (400, 500 or 600) and negative tracking, never from a second display face.",
+        "section": "typography"
+      },
+      {
+        "name": "The Mono Is Data Rule",
+        "body": "JetBrains Mono sets only standalone figures: versions, stat values, percentages, list years, ranks and step numbers. A number inside a sentence or a meta line (\"Android app · 2026\") stays in the sans. On /ar each mono value is wrapped in `dir=\"ltr\"`.",
+        "section": "typography"
+      },
+      {
+        "name": "The No Tracking In Arabic Rule",
+        "body": "Letter-spacing breaks Arabic letter joining, so any tracked style resets to 0 on Arabic text. The stylesheet enforces this for every tracking class.",
+        "section": "typography"
+      },
+      {
+        "name": "The Email In Reach Rule",
+        "body": "Every scroll position has a visible way to email: the Email me pill in the pinned identity column on desktop, or the mail button in the sticky section bar on phones.",
+        "section": "layout"
+      },
+      {
+        "name": "The Mirror Rule",
+        "body": "Anything with a direction, in layout or in motion, uses logical properties or flips under `dir=\"rtl\"`. Nothing is pinned to left or right.",
+        "section": "layout"
+      },
+      {
+        "name": "The Flat Page Rule",
+        "body": "The page, panels, pills, tags and buttons never cast shadows. A shadow means \"this is a device or a window\" and nothing else.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** keep a single ink pill (`text` fill, `bg` label, 999px, 2.75rem) as the primary action, with a mail or download icon and a verb.",
+      "**Do** put every screenshot and diagram in a panel: a `sunken` ground, a 1px `line` border and 14px corners.",
+      "**Do** set standalone figures in JetBrains Mono next to a sans label, and wrap them in `dir=\"ltr\"` on the Arabic page.",
+      "**Do** reference colour tokens (`var(--text)`, `text-text-2`) so every component flips with the system theme. Keep literal colours for the device bezel and the frame shadows only.",
+      "**Do** use logical properties (start/end, inline-start/end) and mirror any directional motion under `dir=\"rtl\"`.",
+      "**Do** give every interactive element a 44px target and the 2px `accent` focus outline at a 3px offset.",
+      "**Do** keep motion to a single play, behind `prefers-reduced-motion: no-preference`, starting from a visible default.",
+      "**Do** write the name \"Hussein Al Herk\" in Latin script, left to right, in Schibsted Grotesk on both pages."
+    ],
+    "donts": [
+      "**Don't** introduce a themed or costume world: no material metaphor, period ornament, decorative texture or illustrative chrome. The look stays professional and familiar.",
+      "**Don't** add a second accent hue, or use blue for the primary button, a panel or a section background.",
+      "**Don't** use green, amber or red as text, fills or decoration outside status dots and the pose figure.",
+      "**Don't** give panels, pills, tags or buttons a shadow; shadows belong to device and window frames.",
+      "**Don't** set headings, prose or labels in JetBrains Mono.",
+      "**Don't** reuse the nav's uppercase tracked label as an eyebrow above headings; uppercase belongs to the desktop section nav alone.",
+      "**Don't** apply letter-spacing to Arabic text.",
+      "**Don't** add looping or autoplaying motion beyond the figure's single wave and the order journey's single play-through.",
+      "**Don't** show screens or brand marks that PRODUCT.md withholds (the private financial app, the shop client's brand)."
+    ]
+  }
+}
