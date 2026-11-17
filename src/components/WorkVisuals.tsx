@@ -12,7 +12,7 @@ const css = (vars: Record<string, string | number>) => vars as CSSProperties;
 
 /* ------------------------------- Shared parts ------------------------------ */
 
-/** A phone with a painted-black bezel, standing in the shop window. */
+/** A phone with a thin dark bezel. */
 function Phone({
   children,
   className = "",
@@ -22,7 +22,7 @@ function Phone({
 }) {
   return (
     <div
-      className={`relative aspect-[9/19.5] rounded-[1.9rem] bg-ink p-[6px] shadow-[0_26px_40px_-24px_rgb(21_24_30/0.75)] ${className}`}
+      className={`relative aspect-[9/19.5] rounded-[1.9rem] bg-[#161618] p-[5px] shadow-[0_0_0_1px_rgb(0_0_0/0.08),0_22px_40px_-24px_rgb(0_0_0/0.45)] ${className}`}
     >
       <div className="relative h-full w-full overflow-hidden rounded-[1.55rem] bg-black">
         {children}
@@ -31,10 +31,10 @@ function Phone({
   );
 }
 
-/** A small caption lettered like a sign. */
+/** A small figure caption. */
 function Caption({ children }: { children: ReactNode }) {
   return (
-    <figcaption className="label-type text-[15px] text-ink-2">
+    <figcaption className="text-[13px] font-medium text-text-2">
       {children}
     </figcaption>
   );
@@ -79,10 +79,10 @@ export function PhoneShowcase({
             type="button"
             aria-pressed={k === i}
             onClick={() => setI(k)}
-            className={`label-type min-h-11 cursor-pointer px-1 text-start text-[16px] underline-offset-[7px] transition-colors duration-200 ${
+            className={`flex min-h-10 cursor-pointer items-center gap-2 px-1 text-start text-[14px] transition-colors duration-200 ${
               k === i
-                ? "text-cobalt underline decoration-2 decoration-cobalt"
-                : "text-ink-3 hover:text-ink"
+                ? "font-medium text-text before:size-1.5 before:rounded-full before:bg-accent"
+                : "text-text-3 before:size-1.5 before:rounded-full before:bg-transparent hover:text-text"
             }`}
           >
             {name}
@@ -95,7 +95,7 @@ export function PhoneShowcase({
 
 /* ---------------------------- Fight detection ---------------------------- */
 
-/** The decision chain, numbered with house-number plates. */
+/** The decision chain, one numbered step per stage. */
 export function Pipeline({ title, steps }: { title: string; steps: string[] }) {
   return (
     <figure>
@@ -103,19 +103,22 @@ export function Pipeline({ title, steps }: { title: string; steps: string[] }) {
       <ol className="relative mt-3 space-y-2.5">
         <span
           aria-hidden="true"
-          className="absolute bottom-3 start-[0.9rem] top-3 w-px bg-ink/25"
+          className="absolute bottom-3 start-[0.7rem] top-3 w-px bg-line-strong"
         />
         {steps.map((s, i) => (
           <li
             key={s}
-            className="relative flex items-center gap-3 text-[16px] text-ink"
+            className="relative flex items-center gap-3 text-[15px] text-text"
           >
-            <span className="house-no tnum" aria-hidden="true">
+            <span
+              className="grid size-[1.45rem] shrink-0 place-items-center rounded-full border border-line-strong bg-surface font-mono text-[11.5px] text-text-2"
+              aria-hidden="true"
+            >
               {i + 1}
             </span>
             <bdi
               className={
-                i === steps.length - 1 ? "font-semibold text-cobalt" : ""
+                i === steps.length - 1 ? "font-medium text-accent" : ""
               }
             >
               {s}
@@ -127,7 +130,7 @@ export function Pipeline({ title, steps }: { title: string; steps: string[] }) {
   );
 }
 
-/** Accuracy as enamel strips in a groove. */
+/** Accuracy as simple bars. */
 export function ResultBars({
   title,
   rows,
@@ -144,17 +147,17 @@ export function ResultBars({
         {rows.map(([label, v], idx) => (
           <li key={label}>
             <div className="flex items-baseline justify-between gap-3 text-[15.5px]">
-              <span className="text-ink-2">{label}</span>
+              <span className="text-text-2">{label}</span>
               <span
-                className={`font-sign text-[22px] font-bold leading-none tnum ${idx === 0 ? "text-cobalt" : "text-ink"}`}
+                className={`font-mono text-[15px] font-medium leading-none tnum ${idx === 0 ? "text-accent" : "text-text"}`}
                 dir="ltr"
               >
                 {v}%
               </span>
             </div>
-            <div className="mt-1.5 h-2 overflow-hidden rounded-full bg-wall-deep shadow-[inset_0_1px_2px_rgb(21_24_30/0.22)]">
+            <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-line">
               <div
-                className={`bar-fill h-full rounded-full ${idx === 0 ? "bg-cobalt" : "bg-ink-3"}`}
+                className={`bar-fill h-full rounded-full ${idx === 0 ? "bg-accent" : "bg-text-3"}`}
                 style={{ width: `${v}%` }}
               />
             </div>
@@ -162,7 +165,7 @@ export function ResultBars({
         ))}
       </ul>
       {note && (
-        <p className="mt-3 max-w-[52ch] text-[14.5px] leading-relaxed text-ink-2">
+        <p className="mt-3 max-w-[52ch] text-[13.5px] leading-relaxed text-text-2">
           {note}
         </p>
       )}
@@ -184,19 +187,17 @@ function Node({
   return (
     <div
       className={`mx-auto w-full max-w-[13.5rem] rounded-[7px] px-3 py-2 text-center ${
-        strong
-          ? "plate plate-sm"
-          : "bg-enamel shadow-[inset_0_0_0_1px_rgb(21_24_30/0.16),0_6px_12px_-10px_rgb(21_24_30/0.5)]"
+        strong ? "bg-text" : "border border-line-strong"
       }`}
     >
       <div
-        className={`text-[15.5px] font-semibold leading-tight ${strong ? "text-enamel" : "text-ink"}`}
+        className={`whitespace-nowrap text-[14px] font-medium leading-tight ${strong ? "text-bg" : "text-text"}`}
         dir="auto"
       >
         {title}
       </div>
       <div
-        className={`mt-0.5 text-[13.5px] leading-tight ${strong ? "text-cobalt-ink" : "text-ink-2"}`}
+        className={`mt-0.5 text-[12.5px] leading-tight ${strong ? "text-bg/75" : "text-text-2"}`}
         dir="auto"
       >
         {sub}
@@ -206,7 +207,7 @@ function Node({
 }
 
 function Down() {
-  return <div aria-hidden="true" className="mx-auto h-4 w-px bg-ink/40" />;
+  return <div aria-hidden="true" className="mx-auto h-4 w-px bg-line-strong" />;
 }
 
 export function RetrievalFlow({
@@ -240,7 +241,7 @@ export function RetrievalFlow({
           <path
             d="M2 0 V9 Q2 13 6 13 H194 Q198 13 198 9 V0 M100 13 V26"
             fill="none"
-            stroke="rgb(21 24 30 / 0.4)"
+            stroke="var(--line-strong)"
             strokeWidth="1"
             vectorEffect="non-scaling-stroke"
           />
@@ -274,10 +275,10 @@ export function VoiceNote({
   return (
     <div>
       <div className="flex items-center gap-3">
-        <span className="grid size-10 shrink-0 place-items-center rounded-full bg-cobalt text-enamel shadow-[inset_0_0_0_2px_var(--cobalt),inset_0_0_0_3px_rgb(248_248_244/0.85)]">
+        <span className="grid size-9 shrink-0 place-items-center rounded-full bg-accent text-bg">
           <Mic className="size-[17px]" aria-hidden="true" />
         </span>
-        <span className="text-[15.5px] text-ink-2">{listening}</span>
+        <span className="text-[14.5px] text-text-2">{listening}</span>
         <div
           aria-hidden="true"
           className="ms-auto flex h-7 items-center gap-[3px]"
@@ -285,7 +286,7 @@ export function VoiceNote({
           {BARS.map((b, i) => (
             <span
               key={i}
-              className="voice-bar block w-[3px] rounded-full bg-cobalt"
+              className="voice-bar block w-[3px] rounded-full bg-accent"
               style={css({
                 height: `${Math.round(b * 26)}px`,
                 "--d": `${(i % 6) * -0.17}s`,
@@ -298,12 +299,12 @@ export function VoiceNote({
       <p
         lang="ar"
         dir="rtl"
-        className="mt-3 font-arabic text-[18px] leading-relaxed text-ink"
+        className="mt-3 font-arabic text-[17px] leading-relaxed text-text"
       >
         «{said}»
       </p>
       {meaning && (
-        <p className="mt-1 text-[15.5px] leading-relaxed text-ink-2">
+        <p className="mt-1 text-[14.5px] leading-relaxed text-text-2">
           {meaning}
         </p>
       )}
@@ -329,7 +330,7 @@ export function TodoPhone() {
 
 /* ---------------------------- Class distributor --------------------------- */
 
-/** 12 ranked students dealt into 3 classes in zigzag (snake) order, as house-number plates. */
+/** 12 ranked students dealt into 3 classes in zigzag (snake) order. */
 export function SnakeDraft({
   caption,
   names,
@@ -345,21 +346,21 @@ export function SnakeDraft({
     const pos = i % 3;
     cols[round % 2 === 0 ? pos : 2 - pos]?.push(i);
   }
-  // Ranks 1–3 in full cobalt, fading through lighter enamels to white.
+  // Ranks 1–3 solid, fading through lighter tones to an outline.
   const tone = (r: number) =>
     r < 3
-      ? ["var(--cobalt)", "var(--enamel)"]
+      ? ["var(--text)", "var(--bg)"]
       : r < 6
-        ? ["#4a68b8", "var(--enamel)"]
+        ? ["var(--text-2)", "var(--bg)"]
         : r < 9
-          ? ["#bccae9", "var(--ink)"]
-          : ["var(--enamel)", "var(--ink)"];
+          ? ["var(--line-strong)", "var(--text)"]
+          : ["var(--surface)", "var(--text)"];
   return (
     <figure>
       <div className="grid grid-cols-3 gap-3">
         {cols.map((ranks, c) => (
           <div key={c} className="flex flex-col items-center gap-2">
-            <span className="sign-type text-[18px] text-cobalt">
+            <span className="text-[14px] font-medium text-text">
               {names[c]}
             </span>
             {ranks.map((r) => {
@@ -367,7 +368,7 @@ export function SnakeDraft({
               return (
                 <span
                   key={r}
-                  className="draft-dot grid h-7 w-10 place-items-center rounded-[5px] font-sign text-[15px] font-semibold tnum shadow-[inset_0_0_0_1px_rgb(21_24_30/0.14),0_4px_8px_-6px_rgb(21_24_30/0.5)]"
+                  className="draft-dot grid size-8 place-items-center rounded-full border border-line-strong font-mono text-[12.5px] font-medium tnum"
                   style={css({
                     background: bg ?? "",
                     color: fg ?? "",
@@ -378,13 +379,16 @@ export function SnakeDraft({
                 </span>
               );
             })}
-            <span className="mt-1 text-[14px] text-ink-2 tnum" dir="ltr">
+            <span
+              className="mt-1 font-mono text-[12.5px] text-text-2 tnum"
+              dir="ltr"
+            >
               {(ranks.reduce((a, b) => a + b + 1, 0) / ranks.length).toFixed(1)}
             </span>
           </div>
         ))}
       </div>
-      <figcaption className="mt-3 text-[14.5px] leading-snug text-ink-2">
+      <figcaption className="mt-3 text-[13.5px] leading-snug text-text-2">
         {caption} · {avgLabel} <span dir="ltr">6.5</span>
       </figcaption>
     </figure>
@@ -400,11 +404,11 @@ const STEP_ICONS = [Globe, LayoutDashboard, Navigation, Radio];
 
 function Browser({ children }: { children: ReactNode }) {
   return (
-    <div className="w-full max-w-[820px] overflow-hidden rounded-[6px] bg-steel shadow-[0_26px_44px_-28px_rgb(21_24_30/0.75)]">
+    <div className="w-full max-w-[820px] overflow-hidden rounded-[10px] border border-line bg-surface shadow-[0_18px_40px_-28px_rgb(0_0_0/0.35)]">
       <div aria-hidden="true" className="flex h-6 items-center gap-1.5 px-3">
-        <span className="size-2 rounded-full bg-enamel/35" />
-        <span className="size-2 rounded-full bg-enamel/35" />
-        <span className="size-2 rounded-full bg-enamel/35" />
+        <span className="size-2 rounded-full bg-line-strong" />
+        <span className="size-2 rounded-full bg-line-strong" />
+        <span className="size-2 rounded-full bg-line-strong" />
       </div>
       {children}
     </div>
@@ -443,7 +447,7 @@ function JourneyStage({
         height={lang === "ar" ? 700 : 686}
         loading="lazy"
         decoding="async"
-        className="block h-auto w-full max-w-[820px] rounded-[6px] shadow-[0_0_0_1px_rgb(21_24_30/0.12),0_26px_44px_-28px_rgb(21_24_30/0.75)]"
+        className="block h-auto w-full max-w-[820px] rounded-[10px] border border-line shadow-[0_18px_40px_-28px_rgb(0_0_0/0.35)]"
       />
     );
   if (k === 2)
@@ -487,7 +491,7 @@ function JourneyStage({
         height={lang === "ar" ? 195 : 189}
         loading="lazy"
         decoding="async"
-        className="block h-auto w-full rounded-[6px] shadow-[0_0_0_1px_rgb(21_24_30/0.12),0_18px_30px_-22px_rgb(21_24_30/0.6)]"
+        className="block h-auto w-full rounded-[10px] border border-line"
       />
     </div>
   );
@@ -545,15 +549,15 @@ export function OrderJourney({
               {k < steps.length - 1 && (
                 <span
                   aria-hidden="true"
-                  className="absolute top-[24px] block h-[2px] overflow-hidden rounded-full bg-ink/15"
+                  className="absolute top-[18px] block h-px overflow-hidden bg-line-strong"
                   style={{
-                    insetInlineStart: "calc(50% + 26px)",
+                    insetInlineStart: "calc(50% + 22px)",
                     insetInlineEnd: "calc(-50% + 18px)",
                   }}
                 >
                   <span
                     key={`${i}-${auto}`}
-                    className={`block h-full bg-cobalt ${k < i ? "" : k === i && auto ? "journey-fill" : "scale-x-0"}`}
+                    className={`block h-full bg-text ${k < i ? "" : k === i && auto ? "journey-fill" : "scale-x-0"}`}
                     style={css({
                       transformOrigin: lang === "ar" ? "right" : "left",
                       "--dur": `${STEP_MS}ms`,
@@ -571,18 +575,18 @@ export function OrderJourney({
                 className="relative flex w-full cursor-pointer flex-col items-center gap-2 rounded-[4px] py-1 text-center"
               >
                 <span
-                  className={`grid size-10 place-items-center rounded-full transition-colors duration-300 ${
+                  className={`grid size-9 place-items-center rounded-full border transition-colors duration-300 ${
                     on
-                      ? "bg-cobalt text-enamel shadow-[inset_0_0_0_2px_var(--cobalt),inset_0_0_0_3.5px_rgb(248_248_244/0.9),0_6px_12px_-8px_rgb(21_24_30/0.6)]"
+                      ? "border-text bg-text text-bg"
                       : k < i
-                        ? "bg-enamel text-cobalt shadow-[inset_0_0_0_2px_var(--cobalt)]"
-                        : "bg-enamel text-ink-3 shadow-[inset_0_0_0_1px_rgb(21_24_30/0.2)]"
+                        ? "border-text bg-surface text-text"
+                        : "border-line-strong bg-surface text-text-3"
                   }`}
                 >
                   <Icon className="size-[18px]" aria-hidden="true" />
                 </span>
                 <span
-                  className={`label-type text-[15px] leading-tight ${on ? "text-cobalt" : "text-ink-2"}`}
+                  className={`text-[13px] font-medium leading-tight ${on ? "text-text" : "text-text-3"}`}
                 >
                   {s.label}
                 </span>
@@ -603,9 +607,8 @@ export function OrderJourney({
             <div className="flex flex-1 items-center justify-center">
               <JourneyStage k={k} alt={s.alt} lang={lang} />
             </div>
-            <p className="mx-auto mt-4 max-w-[60ch] text-center text-[15.5px] leading-relaxed text-ink-2">
-              <span className="font-semibold text-ink">{s.title}.</span>{" "}
-              {s.text}
+            <p className="mx-auto mt-4 max-w-[60ch] text-center text-[14.5px] leading-relaxed text-text-2">
+              <span className="font-medium text-text">{s.title}.</span> {s.text}
             </p>
           </div>
         ))}

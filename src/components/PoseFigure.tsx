@@ -1,9 +1,8 @@
 import { useEffect, useRef } from "react";
 
 /*
-  Hero illustration of the fight detector's input, behind the shop window:
-  the COCO-17 pose skeleton (what YOLO26-pose returns) painted in enamel
-  white on dark glass. It is drawn, not inferred. It waves once, then rests. Move a
+  Hero illustration of the fight detector's input: the COCO-17 pose skeleton
+  (what YOLO26-pose returns), drawn as hairline bones and hollow joints. It is drawn, not inferred. It waves once, then rests. Move a
   mouse over it and the nearest arm reaches for the cursor; tap or click and
   it jabs at that point. The speed strip along the bottom fills as the wrists
   move, the same kind of velocity feature the real model reads, and past the
@@ -41,18 +40,20 @@ const UPPER = 78;
 const FORE = 70;
 const THRESHOLD = 0.6;
 
+// Colours come from CSS custom properties (--fig-*) so the figure follows the
+// light or dark theme; these are the light-theme fallbacks.
 const COL = {
-  line: "#eef1f7",
-  hot: "#ff5d52",
-  shade: "rgba(6,10,20,0.55)",
-  joint: "#ffffff",
-  ring: "#0f1626",
-  track: "rgba(255,255,255,0.16)",
-  label: "#c4ccdb",
-  taxi: "#f0c02f",
+  line: "#1f1f23",
+  joint: "#fbfbfa",
+  hot: "#dc2626",
+  track: "#e2e1de",
+  label: "#5b5b63",
+  mark: "#d97706",
 };
 
 const at = (pts: Pt[], i: number): Pt => pts[i] as Pt;
+/** Sentence case for the strip labels (a no-op on Arabic). */
+const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 const lerpPt = (a: Pt, b: Pt, t: number): Pt => [
   lerp(a[0], b[0], t),
@@ -171,6 +172,19 @@ export function PoseFigure({
     const reduce = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
+    const readPalette = () => {
+      const cs = getComputedStyle(wrap);
+      const v = (name: string, fallback: string) =>
+        cs.getPropertyValue(name).trim() || fallback;
+      COL.line = v("--fig-line", COL.line);
+      COL.joint = v("--fig-joint", COL.joint);
+      COL.hot = v("--alert", COL.hot);
+      COL.track = v("--fig-track", COL.track);
+      COL.label = v("--fig-label", COL.label);
+      COL.mark = v("--fig-mark", COL.mark);
+    };
+    readPalette();
+    const scheme = window.matchMedia("(prefers-color-scheme: dark)");
     let w = 0;
     let h = 0;
     let raf = 0;
@@ -281,12 +295,11 @@ export function PoseFigure({
 
       const P = pose.map(([x, y]) => [ox + x * k, oy + y * k] as Pt);
 
-      // Skeleton: enamel-white strokes with a soft shadow on the glass.
+      // Skeleton: one clean stroke per bone.
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
       for (const [stroke, width] of [
-        [COL.shade, Math.max(6, 7.5 * k)],
-        [hot ? COL.hot : COL.line, Math.max(2.8, 3.6 * k)],
+        [hot ? COL.hot : COL.line, Math.max(2.2, 2.8 * k)],
       ] as const) {
         ctx.strokeStyle = stroke;
         ctx.lineWidth = width;
@@ -302,7 +315,7 @@ export function PoseFigure({
 
       // Arrows showing where fast wrists are heading.
       if (prevPose) {
-        ctx.strokeStyle = hot ? COL.hot : COL.taxi;
+        ctx.strokeStyle = hot ? COL.hot : COL.mark;
         ctx.lineWidth = 1.5;
         for (const [i, q] of [
           [9, prevPose[0]],
@@ -319,17 +332,18 @@ export function PoseFigure({
         }
       }
 
-      // Joints: white enamel dots; the wrists turn red once the alert trips.
+      // Joints: hollow rings; the wrists fill red once the alert trips.
       for (let i = 0; i < P.length; i++) {
         const moving = i >= 7 && i <= 10;
         const p = at(P, i);
-        const r = (moving ? 6.5 : 5) * Math.max(0.8, Math.min(1.3, k * 1.5));
+        const r = (moving ? 5.5 : 4.2) * Math.max(0.8, Math.min(1.3, k * 1.5));
+        const wristHot = hot && (i === 9 || i === 10);
         ctx.beginPath();
         ctx.arc(p[0], p[1], r, 0, Math.PI * 2);
-        ctx.fillStyle = hot && (i === 9 || i === 10) ? COL.hot : COL.joint;
+        ctx.fillStyle = wristHot ? COL.hot : COL.joint;
         ctx.fill();
-        ctx.strokeStyle = COL.ring;
-        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = wristHot ? COL.hot : hot ? COL.hot : COL.line;
+        ctx.lineWidth = 1.6;
         ctx.stroke();
       }
 
@@ -337,37 +351,30 @@ export function PoseFigure({
       const mx0 = 16;
       const mx1 = w - 16;
       const my = h - 20;
-      ctx.font = "600 14px 'Barlow Condensed', 'Noto Sans Arabic', sans-serif";
+      ctx.font =
+        "500 12.5px 'Schibsted Grotesk', 'Noto Sans Arabic', system-ui, sans-serif";
       ctx.textBaseline = "middle";
       ctx.direction = rtl ? "rtl" : "ltr";
       ctx.fillStyle = COL.label;
       ctx.textAlign = rtl ? "right" : "left";
-      ctx.fillText(
-        rtl ? motionLabel : motionLabel.toUpperCase(),
-        rtl ? mx1 : mx0,
-        my - 16,
-      );
+      ctx.fillText(cap(motionLabel), rtl ? mx1 : mx0, my - 16);
       if (hot) {
         ctx.fillStyle = COL.hot;
         ctx.textAlign = rtl ? "left" : "right";
-        ctx.fillText(
-          rtl ? alertLabel : alertLabel.toUpperCase(),
-          rtl ? mx0 : mx1,
-          my - 16,
-        );
+        ctx.fillText(cap(alertLabel), rtl ? mx0 : mx1, my - 16);
       }
       ctx.direction = "ltr";
       ctx.textAlign = "left";
       ctx.fillStyle = COL.track;
-      ctx.fillRect(mx0, my - 3, mx1 - mx0, 6);
+      ctx.fillRect(mx0, my - 2, mx1 - mx0, 4);
       const fw = (mx1 - mx0) * meter;
       ctx.fillStyle = hot ? COL.hot : COL.line;
-      ctx.fillRect(rtl ? mx1 - fw : mx0, my - 3, fw, 6);
+      ctx.fillRect(rtl ? mx1 - fw : mx0, my - 2, fw, 4);
       const tx = rtl
         ? mx1 - (mx1 - mx0) * THRESHOLD
         : mx0 + (mx1 - mx0) * THRESHOLD;
-      ctx.fillStyle = COL.taxi;
-      ctx.fillRect(tx - 1, my - 8, 2, 16);
+      ctx.fillStyle = COL.mark;
+      ctx.fillRect(tx - 1, my - 7, 2, 14);
     };
 
     // Frames run only while something moves: the opening wave, a pointer,
@@ -449,6 +456,16 @@ export function PoseFigure({
     });
     io.observe(wrap);
 
+    const onScheme = () => {
+      readPalette();
+      if (reduce) still();
+      else {
+        const now = performance.now();
+        draw((now - start) / 1000, now);
+      }
+    };
+    scheme.addEventListener("change", onScheme);
+
     if (!reduce) {
       wrap.addEventListener("pointermove", onMove);
       wrap.addEventListener("pointerdown", onDown);
@@ -456,7 +473,7 @@ export function PoseFigure({
       document.addEventListener("visibilitychange", onVisibility);
       kick();
     }
-    // Redraw once fonts arrive so the label uses Barlow Condensed.
+    // Redraw once fonts arrive so the label uses Schibsted Grotesk.
     document.fonts?.ready.then(() => reduce && still()).catch(() => {});
 
     return () => {
@@ -467,6 +484,7 @@ export function PoseFigure({
       wrap.removeEventListener("pointerdown", onDown);
       wrap.removeEventListener("pointerleave", onLeave);
       document.removeEventListener("visibilitychange", onVisibility);
+      scheme.removeEventListener("change", onScheme);
     };
   }, [alertLabel, motionLabel, rtl]);
 

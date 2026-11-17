@@ -186,7 +186,7 @@ export function ScrollProgress({ rtl }: { rtl: boolean }) {
     <div
       ref={ref}
       aria-hidden="true"
-      className="absolute inset-x-0 -bottom-px h-[2px] bg-cobalt"
+      className="absolute inset-x-0 -bottom-px h-px bg-text"
       style={{
         transform: "scaleX(0)",
         transformOrigin: rtl ? "right" : "left",

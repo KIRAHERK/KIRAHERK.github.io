@@ -7,7 +7,7 @@ related_targets: ["src/routes/index.tsx","src/routes/ar.tsx"]
 
 ## Scope
 
-Portfolio home, English `/` and Arabic `/ar` (src/components/Portfolio.tsx and its parts). Visitor mode: Experience, with Persuade's one action (email). Code-led build (no image generation in this environment). Replaces the rejected Damascene inlay world wholesale; product truth, copy and behaviour carry over.
+Portfolio home, English `/` and Arabic `/ar` (src/components/Portfolio.tsx and its parts). Visitor mode: Experience, with Persuade's one action (email). Code-led build. Replaces the rejected street-sign world wholesale; product truth, copy and behaviour carry over.
 
 ## Audience and job
 
@@ -15,15 +15,15 @@ Employers first (hiring managers and recruiters for junior AI/ML or software rol
 
 ## Direction contract
 
-THESIS: The portfolio is one Damascus street read in two scripts. Every name hangs on a cobalt enamel plate like the Old City's street signs, Arabic and Latin on the same plate, and each project is a shop under its own sign with its working system in the window. It refuses the dark-neon developer portfolio, the cream editorial page, and the split hero over a card grid.
+THESIS: The category standard, played straight at the craft level of the best engineer portfolios: a sticky identity column beside the work, as on Brittany Chiang's site, with the restraint of Rauno Freiberg's and Paco Coursey's. The work and its numbers carry the page. It refuses every themed or costume world.
 
-OWN-WORLD: Limewashed plaster wall as the ground. Cobalt enamel plates with a white keyline set in from a rounded edge and two screw heads. Enamel-white and taxi-yellow hanging tags for status. One signal-red enamel plaque for the primary action and the detector's alert. Dark shop-window glass in a painted steel frame for the live figure. House-number plates number sequences. Barlow Condensed caps for Latin signage, Aref Ruqaa for Arabic signage, Barlow with Noto Sans Arabic for text.
+OWN-WORLD: Near-white page in light mode, near-black in dark, following the system. Schibsted Grotesk for all Latin text, JetBrains Mono only for versions, dates and numbers, Noto Sans Arabic for Arabic. Neutral greys, one blue accent for links and highlights, near-black primary buttons. Hairline borders and soft panels hold screenshots and diagrams. Small status pills with a coloured dot.
 
-STORY: The visitor reads one sign (the name, the role in both scripts), sees the fight detector's input moving in the window, and the red plaque to email. Down the street, six shops prove AI on real hardware and complete products; the street ends at a red door plate: let's talk.
+STORY: Name, role and one line, with Email me always in reach. The live pose figure proves the fight detector's input; six projects prove AI on real hardware and complete products; contact closes.
 
-FIRST VIEWPORT: Desktop: header on the wall; a full-width cobalt plate with HUSSEIN AL HERK at 6rem, the role in the page language at the start and in the other script at the end; under it one wide shop window, the positioning line painted on the glass at the start with the intro and the red Email me plaque, the live pose figure at the end. Phone: the plate (name on two lines, both roles), the painted line, the red plaque, then the figure.
+FIRST VIEWPORT: Desktop: left sticky column with the name in large semibold Schibsted Grotesk, the role, the one line, Email me with GitHub and LinkedIn icons, and the section nav. Right column opens with the pose figure panel and the intro. Phone: name, role, line, Email me and icons, then the figure panel.
 
-FORM: Bilingual shop signs, Impeccable's pick, position 1 of 7 on the grounded list, locked by the user over the dealt direction ("do your pick now forget about my pick"); seed:a6e69928e8715a53. Signature interaction: the figure in the window follows the pointer and trips a red FAST alert when moved quickly; the street sign hangs into place once on load, and each shop's status tag swings once on its string when the shop comes into view, then rests.
+FORM: The category standard (the standing exit), taken in the user's words; seed: none (pinned) "Search online for the best looking portfolio and learn form them". Signature interaction: the pose figure follows the pointer and trips a red alert when moved fast, then rests; the nav line grows to mark the section in view.
 
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
 

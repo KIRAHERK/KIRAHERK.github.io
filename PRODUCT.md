@@ -41,6 +41,7 @@ What a visitor should remember after 30 seconds, in this order:
 - **The olive-oil shop and delivery system:** the client's brand stays hidden for legal reasons, everywhere, including file names. It is described as a personal project that was never adopted, and its screens use demo data.
 - **The financial reporting app stays private:** no product name and no screenshots.
 - **The research paper is a work in progress:** no venue or co-author is named until confirmed.
+- **The look stays professional and familiar:** the clean grammar of the best engineer portfolios (a clear identity column, real screenshots and diagrams, one typeface, neutral colours, one accent), executed at high craft. No themed or costume worlds: a wood-and-brass inlay and a Damascus street-sign look were both rejected as "goofy".
 
 ## Evidence on Hand
 
