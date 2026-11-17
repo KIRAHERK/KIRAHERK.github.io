@@ -13,9 +13,9 @@ colors:
   accent: "#2550d6"
   ok: "#15803d"
   wip: "#b45309"
-  alert: "#dc2626"
+  alert: "#c81e1e"
   fig-line: "#1f1f23"
-  fig-joint: "#fbfbfa"
+  fig-joint: "#f3f3f1"
   fig-track: "#e2e1de"
   fig-label: "#5b5b63"
   fig-mark: "#d97706"
@@ -124,7 +124,7 @@ typography:
     fontSize: "12.5px"
     fontWeight: 400
   arabic:
-    fontFamily: "Noto Sans Arabic, Schibsted Grotesk, system-ui, sans-serif"
+    fontFamily: "Schibsted Grotesk, Noto Sans Arabic, system-ui, sans-serif"
     fontWeight: 400
     letterSpacing: "0em"
 rounded:
@@ -247,7 +247,7 @@ One element is allowed to perform: the live pose figure at the top of the work c
 
 ## Colors
 
-The palette is restrained: two neutral grounds that follow the system theme, a ladder of greys, one blue for links and highlights, and three status colours that appear only as dots or inside the figure. Every token has a light value and a `-dark` sibling that swaps in under `prefers-color-scheme: dark`. Components name the token, never the hex.
+The palette is restrained: two neutral grounds that follow the system theme, a ladder of greys, one blue for links and highlights, and three status colours that appear only as dots or inside the figure. Every token has a light value and a `-dark` sibling that swaps in under `prefers-color-scheme: dark`. Tailwind's `dark:` variant follows the same media query. Components name the token, never the hex.
 
 ### Primary
 - **Cobalt Link Blue** (`accent`, dark `accent-dark`): the only expressive hue. It is the hover colour for links and "How it works", the active screen dot in the Forge showcase, the headline result and its bar, the final "Alert + clip" pipeline step, and the voice-note mic disc and waveform. It also colours focus outlines, text selection, the caret and native control accents. It is never the background of a section, a panel or a button.
@@ -265,12 +265,12 @@ The palette is restrained: two neutral grounds that follow the system theme, a l
 ### Status
 - **Release Green** (`ok`): the dot on "Released" pills.
 - **Work Amber** (`wip`): the dot on "In progress" and "Paper in progress" pills, and the bullets of the About section's "Now" list.
-- **Alert Red** (`alert`): the pose figure's alert state only. Past the speed threshold, the skeleton, wrists, meter fill and the "fast" label turn red. In light mode that label measures 4.35:1 on the sunken panel, under the 4.5:1 text floor. That is a defect to fix, not a precedent.
+- **Alert Red** (`alert`): the pose figure's alert state only. Past the speed threshold, the skeleton, wrists, meter fill and the "fast" label turn red.
 
 ### Figure
 The canvas reads its own tokens (`--fig-*`, plus `--alert`) at runtime and redraws when the colour scheme changes.
 - **Skeleton Ink** (`fig-line`): bones, face points, joint outlines, and the meter fill below the threshold.
-- **Joint Fill** (`fig-joint`): the inside of the hollow joints.
+- **Joint Fill** (`fig-joint`): the inside of the hollow joints. It equals the panel ground in both schemes, so the joints read as truly hollow.
 - **Meter Track** (`fig-track`): the speed strip's empty track.
 - **Meter Label** (`fig-label`): the "Speed" label.
 - **Threshold Amber** (`fig-mark`): the threshold tick and the wrist direction arrows.
@@ -278,7 +278,7 @@ The canvas reads its own tokens (`--fig-*`, plus `--alert`) at runtime and redra
 ### Device
 - **Device Bezel** (`device-bezel`): the phone frame around app screenshots, with a pure black screen behind the image. It is the one fixed colour that does not flip, because it depicts a physical object.
 
-The stylesheet also maps shadcn names (`primary`, `muted`, `border`, `destructive` and others) onto these tokens for the 404 and error screens. There, shadcn's `accent` is this solid blue, not a soft hover surface.
+The stylesheet also maps shadcn names (`primary`, `secondary`, `muted`, `border`, `destructive` and others) onto these tokens for the 404 and error screens. shadcn's `accent` maps to this solid blue, so it is not a hover surface. For a quiet hover fill use `secondary` (Soft Stone), as the error screen's "Go home" button does.
 
 ### Named Rules
 **The One Blue Rule.** Blue is the only hue that is not a status colour. It marks links, highlights and focus, always as small marks. It never fills a section, a panel or a button.
@@ -292,7 +292,7 @@ The stylesheet also maps shadcn names (`primary`, `muted`, `border`, `destructiv
 **Display Font:** Schibsted Grotesk (with Noto Sans Arabic, system-ui, sans-serif)
 **Body Font:** Schibsted Grotesk (same stack)
 **Label/Mono Font:** JetBrains Mono (with ui-monospace, SFMono-Regular, monospace), for data only
-**Arabic Font:** Noto Sans Arabic (with Schibsted Grotesk, system-ui, sans-serif)
+**Arabic Font:** Noto Sans Arabic, reached by fall-through. Arabic text uses the same Latin-first stack (Schibsted Grotesk, Noto Sans Arabic, system-ui, sans-serif), so Latin runs inside Arabic stay in Schibsted Grotesk and only Arabic letters fall to Noto.
 
 The fonts load from Google Fonts: Schibsted Grotesk 400–700, JetBrains Mono 400–500 and Noto Sans Arabic 400–700. The page uses weights 400, 500 and 600.
 
@@ -323,8 +323,6 @@ Measures: 32ch for the hero line, 52ch for section intros and chart notes, 46ch 
 **The Mono Is Data Rule.** JetBrains Mono sets only standalone figures: versions, stat values, percentages, list years, ranks and step numbers. A number inside a sentence or a meta line ("Android app · 2026") stays in the sans. On /ar each mono value is wrapped in `dir="ltr"`.
 
 **The No Tracking In Arabic Rule.** Letter-spacing breaks Arabic letter joining, so any tracked style resets to 0 on Arabic text. The stylesheet enforces this for every tracking class.
-
-Known drift: the /ar build does not yet meet the One Typeface Rule. The Arabic stack puts Noto Sans Arabic first, and Noto Sans Arabic ships its own Latin glyphs. So the Latin runs on /ar (the name, tags, "English", GitHub and LinkedIn) currently render in Noto's Latin rather than Schibsted Grotesk. The rule stands.
 
 ## Layout
 
