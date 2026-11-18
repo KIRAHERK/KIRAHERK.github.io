@@ -66,7 +66,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
           </button>
           <a
             href="/"
-            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-secondary"
+            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
           >
             Go home
           </a>
@@ -89,16 +89,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
             "AI engineering portfolio of Hussein Al Herk: computer vision, offline RAG and Android apps.",
         },
         { name: "author", content: "Hussein Al Herk" },
-        {
-          name: "theme-color",
-          content: "#fbfbfa",
-          media: "(prefers-color-scheme: light)",
-        },
-        {
-          name: "theme-color",
-          content: "#0b0b0d",
-          media: "(prefers-color-scheme: dark)",
-        },
+        { name: "theme-color", content: "#0b0d14" },
         { property: "og:type", content: "website" },
         { name: "twitter:card", content: "summary_large_image" },
       ],
@@ -115,7 +106,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         },
         {
           rel: "stylesheet",
-          href: "https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400..700&family=JetBrains+Mono:wght@400..500&family=Noto+Sans+Arabic:wght@400..700&display=swap",
+          href: "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap",
         },
         { rel: "icon", href: "/favicon.png", type: "image/png" },
       ],

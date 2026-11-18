@@ -4,43 +4,6 @@ export const prefersReducedMotion = () =>
   typeof window !== "undefined" &&
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-/**
- * Scroll reveal for every [data-reveal] element on the page. Elements already
- * on screen are marked shown first, then html.js-reveal switches on the hidden
- * state for the rest, so nothing that is visible ever flickers.
- */
-export function useReveal() {
-  useEffect(() => {
-    const els = Array.from(
-      document.querySelectorAll<HTMLElement>("[data-reveal]"),
-    );
-    const vh = window.innerHeight;
-    for (const el of els) {
-      const r = el.getBoundingClientRect();
-      if (r.top < vh && r.bottom > 0) el.classList.add("is-in");
-    }
-    document.documentElement.classList.add("js-reveal");
-
-    if (!("IntersectionObserver" in window)) {
-      els.forEach((el) => el.classList.add("is-in"));
-      return;
-    }
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) {
-          if (e.isIntersecting) {
-            e.target.classList.add("is-in");
-            io.unobserve(e.target);
-          }
-        }
-      },
-      { rootMargin: "0px 0px -8% 0px", threshold: 0.12 },
-    );
-    els.forEach((el) => !el.classList.contains("is-in") && io.observe(el));
-    return () => io.disconnect();
-  }, []);
-}
-
 export type Release = { tag: string; at: string };
 
 /**
@@ -104,7 +67,6 @@ export function timeAgo(iso: string, lang: string) {
   return rtf.format(0, "minute");
 }
 
-/** Which section is in the middle of the screen, for the nav highlight. */
 export function useActiveSection(ids: string[]) {
   const [active, setActive] = useState<string | null>(null);
   const key = ids.join(",");

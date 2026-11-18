@@ -2,8 +2,8 @@
 //
 // Editing tips
 // - A project's `status` is "live" (released) or "building" (still in progress).
-//   `summary` is the one sentence shown first; `text` sits behind "How it works".
-// - `releaseRepo` makes the panel fetch that repo's latest GitHub release and
+//   A "building" project gets an amber badge and shows its `note`.
+// - `releaseRepo` makes the card fetch that repo's latest GitHub release and
 //   show its version and date. `version` is shown if GitHub can't be reached.
 // - Screenshots live in public/work/.
 
@@ -40,9 +40,7 @@ export type Project = {
   status: Status;
   meta: string;
   title: string;
-  /** One plain sentence: what it is and why it matters. Shown first. */
-  summary: string;
-  /** The longer explanation, behind "How it works". */
+  tagline: string;
   text: string;
   stats: Stat[];
   tags: string[];
@@ -51,7 +49,7 @@ export type Project = {
   version?: string;
   /** Extra badge next to the meta line, e.g. "Paper in progress" or "Not adopted". */
   flag?: string;
-  /** "amber" for work in progress, "neutral" for plain facts: the colour of the badge's dot. */
+  /** "amber" for work in progress, "neutral" for plain facts. Also colours the note. */
   flagTone?: "amber" | "neutral";
   note?: string;
 };
@@ -60,7 +58,6 @@ type Small = {
   year: string;
   title: string;
   text: string;
-  icon: "wifi" | "radar" | "receipt";
 };
 
 export type Content = {
@@ -75,18 +72,27 @@ export type Content = {
     switchLabel: string;
   };
   hero: {
+    status: string;
     name: string;
     lead: string;
+    /** One plain line under the name: what I build. */
     line: string;
     intro: string;
     seeWork: string;
     emailMe: string;
   };
-  pose: { caption: string; label: string; motion: string; alert: string };
+  pose: {
+    caption: string;
+    label: string;
+    motion: string;
+    alert: string;
+    left: string;
+    right: string;
+  };
+  stats: Stat[];
   work: {
     title: string;
-    details: string;
-    builtWith: string;
+    intro: string;
     released: string;
     building: string;
     latest: string;
@@ -126,8 +132,10 @@ export type Content = {
     title: string;
     bio: string;
     facts: Array<[string, string]>;
-    nowTitle: string;
-    now: Array<[what: string, detail: string]>;
+    timelineTitle: string;
+    /** Timeline entries whose "when" equals this get the pulsing "now" dot. */
+    nowLabel: string;
+    timeline: Array<[when: string, title: string, text: string]>;
   };
   skills: {
     title: string;
@@ -199,11 +207,12 @@ export const content: Record<Lang, Content> = {
       switchLabel: "العربية",
     },
     hero: {
+      status: "Open to junior AI and software roles",
       name: "Hussein Al Herk",
-      lead: "Junior AI engineer in Damascus, Syria.",
-      line: "I build AI that runs on real hardware, and ship it as finished products.",
+      lead: "Junior AI engineer in Damascus, Syria",
+      line: "I build real-time computer vision, offline AI that reads Arabic, and Android apps",
       intro:
-        "Computer vision on school cameras, AI on servers with no cloud, and Android apps people install. I'm looking for a junior AI or software role, on site or remote.",
+        "My work runs on real hardware: CCTV cameras, school servers with no cloud, and phones. I also know my way around networks and security. I'm looking for a junior AI or software role, in Damascus or remote.",
       seeWork: "See my work",
       emailMe: "Email me",
     },
@@ -212,13 +221,21 @@ export const content: Record<Lang, Content> = {
         "What my fight detector reads: 17 body keypoints and how fast they move. Move your cursor over the figure, or tap it.",
       label:
         "Interactive stick figure made of 17 body keypoints inside a detection box. Its arm follows your cursor, and a meter shows how fast it moves.",
-      motion: "speed",
+      motion: "motion",
       alert: "fast",
+      left: "left side",
+      right: "right side",
     },
+    stats: [
+      ["81%", "accuracy spotting fights on real CCTV"],
+      ["3", "AI services I built for my senior project"],
+      ["2", "Android apps in Arabic and English"],
+      ["23+", "textbooks indexed for offline search"],
+    ],
     work: {
       title: "Selected work",
-      details: "How it works",
-      builtWith: "Built with",
+      intro:
+        "From real-time vision on school cameras to a full shop-and-delivery system and Android apps with regular releases. Version numbers come straight from GitHub.",
       released: "Released",
       building: "In progress",
       latest: "Latest",
@@ -228,8 +245,7 @@ export const content: Record<Lang, Content> = {
           status: "live",
           meta: "Android app · 2026",
           title: "Forge",
-          summary:
-            "An Android training app that logs every set, reads nutrition labels with the camera, and holds you to your plan with real penalties.",
+          tagline: "A training app that holds you to your plan",
           text: "Logs every set with progression hints, tracks calories, protein and morning weight, and reads nutrition labels live with the camera, on the phone. Skip a session and the streak resets and a penalty lands, due in 24 hours. Works offline with no account, in full Arabic or English, and updates itself from GitHub Releases.",
           stats: [
             ["85", "exercises with form guides"],
@@ -254,8 +270,7 @@ export const content: Record<Lang, Content> = {
           status: "live",
           meta: "Senior project · AI service · 2026",
           title: "Fight detection",
-          summary:
-            "Spots fights on school CCTV in real time by reading body keypoints, not pixels, then saves the clip and alerts the school.",
+          tagline: "Real-time alerts from school CCTV",
           text: "It reads skeletons, not pixels. YOLO26-pose turns every frame into 17 keypoints per person, the service adds how fast each joint moves, and an mLSTM decides fight or no fight from one second of movement. When it fires, it keeps 10 seconds before and after and alerts the school dashboard.",
           stats: [
             ["15,596", "training sequences"],
@@ -273,8 +288,7 @@ export const content: Record<Lang, Content> = {
           status: "live",
           meta: "Senior project · AI service · 2026",
           title: "Exam question generator",
-          summary:
-            "Writes exam questions from the right textbook pages with a local Arabic model, fully offline, and exports a Word exam with answers.",
+          tagline: "Offline RAG over Arabic and English textbooks",
           text: "A teacher picks a book and chapters. Hybrid search finds the right passages: BM25 for exact curriculum terms, dense vectors for paraphrases, merged with reciprocal rank fusion. A local Arabic LLM writes the questions, each one gets a 0–100 quality score, and it exports a Word exam with an answer key. Nothing leaves the machine.",
           stats: [
             ["23+", "curriculum books indexed"],
@@ -289,8 +303,8 @@ export const content: Record<Lang, Content> = {
           status: "live",
           meta: "Personal project · 2026",
           title: "Olive-oil shop and delivery system",
-          summary:
-            "A 3D web shop, an admin dashboard and a driver app that pass one order between them, live.",
+          tagline:
+            "A 3D web shop, an admin dashboard and a driver app, working as one",
           text: "A bilingual online shop where olive-oil bottles, modelled in Blender, turn in 3D in the browser. Orders reach the admin dashboard in real time: the shop accepts them, checks payment and offers them to a driver. The driver's Android app has its own map with turn-by-turn directions, plans routes with several stops, and shows nearby supermarkets to sell to from the truck. As the driver moves, the customer's arrival time and the dashboard update live.",
           stats: [],
           tags: [
@@ -313,8 +327,7 @@ export const content: Record<Lang, Content> = {
           status: "building",
           meta: "Android app · 2026",
           title: "Smart To-Do",
-          summary:
-            "An Android to-do list you talk to in any Arabic dialect; it reads back what it understood before saving.",
+          tagline: "A to-do list you talk to in Arabic",
           text: "Built for a busy businessman who kept his lists on paper. He presses one button and speaks in any Arabic dialect. Gemini turns it into a task with a category, reminder and repeat rule, and the app reads it back before saving. Every change is kept, so he can ask things like “when did I last call Ahmed?”",
           stats: [],
           tags: [
@@ -341,8 +354,7 @@ export const content: Record<Lang, Content> = {
           status: "live",
           meta: "Senior project · 2026",
           title: "Class distributor",
-          summary:
-            "Splits students into fair, balanced classes: ranked by grades, behaviour and attendance, then dealt in a zigzag.",
+          tagline: "Fair, balanced classes",
           text: "Ranks students by a weighted score of grades, behaviour and attendance, then deals them into classes in zigzag order, so every class gets the same mix. A small FastAPI service that also reports how balanced the result is.",
           stats: [],
           tags: ["Python", "FastAPI", "NumPy"],
@@ -355,19 +367,16 @@ export const content: Record<Lang, Content> = {
           year: "2026",
           title: "Wireless security home lab",
           text: "Tested WPA2 security in an isolated Kali Linux lab and wrote up the findings.",
-          icon: "wifi",
         },
         {
           year: "2025",
           title: "Hazard prediction for Syria",
           text: "Machine-learning models that predict environmental and conflict-related hazards from real Syrian data.",
-          icon: "radar",
         },
         {
           year: "2024",
           title: "Financial reporting app",
           text: "ASP.NET app that builds monthly and yearly balance sheets and income statements.",
-          icon: "receipt",
         },
       ],
     },
@@ -442,18 +451,51 @@ export const content: Record<Lang, Content> = {
     },
     about: {
       title: "About",
-      bio: "I graduated in Information Technology, AI specialization, from Arab International University in 2026. In our five-person senior project, a school management system, I built the three AI services. I also build Android apps and run a home lab for network security.",
+      bio: "I graduated in Information Technology, AI specialization, from Arab International University in 2026. For our senior project, a team of five built an AI-powered school management system (Laravel backend, Flutter app, React dashboard), and I built its three AI services. Outside coursework I build Android apps and run a home lab for network security, and I'm now turning my fight detector into a research paper.",
       facts: [
         ["Languages", "Arabic (native), English (excellent)"],
         ["Learning now", "Certifications in AI/ML and cybersecurity"],
         ["Based in", "Damascus, Syria · open to remote"],
       ],
-      nowTitle: "Now",
-      now: [
-        ["Building", "Smart To-Do, an Arabic to-do app you talk to."],
+      timelineTitle: "Timeline",
+      nowLabel: "Now",
+      timeline: [
         [
-          "Writing",
-          "A research paper on mLSTM for skeleton-based fight detection.",
+          "2021",
+          "Started university",
+          "Bachelor of IT, AI specialization, Arab International University.",
+        ],
+        [
+          "2024",
+          "Financial reporting app",
+          "Monthly and yearly statements in ASP.NET.",
+        ],
+        [
+          "2025",
+          "Hazard prediction",
+          "Machine-learning models on real Syrian data.",
+        ],
+        [
+          "2026",
+          "Senior project",
+          "Three AI services for a school system, in a team of five.",
+        ],
+        ["2026", "Graduated", "Bachelor of IT, AI specialization."],
+        [
+          "2026",
+          "Built a shop and delivery system",
+          "A 3D web shop, an admin dashboard and a driver app for an olive-oil producer, on my own initiative. Not adopted.",
+        ],
+        [
+          "2026",
+          "Shipped Forge",
+          "An Android app in Arabic and English that updates itself.",
+        ],
+        ["Now", "Building Smart To-Do", "A voice-first to-do app in Arabic."],
+        [
+          "Now",
+          "Writing a research paper",
+          "mLSTM for skeleton-based fight detection, with a leakage-aware evaluation.",
         ],
       ],
     },
@@ -469,7 +511,7 @@ export const content: Record<Lang, Content> = {
       ],
     },
     contact: {
-      title: "Let's talk",
+      title: "Let's build something",
       text: "I'm looking for a junior AI, ML or software role. Email is the fastest way to reach me.",
       copy: "Copy",
       copied: "Copied",
@@ -494,11 +536,12 @@ export const content: Record<Lang, Content> = {
       switchLabel: "English",
     },
     hero: {
+      status: "متاح لوظيفة مبتدئة في الذكاء الاصطناعي أو البرمجيات",
       name: "Hussein Al Herk",
-      lead: "مهندس ذكاء اصطناعي مبتدئ في دمشق، سوريا.",
-      line: "أبني ذكاءً اصطناعياً يعمل على أجهزة حقيقية، وأسلّمه منتجات مكتملة.",
+      lead: "مهندس ذكاء اصطناعي مبتدئ في دمشق، سوريا",
+      line: "أبني رؤية حاسوبية تعمل لحظياً، وذكاءً اصطناعياً يقرأ العربية دون إنترنت، وتطبيقات أندرويد",
       intro:
-        "رؤية حاسوبية على كاميرات المدارس، وذكاء اصطناعي على خوادم دون خدمات سحابية، وتطبيقات أندرويد يثبّتها الناس. أبحث عن وظيفة مبتدئة في الذكاء الاصطناعي أو البرمجيات، حضورياً أو عن بُعد.",
+        "أعمالي تعمل على أجهزة حقيقية: كاميرات المراقبة، وخوادم مدارس دون خدمات سحابية، والهواتف. ولدي خبرة عملية في الشبكات وأمن المعلومات. أبحث عن وظيفة مبتدئة في الذكاء الاصطناعي أو البرمجيات، في دمشق أو عن بُعد.",
       seeWork: "شاهد أعمالي",
       emailMe: "راسلني",
     },
@@ -507,13 +550,21 @@ export const content: Record<Lang, Content> = {
         "ما يقرؤه كاشف الشجار الذي بنيته: 17 نقطة مفصلية للجسم وسرعة حركتها. حرّك المؤشر فوق الشكل أو المسه.",
       label:
         "شكل تفاعلي من 17 نقطة مفصلية داخل مربع كشف. تتبع ذراعه المؤشر، ويُظهر مقياس سرعة حركتها.",
-      motion: "السرعة",
+      motion: "الحركة",
       alert: "سريعة",
+      left: "الجانب الأيسر",
+      right: "الجانب الأيمن",
     },
+    stats: [
+      ["81%", "دقة كشف الشجار في تسجيلات كاميرات حقيقية"],
+      ["3", "خدمات ذكاء اصطناعي بنيتها لمشروع التخرج"],
+      ["2", "تطبيقا أندرويد بالعربية والإنجليزية"],
+      ["23+", "كتاباً مدرسياً مفهرساً للبحث دون إنترنت"],
+    ],
     work: {
       title: "أبرز الأعمال",
-      details: "كيف يعمل",
-      builtWith: "التقنيات",
+      intro:
+        "من الرؤية الحاسوبية اللحظية في كاميرات المدارس إلى نظام كامل للبيع والتوصيل وتطبيقات أندرويد بإصدارات منتظمة. أرقام الإصدارات تُجلب مباشرة من GitHub.",
       released: "منشور",
       building: "قيد التطوير",
       latest: "آخر إصدار",
@@ -523,8 +574,7 @@ export const content: Record<Lang, Content> = {
           status: "live",
           meta: "تطبيق أندرويد · 2026",
           title: "Forge",
-          summary:
-            "تطبيق تمارين لأندرويد يسجّل كل مجموعة، ويقرأ جداول القيم الغذائية بالكاميرا، ويُلزمك بخطتك بعقوبات حقيقية.",
+          tagline: "تطبيق تمارين يُلزمك بخطتك",
           text: "يسجّل كل مجموعة مع اقتراحات لزيادة الحِمل، ويتابع السعرات والبروتين ووزن الصباح، ويقرأ جداول القيم الغذائية مباشرة بالكاميرا على الهاتف نفسه. إن فاتك تمرين ينقطع تتابع الأيام وتُفرض عليك عقوبة خلال 24 ساعة. يعمل دون إنترنت ودون حساب، بالعربية أو الإنجليزية بالكامل، ويحدّث نفسه من GitHub Releases.",
           stats: [
             ["85", "تمريناً مع شرح الأداء الصحيح"],
@@ -545,8 +595,7 @@ export const content: Record<Lang, Content> = {
           status: "live",
           meta: "مشروع التخرج · خدمة ذكاء اصطناعي · 2026",
           title: "كشف الشجار",
-          summary:
-            "يكشف الشجار في كاميرات المدارس لحظياً بقراءة النقاط المفصلية للجسم لا البكسلات، ثم يحفظ المقطع وينبّه إدارة المدرسة.",
+          tagline: "تنبيهات لحظية من كاميرات المدارس",
           text: "يقرأ الهياكل لا البكسلات. يحوّل YOLO26-pose كل إطار إلى 17 نقطة مفصلية لكل شخص، وتضيف الخدمة سرعة حركة كل مفصل، ثم يقرر نموذج mLSTM إن كان هناك شجار من ثانية واحدة من الحركة. عند الكشف يحفظ 10 ثوانٍ قبل الحدث و10 بعده ويرسل تنبيهاً إلى لوحة إدارة المدرسة.",
           stats: [
             ["15,596", "سلسلة تدريب"],
@@ -564,8 +613,7 @@ export const content: Record<Lang, Content> = {
           status: "live",
           meta: "مشروع التخرج · خدمة ذكاء اصطناعي · 2026",
           title: "مولّد أسئلة الامتحانات",
-          summary:
-            "يكتب أسئلة الامتحانات من صفحات الكتاب المناسبة بنموذج عربي محلي دون إنترنت، ويصدّر امتحان Word مع الإجابات.",
+          tagline: "بحث وتوليد (RAG) دون إنترنت في الكتب العربية والإنجليزية",
           text: "يختار المعلّم الكتاب والفصول، فيجد البحث الهجين الفقرات المناسبة: BM25 للمصطلحات المطابقة حرفياً، والمتجهات الدلالية للمعنى وإعادة الصياغة، ثم يُدمج الترتيبان بطريقة Reciprocal Rank Fusion. يكتب نموذج لغوي عربي محلي الأسئلة، ويحصل كل سؤال على درجة جودة من 0 إلى 100، ثم يُصدَّر امتحان Word مع مفتاح الإجابات. لا يغادر أي شيء الجهاز.",
           stats: [
             ["23+", "كتاباً من المنهاج مفهرساً"],
@@ -580,8 +628,8 @@ export const content: Record<Lang, Content> = {
           status: "live",
           meta: "مشروع شخصي · 2026",
           title: "متجر ونظام توصيل لشركة زيت زيتون",
-          summary:
-            "متجر إلكتروني ثلاثي الأبعاد ولوحة إدارة وتطبيق مندوب يتناقلون الطلب الواحد مباشرة.",
+          tagline:
+            "متجر إلكتروني ثلاثي الأبعاد ولوحة إدارة وتطبيق مندوب، تعمل كنظام واحد",
           text: "متجر إلكتروني بلغتين تدور فيه عبوات زيت الزيتون بشكل ثلاثي الأبعاد في المتصفح، صمّمتها في Blender. تصل الطلبات إلى لوحة الإدارة مباشرة: يقبلها المتجر ويتحقق من الدفع ويعرضها على مندوب. لتطبيق المندوب على أندرويد خريطته الخاصة مع إرشادات منعطفاً بمنعطف، ويخطّط مسارات لعدة طلبات، ويعرض المحلات القريبة للبيع لها من السيارة. ومع تحرّك المندوب يتحدّث وقت وصول الطلب للزبون ولوحة الإدارة مباشرة.",
           stats: [],
           tags: [
@@ -604,8 +652,7 @@ export const content: Record<Lang, Content> = {
           status: "building",
           meta: "تطبيق أندرويد · 2026",
           title: "مهامي الذكية",
-          summary:
-            "قائمة مهام لأندرويد تتحدث إليها بأي لهجة عربية، وتقرأ ما فهمته قبل الحفظ.",
+          tagline: "قائمة مهام تتحدث إليها بالعربية",
           text: "صمّمته لرجل أعمال مشغول كان يكتب مهامه على الورق. يضغط زراً واحداً ويتكلم بأي لهجة عربية، فيحوّل Gemini كلامه إلى مهمة مع تصنيف وتذكير وتكرار، ويقرأ التطبيق ما فهمه قبل الحفظ. كل تغيير محفوظ، فيستطيع أن يسأل: «متى اتصلت بأحمد آخر مرة؟»",
           stats: [],
           tags: [
@@ -628,8 +675,7 @@ export const content: Record<Lang, Content> = {
           status: "live",
           meta: "مشروع التخرج · 2026",
           title: "توزيع الطلاب على الشُّعب",
-          summary:
-            "يوزّع الطلاب على شُعب متوازنة وعادلة: ترتيب حسب العلامات والسلوك والحضور، ثم توزيع متعرّج.",
+          tagline: "شُعب متوازنة وعادلة",
           text: "يرتّب الطلاب حسب درجة مركّبة من العلامات والسلوك والحضور، ثم يوزّعهم على الشُّعب بترتيب متعرّج، فتحصل كل شعبة على المزيج نفسه. خدمة FastAPI صغيرة تقيس أيضاً مدى توازن النتيجة.",
           stats: [],
           tags: ["Python", "FastAPI", "NumPy"],
@@ -644,19 +690,16 @@ export const content: Record<Lang, Content> = {
           year: "2026",
           title: "مختبر أمن الشبكات اللاسلكية",
           text: "اختبار أمان WPA2 في مختبر Kali Linux معزول وتوثيق النتائج.",
-          icon: "wifi",
         },
         {
           year: "2025",
           title: "التنبؤ بالمخاطر في سوريا",
           text: "نماذج تعلّم آلي تتنبأ بالمخاطر البيئية والمرتبطة بالنزاع من بيانات سورية حقيقية.",
-          icon: "radar",
         },
         {
           year: "2024",
           title: "تطبيق التقارير المالية",
           text: "تطبيق ASP.NET يُنشئ الميزانيات وقوائم الدخل الشهرية والسنوية.",
-          icon: "receipt",
         },
       ],
     },
@@ -730,16 +773,56 @@ export const content: Record<Lang, Content> = {
     },
     about: {
       title: "نبذة",
-      bio: "تخرّجت في تقانة المعلومات، اختصاص الذكاء الاصطناعي، من الجامعة العربية الدولية عام 2026. في مشروع التخرج، نظام لإدارة المدارس بنيناه فريقاً من خمسة، بنيت أنا خدمات الذكاء الاصطناعي الثلاث. وأبني أيضاً تطبيقات أندرويد، ولدي مختبر منزلي لأمن الشبكات.",
+      bio: "تخرّجت في تقانة المعلومات، اختصاص الذكاء الاصطناعي، من الجامعة العربية الدولية عام 2026. في مشروع التخرج بنى فريق من خمسة طلاب نظاماً ذكياً لإدارة المدارس (خادم Laravel وتطبيق Flutter ولوحة تحكم React)، وبنيت أنا خدمات الذكاء الاصطناعي الثلاث فيه. وخارج الدراسة أبني تطبيقات أندرويد، ولدي مختبر منزلي لأمن الشبكات، وأعمل الآن على تحويل كاشف الشجار إلى ورقة بحثية.",
       facts: [
         ["اللغات", "العربية (اللغة الأم) والإنجليزية (ممتازة)"],
         ["أتعلّم حالياً", "شهادات في الذكاء الاصطناعي وأمن المعلومات"],
         ["المكان", "دمشق، سوريا · متاح للعمل عن بُعد"],
       ],
-      nowTitle: "الآن",
-      now: [
-        ["أبني", "مهامي الذكية، تطبيق مهام بالعربية تتحدث إليه."],
-        ["أكتب", "ورقة بحثية عن نموذج mLSTM لكشف الشجار من الهياكل العظمية."],
+      timelineTitle: "المسيرة",
+      nowLabel: "الآن",
+      timeline: [
+        [
+          "2021",
+          "بداية الجامعة",
+          "إجازة في تقانة المعلومات، اختصاص الذكاء الاصطناعي، الجامعة العربية الدولية.",
+        ],
+        [
+          "2024",
+          "تطبيق التقارير المالية",
+          "قوائم مالية شهرية وسنوية بـ ASP.NET.",
+        ],
+        ["2025", "التنبؤ بالمخاطر", "نماذج تعلّم آلي على بيانات سورية حقيقية."],
+        [
+          "2026",
+          "مشروع التخرج",
+          "ثلاث خدمات ذكاء اصطناعي لنظام مدرسي، ضمن فريق من خمسة.",
+        ],
+        [
+          "2026",
+          "التخرّج",
+          "إجازة في تقانة المعلومات، اختصاص الذكاء الاصطناعي.",
+        ],
+        [
+          "2026",
+          "بنيت متجراً ونظام توصيل",
+          "متجر ثلاثي الأبعاد ولوحة إدارة وتطبيق مندوب لشركة زيت زيتون، بمبادرة شخصية. لم يُعتمد.",
+        ],
+        [
+          "2026",
+          "إطلاق Forge",
+          "تطبيق أندرويد بالعربية والإنجليزية يحدّث نفسه.",
+        ],
+        [
+          "الآن",
+          "أعمل على مهامي الذكية",
+          "تطبيق مهام بالعربية يعتمد على الصوت.",
+        ],
+        [
+          "الآن",
+          "أكتب ورقة بحثية",
+          "نموذج mLSTM لكشف الشجار من الهياكل العظمية، مع تقييم يتجنّب تسرّب البيانات.",
+        ],
       ],
     },
     skills: {
@@ -754,7 +837,7 @@ export const content: Record<Lang, Content> = {
       ],
     },
     contact: {
-      title: "لنتحدث",
+      title: "لنبنِ شيئاً معاً",
       text: "أبحث عن وظيفة مبتدئة في الذكاء الاصطناعي أو تعلّم الآلة أو البرمجة. أسرع طريقة للتواصل معي هي البريد الإلكتروني.",
       copy: "نسخ",
       copied: "تم النسخ",
