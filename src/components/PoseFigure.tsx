@@ -41,15 +41,15 @@ const FORE = 70;
 const THRESHOLD = 0.6;
 
 const COL = {
-  bone: "#dce3ee",
-  joint: "#22c55e",
-  hot: "#ccff4d",
-  box: "#22c55e",
+  bone: "#e5e7eb",
+  joint: "#34d399",
+  hot: "#22d3ee",
+  box: "#34d399",
   alert: "#fbbf24",
-  text: "#a6b2c5",
-  grid: "rgba(148,163,184,0.06)",
-  track: "rgba(148,163,184,0.16)",
-  ink: "#04130a",
+  text: "#a3a3a3",
+  grid: "rgba(255,255,255,0.045)",
+  track: "rgba(255,255,255,0.1)",
+  ink: "#022c22",
 };
 
 const at = (pts: Pt[], i: number): Pt => pts[i] as Pt;
@@ -325,7 +325,7 @@ export function PoseFigure({
       ctx.lineWidth = 2.5;
       corners(ctx, bx0, by0, bx1, by1, Math.min(22, (bx1 - bx0) / 4));
 
-      ctx.font = "600 12px 'JetBrains Mono', ui-monospace, monospace";
+      ctx.font = "600 12px 'Geist Mono', ui-monospace, monospace";
       const tag = `person ${(0.96 + Math.sin(t * 2.3) * 0.02).toFixed(2)}`;
       const tw = ctx.measureText(tag).width + 14;
       ctx.fillStyle = accent;
@@ -382,7 +382,7 @@ export function PoseFigure({
       }
 
       // HUD: top corners
-      ctx.font = "500 11px 'JetBrains Mono', ui-monospace, monospace";
+      ctx.font = "500 11px 'Geist Mono', ui-monospace, monospace";
       ctx.fillStyle = COL.text;
       ctx.textBaseline = "middle";
       const leftText = `CAM 02 · ${String(frame % 10000).padStart(4, "0")}`;
@@ -407,7 +407,7 @@ export function PoseFigure({
       const my = h - 22;
       ctx.fillStyle = COL.text;
       ctx.font =
-        "500 11px 'JetBrains Mono', 'IBM Plex Sans Arabic', ui-monospace, monospace";
+        "500 11px 'Geist Mono', 'IBM Plex Sans Arabic', ui-monospace, monospace";
       const val = meter.toFixed(2);
       const status = hot ? alertLabel : "";
       ctx.textAlign = rtl ? "right" : "left";
@@ -489,7 +489,7 @@ export function PoseFigure({
       wrap.addEventListener("pointerleave", onLeave);
       raf = requestAnimationFrame(loop);
     }
-    // Redraw once fonts arrive so the HUD text uses JetBrains Mono.
+    // Redraw once fonts arrive so the HUD text uses Geist Mono.
     document.fonts?.ready.then(() => reduce && still()).catch(() => {});
 
     return () => {

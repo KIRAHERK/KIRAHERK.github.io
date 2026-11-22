@@ -61,10 +61,21 @@ type Small = {
   icon: "wifi" | "radar" | "receipt";
 };
 
+/** One thing I can build, with the project that proves it. */
+export type Ability = {
+  icon: "vision" | "llm" | "android" | "system";
+  title: string;
+  text: string;
+  proof: string;
+  project: ProjectId;
+  tools: string[];
+};
+
 export type Content = {
   meta: { title: string; description: string };
   skip: string;
   nav: {
+    abilities: string;
     work: string;
     about: string;
     skills: string;
@@ -85,6 +96,12 @@ export type Content = {
   };
   pose: { caption: string; label: string; motion: string; alert: string };
   stats: Stat[];
+  abilities: {
+    title: string;
+    intro: string;
+    seeProject: string;
+    items: Ability[];
+  };
   work: {
     eyebrow: string;
     title: string;
@@ -103,6 +120,8 @@ export type Content = {
     fightSteps: string[];
     fightTitle: string;
     fightRows: Array<[label: string, value: number]>;
+    /** Context for the first row, shown under the bars. */
+    fightNote: string;
     qgenTitle: string;
     qgenSteps: {
       lexical: [string, string];
@@ -110,6 +129,19 @@ export type Content = {
       fuse: [string, string];
       llm: [string, string];
       out: [string, string];
+    };
+    /** Labels for the hold-to-talk demo (a gesture demo: nothing is recorded). */
+    voice: {
+      hold: string;
+      holdAria: string;
+      recording: string;
+      slide: string;
+      release: string;
+      play: string;
+      pause: string;
+      discard: string;
+      heard: string;
+      demo: string;
     };
     todoListening: string;
     todoSaid: string;
@@ -196,6 +228,7 @@ export const content: Record<Lang, Content> = {
     },
     skip: "Skip to content",
     nav: {
+      abilities: "What I do",
       work: "Work",
       about: "About",
       skills: "Skills",
@@ -234,6 +267,46 @@ export const content: Record<Lang, Content> = {
       ["2", "Android apps in Arabic and English"],
       ["23+", "textbooks indexed for offline search"],
     ],
+    abilities: {
+      title: "What I can do",
+      intro:
+        "Four things I can build for your team, each one backed by a real project further down.",
+      seeProject: "See the project",
+      items: [
+        {
+          icon: "vision",
+          title: "Computer vision on real cameras",
+          text: "Real-time fight detection on school CCTV: pose keypoints, how fast they move, and an mLSTM that decides from one second of video.",
+          proof: "81% on real CCTV footage (SCVD)",
+          project: "fight",
+          tools: ["PyTorch", "YOLO26-pose", "OpenCV", "FastAPI"],
+        },
+        {
+          icon: "llm",
+          title: "Offline AI that reads Arabic",
+          text: "Retrieval and a local Arabic language model on a school server with no internet, turning textbooks into graded exam questions.",
+          proof: "23+ curriculum books indexed",
+          project: "qgen",
+          tools: ["RAG", "Ollama", "Qdrant", "BM25"],
+        },
+        {
+          icon: "android",
+          title: "Android apps people install",
+          text: "Kotlin and Jetpack Compose apps in Arabic and English, released on GitHub and updating themselves.",
+          proof: "Forge is released; Smart To-Do is in progress",
+          project: "forge",
+          tools: ["Kotlin", "Jetpack Compose", "Room", "CameraX"],
+        },
+        {
+          icon: "system",
+          title: "Complete systems, end to end",
+          text: "A web shop, an admin dashboard and a driver app that pass one order between them, live.",
+          proof: "3 apps working as one system",
+          project: "shop",
+          tools: ["Next.js", "SQLite", "Capacitor", "Leaflet"],
+        },
+      ],
+    },
     work: {
       eyebrow: "01 · Work",
       title: "Selected work",
@@ -252,7 +325,7 @@ export const content: Record<Lang, Content> = {
           text: "Logs every set with progression hints, tracks calories, protein and morning weight, and reads nutrition labels live with the camera, on the phone. Skip a session and the streak resets and a penalty lands, due in 24 hours. Works offline with no account, in full Arabic or English, and updates itself from GitHub Releases.",
           stats: [
             ["85", "exercises with form guides"],
-            ["35", "Syrian dishes with lab-measured values"],
+            ["35", "Syrian dishes with sourced nutrition values"],
             ["0", "accounts, ads or analytics"],
           ],
           tags: ["Kotlin", "Jetpack Compose", "Room", "CameraX", "ML Kit"],
@@ -409,6 +482,8 @@ export const content: Record<Lang, Content> = {
         ["RWF-2000 · test", 73],
         ["RWF-2000 · validation", 71],
       ],
+      fightNote:
+        "The SCVD test split has only 12 fight videos; scored per video instead of per clip, it reaches 87.9%.",
       qgenTitle: "How a question is grounded",
       qgenSteps: {
         lexical: ["BM25", "exact terms"],
@@ -416,6 +491,18 @@ export const content: Record<Lang, Content> = {
         fuse: ["Rank fusion", "RRF, k = 60"],
         llm: ["Local LLM", "command-r7b-arabic"],
         out: ["Word exam", ".docx + answer key"],
+      },
+      voice: {
+        hold: "Hold to talk",
+        holdAria: "Hold to record a voice note",
+        recording: "Recording. Release to keep, Escape to discard.",
+        slide: "‹ Slide to cancel",
+        release: "Release to cancel",
+        play: "Play",
+        pause: "Pause",
+        discard: "Discard",
+        heard: "What the app understood",
+        demo: "A demo of the gesture: nothing is recorded.",
       },
       todoListening: "Listening…",
       todoSaid: "ذكرني كل أسبوعين يوم الاثنين الساعة عشرة أتصل بأحمد",
@@ -535,6 +622,7 @@ export const content: Record<Lang, Content> = {
     },
     skip: "انتقل إلى المحتوى",
     nav: {
+      abilities: "ما أقدّمه",
       work: "الأعمال",
       about: "نبذة",
       skills: "المهارات",
@@ -573,6 +661,46 @@ export const content: Record<Lang, Content> = {
       ["2", "تطبيقا أندرويد بالعربية والإنجليزية"],
       ["23+", "كتاباً مدرسياً مفهرساً للبحث دون إنترنت"],
     ],
+    abilities: {
+      title: "ما الذي أستطيع بناءه",
+      intro:
+        "أربعة أمور أستطيع بناءها لفريقك، ولكل منها مشروع حقيقي يثبتها في الأسفل.",
+      seeProject: "شاهد المشروع",
+      items: [
+        {
+          icon: "vision",
+          title: "رؤية حاسوبية على كاميرات حقيقية",
+          text: "كشف الشجار لحظياً من كاميرات المراقبة في المدارس: نقاط الجسم المفصلية وسرعة حركتها، ونموذج mLSTM يقرّر من ثانية واحدة من الفيديو.",
+          proof: "دقة 81% على تسجيلات كاميرات حقيقية (SCVD)",
+          project: "fight",
+          tools: ["PyTorch", "YOLO26-pose", "OpenCV", "FastAPI"],
+        },
+        {
+          icon: "llm",
+          title: "ذكاء اصطناعي يقرأ العربية دون إنترنت",
+          text: "بحث واسترجاع ونموذج لغوي عربي محلي على خادم مدرسة دون إنترنت، يحوّل الكتب المدرسية إلى أسئلة امتحان مصنّفة.",
+          proof: "أكثر من 23 كتاباً مدرسياً مفهرساً",
+          project: "qgen",
+          tools: ["RAG", "Ollama", "Qdrant", "BM25"],
+        },
+        {
+          icon: "android",
+          title: "تطبيقات أندرويد يثبّتها الناس",
+          text: "تطبيقات بلغة Kotlin وJetpack Compose بالعربية والإنجليزية، تُنشر عبر GitHub وتحدّث نفسها بنفسها.",
+          proof: "Forge منشور، ومهامي الذكية قيد التطوير",
+          project: "forge",
+          tools: ["Kotlin", "Jetpack Compose", "Room", "CameraX"],
+        },
+        {
+          icon: "system",
+          title: "أنظمة كاملة من البداية إلى النهاية",
+          text: "متجر إلكتروني ولوحة إدارة وتطبيق مندوب تتناقل الطلب الواحد فيما بينها مباشرة.",
+          proof: "ثلاثة تطبيقات تعمل كنظام واحد",
+          project: "shop",
+          tools: ["Next.js", "SQLite", "Capacitor", "Leaflet"],
+        },
+      ],
+    },
     work: {
       eyebrow: "01 · الأعمال",
       title: "أبرز الأعمال",
@@ -591,7 +719,7 @@ export const content: Record<Lang, Content> = {
           text: "يسجّل كل مجموعة مع اقتراحات لزيادة الحِمل، ويتابع السعرات والبروتين ووزن الصباح، ويقرأ جداول القيم الغذائية مباشرة بالكاميرا على الهاتف نفسه. إن فاتك تمرين ينقطع تتابع الأيام وتُفرض عليك عقوبة خلال 24 ساعة. يعمل دون إنترنت ودون حساب، بالعربية أو الإنجليزية بالكامل، ويحدّث نفسه من GitHub Releases.",
           stats: [
             ["85", "تمريناً مع شرح الأداء الصحيح"],
-            ["35", "طبقاً سورياً بقيم غذائية مقيسة مخبرياً"],
+            ["35", "طبقاً سورياً بقيم غذائية موثّقة المصدر"],
             ["0", "حسابات أو إعلانات أو تتبّع"],
           ],
           tags: ["Kotlin", "Jetpack Compose", "Room", "CameraX", "ML Kit"],
@@ -742,6 +870,8 @@ export const content: Record<Lang, Content> = {
         ["RWF-2000 · اختبار", 73],
         ["RWF-2000 · تحقق", 71],
       ],
+      fightNote:
+        "قسم الاختبار في SCVD يضم 12 مقطع شجار فقط؛ وعند التقييم لكل مقطع فيديو بدل كل جزء تصل الدقة إلى 87.9%.",
       qgenTitle: "كيف يستند كل سؤال إلى الكتاب",
       qgenSteps: {
         lexical: ["BM25", "مطابقة حرفية"],
@@ -749,6 +879,18 @@ export const content: Record<Lang, Content> = {
         fuse: ["دمج الترتيب", "RRF، k = 60"],
         llm: ["نموذج لغوي محلي", "command-r7b-arabic"],
         out: ["امتحان Word", "مع مفتاح الإجابات"],
+      },
+      voice: {
+        hold: "اضغط مطولاً وتحدث",
+        holdAria: "اضغط مطولاً لتسجيل ملاحظة صوتية",
+        recording: "جارٍ التسجيل. أفلت للحفظ، أو اضغط Escape للحذف.",
+        slide: "‹ اسحب للإلغاء",
+        release: "أفلت للإلغاء",
+        play: "تشغيل",
+        pause: "إيقاف مؤقت",
+        discard: "حذف",
+        heard: "ما فهمه التطبيق",
+        demo: "عرض توضيحي للحركة: لا يُسجَّل أي صوت.",
       },
       todoListening: "أنا أسمعك…",
       todoSaid: "ذكرني كل أسبوعين يوم الاثنين الساعة عشرة أتصل بأحمد",
