@@ -5,86 +5,108 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
-  Direction (unslop): exact, field-tested, quietly confident. The world is a
-  school's camera feed at night beside an engineer's bench, so the page sits
-  on an ink-tinted neutral ramp. One sage accent marks the main action and
-  the key number. The only rich colour lives in the pose figure, where it
-  means something: one hue for the body's left side, one for its right, red
-  for the alert. Signature: the figure's hollow joint rings, reused as the
-  status and list markers. IBM Plex Sans and IBM Plex Sans Arabic for text,
-  IBM Plex Mono for figures and meta.
+  Dark, modern portfolio built on three free libraries:
+  - Aceternity UI (spotlight, text generate, glowing borders, tracing beam,
+    timeline, background beams), adapted in src/components/aceternity/
+  - Transitions.dev CSS snippets (texts reveal, sliding tabs, learn-more
+    arrow, icon swap, spinning counter), below and in src/components/transitions/
+  - Bencho's voice-note block, in src/components/bencho/
+  Geist for Latin, IBM Plex Sans Arabic for Arabic, Geist Mono for figures.
 */
 @theme inline {
   --radius-sm: 6px;
   --radius-md: 10px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
 
-  --color-deep: var(--deep);
   --color-bg: var(--bg);
-  --color-card: var(--card);
-  --color-raised: var(--raised);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
   --color-line: var(--line);
   --color-line-strong: var(--line-strong);
   --color-text: var(--text);
   --color-soft: var(--soft);
   --color-faint: var(--faint);
-  --color-signal: var(--signal);
-  --color-signal-ink: var(--signal-ink);
+  --color-brand: var(--brand);
+  --color-brand-ink: var(--brand-ink);
+  --color-cyan: var(--cyan);
   --color-amber: var(--amber);
   --color-alert: var(--alert);
 
   /* shadcn token names kept so the 404/error screens and ui/* still work */
   --color-background: var(--bg);
   --color-foreground: var(--text);
+  --color-card: var(--surface);
   --color-card-foreground: var(--text);
-  --color-popover: var(--card);
+  --color-popover: var(--surface);
   --color-popover-foreground: var(--text);
-  --color-primary: var(--signal);
-  --color-primary-foreground: var(--signal-ink);
-  --color-secondary: var(--raised);
+  --color-primary: var(--brand);
+  --color-primary-foreground: var(--brand-ink);
+  --color-secondary: var(--surface-2);
   --color-secondary-foreground: var(--text);
-  --color-muted: var(--raised);
+  --color-muted: var(--surface-2);
   --color-muted-foreground: var(--soft);
-  --color-accent: var(--raised);
+  --color-accent: var(--surface-2);
   --color-accent-foreground: var(--text);
   --color-destructive: var(--alert);
   --color-destructive-foreground: #ffffff;
   --color-border: var(--line);
   --color-input: var(--line-strong);
-  --color-ring: var(--signal);
+  --color-ring: var(--brand);
 
-  --font-sans:
-    "IBM Plex Sans", "IBM Plex Sans Arabic", "Segoe UI", system-ui, sans-serif;
-  --font-arabic:
-    "IBM Plex Sans Arabic", "IBM Plex Sans", "Segoe UI", Tahoma, sans-serif;
-  --font-mono: "IBM Plex Mono", "IBM Plex Sans Arabic", ui-monospace, monospace;
+  --font-sans: "Geist", "IBM Plex Sans Arabic", system-ui, sans-serif;
+  --font-arabic: "IBM Plex Sans Arabic", "Geist", system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, monospace;
 }
 
 :root {
-  /* Ink ramp */
-  --deep: #07080d;
-  --bg: #0b0d14;
-  --card: #11141c;
-  --raised: #1a1e28;
-  --line: rgb(238 240 245 / 0.08);
-  --line-strong: rgb(238 240 245 / 0.14);
-  --text: #eef0f5;
-  --soft: #a3a9b8;
-  --faint: #7a8296;
-
-  /* One accent, and meaning-only colours */
-  --signal: #4cc38a;
-  --signal-ink: #06140d;
-  --amber: #d9a441;
-  --alert: #e5484d;
-  /* Pose figure only: the body's left and right side. Kept out of @theme on
-     purpose, so they never become text-left / text-right utilities. */
-  --limb-left: #7cb0ff;
-  --limb-right: #f2a65a;
-
-  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --bg: #0a0a0a;
+  --surface: #111111;
+  --surface-2: #181818;
+  --line: rgb(255 255 255 / 0.08);
+  --line-strong: rgb(255 255 255 / 0.14);
+  --text: #fafafa;
+  --soft: #a3a3a3;
+  --faint: #8a8a8a;
+  --brand: #34d399;
+  --brand-ink: #022c22;
+  --cyan: #22d3ee;
+  --amber: #fbbf24;
+  --alert: #f87171;
   color-scheme: dark;
+
+  /* Transitions.dev motion tokens (the subset this site uses) */
+  --stagger-dur: 600ms;
+  --stagger-distance: 14px;
+  --stagger-stagger: 70ms;
+  --stagger-blur: 4px;
+  --stagger-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --tabs-dur: 250ms;
+  --tabs-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --learn-shift: 2px;
+  --learn-spread: 8deg;
+  --learn-in: 350ms;
+  --learn-out: 350ms;
+  --learn-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --icon-swap-dur: 250ms;
+  --icon-swap-blur: 2px;
+  --icon-swap-start-scale: 0.25;
+  --icon-swap-ease: ease-in-out;
+  --reel-step-dur: 130ms;
+  --reel-stagger: 90ms;
+  --reel-ease: cubic-bezier(0.35, -0.02, 0.43, 1);
+  --reel-cell: 1.2em;
+  --reel-side-scale: 0.7;
+  --reel-side-offset: 0.52em;
+  --reel-side-blur: max(0.067em, 0.171em - 2.1px);
+  --reel-side-opacity: 0.17;
+  --reel-center-scale: 0.9;
+  --reel-center-blur: 0.042em;
+  --reel-antic-dur: 100ms;
+  --reel-antic-scale: 0.94;
+  --reel-antic-lift: 0.125em;
+  --reel-land-dur: 740ms;
+  --reel-land-peak: 1.03;
 }
 
 @layer base {
@@ -92,11 +114,11 @@
     border-color: var(--color-border);
   }
   html {
-    scroll-padding-top: 5rem;
+    scroll-padding-top: 7rem;
     background-color: var(--bg);
-    scrollbar-color: var(--raised) var(--bg);
-    accent-color: var(--signal);
-    caret-color: var(--signal);
+    scrollbar-color: #2a2a2a var(--bg);
+    accent-color: var(--brand);
+    caret-color: var(--brand);
   }
   body {
     margin: 0;
@@ -109,25 +131,27 @@
   [lang="ar"] {
     font-family: var(--font-arabic);
   }
-  /* Arabic needs room for dots and vowel marks. */
   [lang="ar"] h2,
-  [lang="ar"] h3 {
-    line-height: 1.35;
+  [lang="ar"] h3,
+  [lang="ar"] p {
+    line-height: 1.75;
   }
   ::selection {
-    background: var(--signal);
-    color: var(--signal-ink);
+    background: var(--brand);
+    color: var(--brand-ink);
   }
   a,
   button,
-  summary {
-    outline-offset: 2px;
+  summary,
+  [role="button"] {
+    outline-offset: 3px;
   }
   a:focus-visible,
   button:focus-visible,
-  summary:focus-visible {
-    outline: 2px solid var(--signal);
-    border-radius: 6px;
+  summary:focus-visible,
+  [role="button"]:focus-visible {
+    outline: 2px solid var(--brand);
+    border-radius: 10px;
   }
   h1,
   h2,
@@ -136,8 +160,7 @@
   }
   p,
   li,
-  dd,
-  figcaption {
+  dd {
     text-wrap: pretty;
   }
 }
@@ -153,52 +176,67 @@
     font-variant-numeric: tabular-nums;
   }
 
-  /* Buttons: one height, one radius, colour or surface step on hover. */
+  /* Headline text that fades from white to grey, Aceternity style. */
+  .text-sheen {
+    background: linear-gradient(180deg, #fafafa 30%, #9ca3af 110%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
   .btn {
     display: inline-flex;
     min-height: 2.75rem;
     align-items: center;
     gap: 0.5rem;
     padding: 0 1.25rem;
-    border-radius: 10px;
+    border-radius: 999px;
     font-size: 0.9375rem;
     font-weight: 500;
     transition:
-      background-color 150ms var(--ease),
-      border-color 150ms var(--ease),
-      color 150ms var(--ease),
-      transform 150ms var(--ease);
+      background-color 200ms var(--stagger-ease),
+      border-color 200ms var(--stagger-ease),
+      color 200ms var(--stagger-ease),
+      box-shadow 300ms var(--stagger-ease),
+      transform 150ms var(--stagger-ease);
   }
   .btn:active {
-    transform: scale(0.98);
+    transform: scale(0.97);
   }
-  .btn-primary {
-    background: var(--signal);
-    color: var(--signal-ink);
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.18);
+  .btn-brand {
+    background: var(--brand);
+    color: var(--brand-ink);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.35),
+      0 0 0 1px rgb(52 211 153 / 0.4),
+      0 8px 24px -8px rgb(52 211 153 / 0.45);
   }
-  .btn-primary:hover {
-    background: #5fd09a;
+  .btn-brand:hover {
+    background: #4ee3ad;
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.35),
+      0 0 0 1px rgb(52 211 153 / 0.6),
+      0 10px 32px -8px rgb(52 211 153 / 0.6);
   }
-  .btn-secondary {
-    background: var(--raised);
+  .btn-ghost {
+    background: rgb(255 255 255 / 0.04);
     color: var(--text);
-    border: 1px solid var(--line-strong);
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.06);
+    box-shadow: inset 0 0 0 1px var(--line-strong);
   }
-  .btn-secondary:hover {
-    background: #222735;
+  .btn-ghost:hover {
+    background: rgb(255 255 255 / 0.08);
   }
 
-  /* Signature: a hollow joint ring, the same mark the pose figure draws on
-     every keypoint. Used only as a status or list marker. */
-  .joint {
-    display: inline-block;
-    flex-shrink: 0;
-    width: 10px;
-    height: 10px;
-    border-radius: 9999px;
-    border: 2px solid currentColor;
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    padding: 0.2rem 0.65rem;
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    color: var(--soft);
+    background: rgb(255 255 255 / 0.04);
+    box-shadow: inset 0 0 0 1px var(--line);
   }
 
   details > summary {
@@ -207,32 +245,209 @@
   details > summary::-webkit-details-marker {
     display: none;
   }
+
+  /* ---- Transitions.dev: Tabs sliding (#16) ---- */
+  .t-tabs {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 3px;
+    border-radius: 48px;
+    background: rgb(255 255 255 / 0.05);
+    box-shadow: inset 0 0 0 1px var(--line);
+  }
+  .t-tab {
+    position: relative;
+    appearance: none;
+    border: 0;
+    background: transparent;
+    height: 32px;
+    padding: 4px 12px;
+    color: var(--soft);
+    font-size: 0.8125rem;
+    cursor: pointer;
+    border-radius: 48px;
+    z-index: 1;
+    white-space: nowrap;
+    transition: color var(--tabs-dur) var(--tabs-ease);
+  }
+  .t-tab:not([aria-selected="true"]):hover,
+  .t-tab[aria-selected="true"] {
+    color: var(--text);
+  }
+  .t-tabs-pill {
+    position: absolute;
+    top: 3px;
+    left: 0;
+    height: 32px;
+    width: 0;
+    background: rgb(255 255 255 / 0.1);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.08);
+    border-radius: 48px;
+    transform: translateX(0);
+    transition:
+      transform var(--tabs-dur) var(--tabs-ease),
+      width var(--tabs-dur) var(--tabs-ease);
+    will-change: transform, width;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* ---- Transitions.dev: Learn more hover (#24) ---- */
+  .t-learn-chevron {
+    display: inline-flex;
+    transform: translateX(0);
+    transition: transform var(--learn-out) var(--learn-ease);
+  }
+  .t-learn-arm {
+    transform-box: view-box;
+    transform-origin: 10px 8px;
+    vector-effect: non-scaling-stroke;
+    transition: transform var(--learn-out) var(--learn-ease);
+  }
+  .t-learn:hover .t-learn-chevron {
+    transform: translateX(var(--learn-shift));
+    transition-duration: var(--learn-in);
+  }
+  [dir="rtl"] .t-learn-chevron svg {
+    transform: scaleX(-1);
+  }
+  [dir="rtl"] .t-learn:hover .t-learn-chevron {
+    transform: translateX(calc(var(--learn-shift) * -1));
+  }
+  .t-learn:hover .t-learn-arm {
+    transition-duration: var(--learn-in);
+  }
+  .t-learn:hover .t-learn-arm-top {
+    transform: rotate(var(--learn-spread));
+  }
+  .t-learn:hover .t-learn-arm-bot {
+    transform: rotate(calc(var(--learn-spread) * -1));
+  }
+
+  /* ---- Transitions.dev: Icon swap (#9) ---- */
+  .t-icon-swap {
+    position: relative;
+    display: inline-grid;
+  }
+  .t-icon-swap .t-icon {
+    grid-area: 1 / 1;
+    transition:
+      opacity var(--icon-swap-dur) var(--icon-swap-ease),
+      filter var(--icon-swap-dur) var(--icon-swap-ease),
+      transform var(--icon-swap-dur) var(--icon-swap-ease);
+  }
+  .t-icon-swap[data-state="a"] .t-icon[data-icon="a"],
+  .t-icon-swap[data-state="b"] .t-icon[data-icon="b"] {
+    opacity: 1;
+    filter: blur(0);
+    transform: scale(1);
+  }
+  .t-icon-swap[data-state="a"] .t-icon[data-icon="b"],
+  .t-icon-swap[data-state="b"] .t-icon[data-icon="a"] {
+    opacity: 0;
+    filter: blur(var(--icon-swap-blur));
+    transform: scale(var(--icon-swap-start-scale));
+  }
+
+  /* ---- Transitions.dev: Spinning counter (#26) ---- */
+  .t-reel {
+    display: inline-flex;
+    align-items: center;
+    height: var(--reel-cell);
+    font-variant-numeric: tabular-nums;
+  }
+  .t-reel-col {
+    position: relative;
+    display: inline-block;
+    height: var(--reel-cell);
+    line-height: var(--reel-cell);
+  }
+  .t-reel-sizer {
+    visibility: hidden;
+  }
+  .t-reel-digit {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    will-change: transform, filter, opacity;
+  }
+  .t-reel-sep {
+    display: inline-block;
+    height: var(--reel-cell);
+    line-height: var(--reel-cell);
+  }
+
+  /* Bencho tokens, scoped to its blocks so they never touch the page theme */
+  .bencho {
+    --font-ui: var(--font-sans);
+    --card: #111111;
+    --ink: #ffffff;
+    --ink-3: #9a9a9a;
+    --fill-slab: #232323;
+    --fill-on: #ffffff;
+    --pane-edge: rgb(255 255 255 / 0.08);
+    --signal: var(--brand);
+  }
 }
 
-/* ---------- Motion: one short entrance on load, nothing that loops ---------- */
-
+/* ---- Transitions.dev: Texts reveal (#18), used on headings and blocks ----
+   Only hidden once JavaScript is running (html.js-reveal), so the page is
+   complete without it. Children opt in with .t-stagger-line and --i. */
 @media (prefers-reduced-motion: no-preference) {
-  @keyframes rise {
-    from {
-      opacity: 0;
-      transform: translateY(8px);
-    }
-    to {
-      opacity: 1;
-      transform: none;
-    }
+  .js-reveal .t-stagger .t-stagger-line {
+    display: block;
+    opacity: 0;
+    transform: translateY(var(--stagger-distance));
+    filter: blur(var(--stagger-blur));
+    transition:
+      opacity var(--stagger-dur) var(--stagger-ease),
+      transform var(--stagger-dur) var(--stagger-ease),
+      filter var(--stagger-dur) var(--stagger-ease);
+    transition-delay: calc(var(--i, 0) * var(--stagger-stagger));
   }
-  .rise {
-    animation: rise 400ms var(--ease) both;
+  .js-reveal .t-stagger.is-shown .t-stagger-line {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
   }
-  .d1 {
-    animation-delay: 50ms;
+
+  /* Aceternity "text generate effect": words resolve one by one from a blur. */
+  .js-reveal .tge-word {
+    opacity: 0;
+    filter: blur(10px);
+    transition:
+      opacity 500ms ease,
+      filter 500ms ease;
+    transition-delay: calc(0.3s + var(--i, 0) * 0.08s);
   }
-  .d2 {
-    animation-delay: 100ms;
+  .js-reveal .tge.is-shown .tge-word {
+    opacity: 1;
+    filter: blur(0);
   }
-  .d3 {
-    animation-delay: 150ms;
+
+  /* Result bars fill once their project is on screen. */
+  .js-reveal .t-stagger:not(.is-shown) .bar-fill {
+    transform: scaleX(0);
+  }
+  .bar-fill {
+    transition: transform 1.2s var(--stagger-ease) 0.3s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-tabs-pill,
+  .t-tab,
+  .t-learn-chevron,
+  .t-learn-arm,
+  .t-icon-swap .t-icon {
+    transition: none !important;
+  }
+  .t-reel-digit {
+    filter: none !important;
   }
 }
 

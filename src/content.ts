@@ -58,12 +58,24 @@ type Small = {
   year: string;
   title: string;
   text: string;
+  icon: "wifi" | "radar" | "receipt";
+};
+
+/** One thing I can build, with the project that proves it. */
+export type Ability = {
+  icon: "vision" | "llm" | "android" | "system";
+  title: string;
+  text: string;
+  proof: string;
+  project: ProjectId;
+  tools: string[];
 };
 
 export type Content = {
   meta: { title: string; description: string };
   skip: string;
   nav: {
+    abilities: string;
     work: string;
     about: string;
     skills: string;
@@ -75,22 +87,23 @@ export type Content = {
     status: string;
     name: string;
     lead: string;
-    /** One plain line under the name: what I build. */
-    line: string;
+    buildPrefix: string;
+    builds: string[];
+    buildsSpoken: string;
     intro: string;
     seeWork: string;
     emailMe: string;
   };
-  pose: {
-    caption: string;
-    label: string;
-    motion: string;
-    alert: string;
-    left: string;
-    right: string;
-  };
+  pose: { caption: string; label: string; motion: string; alert: string };
   stats: Stat[];
+  abilities: {
+    title: string;
+    intro: string;
+    seeProject: string;
+    items: Ability[];
+  };
   work: {
+    eyebrow: string;
     title: string;
     intro: string;
     released: string;
@@ -117,6 +130,19 @@ export type Content = {
       llm: [string, string];
       out: [string, string];
     };
+    /** Labels for the hold-to-talk demo (a gesture demo: nothing is recorded). */
+    voice: {
+      hold: string;
+      holdAria: string;
+      recording: string;
+      slide: string;
+      release: string;
+      play: string;
+      pause: string;
+      discard: string;
+      heard: string;
+      demo: string;
+    };
     todoListening: string;
     todoSaid: string;
     todoMeaning?: string;
@@ -129,6 +155,7 @@ export type Content = {
     };
   };
   about: {
+    eyebrow: string;
     title: string;
     bio: string;
     facts: Array<[string, string]>;
@@ -138,11 +165,13 @@ export type Content = {
     timeline: Array<[when: string, title: string, text: string]>;
   };
   skills: {
+    eyebrow: string;
     title: string;
     intro: string;
     groups: Array<[string, string[]]>;
   };
   contact: {
+    eyebrow: string;
     title: string;
     text: string;
     copy: string;
@@ -199,6 +228,7 @@ export const content: Record<Lang, Content> = {
     },
     skip: "Skip to content",
     nav: {
+      abilities: "What I do",
       work: "Work",
       about: "About",
       skills: "Skills",
@@ -209,8 +239,15 @@ export const content: Record<Lang, Content> = {
     hero: {
       status: "Open to junior AI and software roles",
       name: "Hussein Al Herk",
-      lead: "Junior AI engineer in Damascus, Syria",
-      line: "I build real-time computer vision, offline AI that reads Arabic, and Android apps",
+      lead: "Junior AI engineer in Damascus, Syria.",
+      buildPrefix: "I build",
+      builds: [
+        "real-time computer vision.",
+        "offline AI that reads Arabic.",
+        "Android apps, Arabic first.",
+      ],
+      buildsSpoken:
+        "I build real-time computer vision, offline AI that reads Arabic, and Android apps.",
       intro:
         "My work runs on real hardware: CCTV cameras, school servers with no cloud, and phones. I also know my way around networks and security. I'm looking for a junior AI or software role, in Damascus or remote.",
       seeWork: "See my work",
@@ -223,8 +260,6 @@ export const content: Record<Lang, Content> = {
         "Interactive stick figure made of 17 body keypoints inside a detection box. Its arm follows your cursor, and a meter shows how fast it moves.",
       motion: "motion",
       alert: "fast",
-      left: "left side",
-      right: "right side",
     },
     stats: [
       ["81%", "accuracy spotting fights on real CCTV"],
@@ -232,7 +267,48 @@ export const content: Record<Lang, Content> = {
       ["2", "Android apps in Arabic and English"],
       ["23+", "textbooks indexed for offline search"],
     ],
+    abilities: {
+      title: "What I can do",
+      intro:
+        "Four things I can build for your team, each one backed by a real project further down.",
+      seeProject: "See the project",
+      items: [
+        {
+          icon: "vision",
+          title: "Computer vision on real cameras",
+          text: "Real-time fight detection on school CCTV: pose keypoints, how fast they move, and an mLSTM that decides from one second of video.",
+          proof: "81% on real CCTV footage (SCVD)",
+          project: "fight",
+          tools: ["PyTorch", "YOLO26-pose", "OpenCV", "FastAPI"],
+        },
+        {
+          icon: "llm",
+          title: "Offline AI that reads Arabic",
+          text: "Retrieval and a local Arabic language model on a school server with no internet, turning textbooks into graded exam questions.",
+          proof: "23+ curriculum books indexed",
+          project: "qgen",
+          tools: ["RAG", "Ollama", "Qdrant", "BM25"],
+        },
+        {
+          icon: "android",
+          title: "Android apps people install",
+          text: "Kotlin and Jetpack Compose apps in Arabic and English, released on GitHub and updating themselves.",
+          proof: "Forge is released; Smart To-Do is in progress",
+          project: "forge",
+          tools: ["Kotlin", "Jetpack Compose", "Room", "CameraX"],
+        },
+        {
+          icon: "system",
+          title: "Complete systems, end to end",
+          text: "A web shop, an admin dashboard and a driver app that pass one order between them, live.",
+          proof: "3 apps working as one system",
+          project: "shop",
+          tools: ["Next.js", "SQLite", "Capacitor", "Leaflet"],
+        },
+      ],
+    },
     work: {
+      eyebrow: "01 · Work",
       title: "Selected work",
       intro:
         "From real-time vision on school cameras to a full shop-and-delivery system and Android apps with regular releases. Version numbers come straight from GitHub.",
@@ -367,16 +443,19 @@ export const content: Record<Lang, Content> = {
           year: "2026",
           title: "Wireless security home lab",
           text: "Tested WPA2 security in an isolated Kali Linux lab and wrote up the findings.",
+          icon: "wifi",
         },
         {
           year: "2025",
           title: "Hazard prediction for Syria",
           text: "Machine-learning models that predict environmental and conflict-related hazards from real Syrian data.",
+          icon: "radar",
         },
         {
           year: "2024",
           title: "Financial reporting app",
           text: "ASP.NET app that builds monthly and yearly balance sheets and income statements.",
+          icon: "receipt",
         },
       ],
     },
@@ -412,6 +491,18 @@ export const content: Record<Lang, Content> = {
         fuse: ["Rank fusion", "RRF, k = 60"],
         llm: ["Local LLM", "command-r7b-arabic"],
         out: ["Word exam", ".docx + answer key"],
+      },
+      voice: {
+        hold: "Hold to talk",
+        holdAria: "Hold to record a voice note",
+        recording: "Recording. Release to keep, Escape to discard.",
+        slide: "‹ Slide to cancel",
+        release: "Release to cancel",
+        play: "Play",
+        pause: "Pause",
+        discard: "Discard",
+        heard: "What the app understood",
+        demo: "A demo of the gesture: nothing is recorded.",
       },
       todoListening: "Listening…",
       todoSaid: "ذكرني كل أسبوعين يوم الاثنين الساعة عشرة أتصل بأحمد",
@@ -450,6 +541,7 @@ export const content: Record<Lang, Content> = {
       },
     },
     about: {
+      eyebrow: "02 · About",
       title: "About",
       bio: "I graduated in Information Technology, AI specialization, from Arab International University in 2026. For our senior project, a team of five built an AI-powered school management system (Laravel backend, Flutter app, React dashboard), and I built its three AI services. Outside coursework I build Android apps and run a home lab for network security, and I'm now turning my fight detector into a research paper.",
       facts: [
@@ -500,6 +592,7 @@ export const content: Record<Lang, Content> = {
       ],
     },
     skills: {
+      eyebrow: "03 · Skills",
       title: "Skills",
       intro: "Tools I've used in finished, working projects.",
       groups: [
@@ -511,6 +604,7 @@ export const content: Record<Lang, Content> = {
       ],
     },
     contact: {
+      eyebrow: "04 · Contact",
       title: "Let's build something",
       text: "I'm looking for a junior AI, ML or software role. Email is the fastest way to reach me.",
       copy: "Copy",
@@ -528,6 +622,7 @@ export const content: Record<Lang, Content> = {
     },
     skip: "انتقل إلى المحتوى",
     nav: {
+      abilities: "ما أقدّمه",
       work: "الأعمال",
       about: "نبذة",
       skills: "المهارات",
@@ -538,8 +633,15 @@ export const content: Record<Lang, Content> = {
     hero: {
       status: "متاح لوظيفة مبتدئة في الذكاء الاصطناعي أو البرمجيات",
       name: "Hussein Al Herk",
-      lead: "مهندس ذكاء اصطناعي مبتدئ في دمشق، سوريا",
-      line: "أبني رؤية حاسوبية تعمل لحظياً، وذكاءً اصطناعياً يقرأ العربية دون إنترنت، وتطبيقات أندرويد",
+      lead: "مهندس ذكاء اصطناعي مبتدئ في دمشق، سوريا.",
+      buildPrefix: "أبني",
+      builds: [
+        "رؤية حاسوبية تعمل لحظياً.",
+        "ذكاءً اصطناعياً يقرأ العربية دون إنترنت.",
+        "تطبيقات أندرويد، بالعربية أولاً.",
+      ],
+      buildsSpoken:
+        "أبني رؤية حاسوبية تعمل لحظياً، وذكاءً اصطناعياً يقرأ العربية دون إنترنت، وتطبيقات أندرويد.",
       intro:
         "أعمالي تعمل على أجهزة حقيقية: كاميرات المراقبة، وخوادم مدارس دون خدمات سحابية، والهواتف. ولدي خبرة عملية في الشبكات وأمن المعلومات. أبحث عن وظيفة مبتدئة في الذكاء الاصطناعي أو البرمجيات، في دمشق أو عن بُعد.",
       seeWork: "شاهد أعمالي",
@@ -552,8 +654,6 @@ export const content: Record<Lang, Content> = {
         "شكل تفاعلي من 17 نقطة مفصلية داخل مربع كشف. تتبع ذراعه المؤشر، ويُظهر مقياس سرعة حركتها.",
       motion: "الحركة",
       alert: "سريعة",
-      left: "الجانب الأيسر",
-      right: "الجانب الأيمن",
     },
     stats: [
       ["81%", "دقة كشف الشجار في تسجيلات كاميرات حقيقية"],
@@ -561,7 +661,48 @@ export const content: Record<Lang, Content> = {
       ["2", "تطبيقا أندرويد بالعربية والإنجليزية"],
       ["23+", "كتاباً مدرسياً مفهرساً للبحث دون إنترنت"],
     ],
+    abilities: {
+      title: "ما الذي أستطيع بناءه",
+      intro:
+        "أربعة أمور أستطيع بناءها لفريقك، ولكل منها مشروع حقيقي يثبتها في الأسفل.",
+      seeProject: "شاهد المشروع",
+      items: [
+        {
+          icon: "vision",
+          title: "رؤية حاسوبية على كاميرات حقيقية",
+          text: "كشف الشجار لحظياً من كاميرات المراقبة في المدارس: نقاط الجسم المفصلية وسرعة حركتها، ونموذج mLSTM يقرّر من ثانية واحدة من الفيديو.",
+          proof: "دقة 81% على تسجيلات كاميرات حقيقية (SCVD)",
+          project: "fight",
+          tools: ["PyTorch", "YOLO26-pose", "OpenCV", "FastAPI"],
+        },
+        {
+          icon: "llm",
+          title: "ذكاء اصطناعي يقرأ العربية دون إنترنت",
+          text: "بحث واسترجاع ونموذج لغوي عربي محلي على خادم مدرسة دون إنترنت، يحوّل الكتب المدرسية إلى أسئلة امتحان مصنّفة.",
+          proof: "أكثر من 23 كتاباً مدرسياً مفهرساً",
+          project: "qgen",
+          tools: ["RAG", "Ollama", "Qdrant", "BM25"],
+        },
+        {
+          icon: "android",
+          title: "تطبيقات أندرويد يثبّتها الناس",
+          text: "تطبيقات بلغة Kotlin وJetpack Compose بالعربية والإنجليزية، تُنشر عبر GitHub وتحدّث نفسها بنفسها.",
+          proof: "Forge منشور، ومهامي الذكية قيد التطوير",
+          project: "forge",
+          tools: ["Kotlin", "Jetpack Compose", "Room", "CameraX"],
+        },
+        {
+          icon: "system",
+          title: "أنظمة كاملة من البداية إلى النهاية",
+          text: "متجر إلكتروني ولوحة إدارة وتطبيق مندوب تتناقل الطلب الواحد فيما بينها مباشرة.",
+          proof: "ثلاثة تطبيقات تعمل كنظام واحد",
+          project: "shop",
+          tools: ["Next.js", "SQLite", "Capacitor", "Leaflet"],
+        },
+      ],
+    },
     work: {
+      eyebrow: "01 · الأعمال",
       title: "أبرز الأعمال",
       intro:
         "من الرؤية الحاسوبية اللحظية في كاميرات المدارس إلى نظام كامل للبيع والتوصيل وتطبيقات أندرويد بإصدارات منتظمة. أرقام الإصدارات تُجلب مباشرة من GitHub.",
@@ -690,16 +831,19 @@ export const content: Record<Lang, Content> = {
           year: "2026",
           title: "مختبر أمن الشبكات اللاسلكية",
           text: "اختبار أمان WPA2 في مختبر Kali Linux معزول وتوثيق النتائج.",
+          icon: "wifi",
         },
         {
           year: "2025",
           title: "التنبؤ بالمخاطر في سوريا",
           text: "نماذج تعلّم آلي تتنبأ بالمخاطر البيئية والمرتبطة بالنزاع من بيانات سورية حقيقية.",
+          icon: "radar",
         },
         {
           year: "2024",
           title: "تطبيق التقارير المالية",
           text: "تطبيق ASP.NET يُنشئ الميزانيات وقوائم الدخل الشهرية والسنوية.",
+          icon: "receipt",
         },
       ],
     },
@@ -735,6 +879,18 @@ export const content: Record<Lang, Content> = {
         fuse: ["دمج الترتيب", "RRF، k = 60"],
         llm: ["نموذج لغوي محلي", "command-r7b-arabic"],
         out: ["امتحان Word", "مع مفتاح الإجابات"],
+      },
+      voice: {
+        hold: "اضغط مطولاً وتحدث",
+        holdAria: "اضغط مطولاً لتسجيل ملاحظة صوتية",
+        recording: "جارٍ التسجيل. أفلت للحفظ، أو اضغط Escape للحذف.",
+        slide: "‹ اسحب للإلغاء",
+        release: "أفلت للإلغاء",
+        play: "تشغيل",
+        pause: "إيقاف مؤقت",
+        discard: "حذف",
+        heard: "ما فهمه التطبيق",
+        demo: "عرض توضيحي للحركة: لا يُسجَّل أي صوت.",
       },
       todoListening: "أنا أسمعك…",
       todoSaid: "ذكرني كل أسبوعين يوم الاثنين الساعة عشرة أتصل بأحمد",
@@ -772,6 +928,7 @@ export const content: Record<Lang, Content> = {
       },
     },
     about: {
+      eyebrow: "02 · نبذة",
       title: "نبذة",
       bio: "تخرّجت في تقانة المعلومات، اختصاص الذكاء الاصطناعي، من الجامعة العربية الدولية عام 2026. في مشروع التخرج بنى فريق من خمسة طلاب نظاماً ذكياً لإدارة المدارس (خادم Laravel وتطبيق Flutter ولوحة تحكم React)، وبنيت أنا خدمات الذكاء الاصطناعي الثلاث فيه. وخارج الدراسة أبني تطبيقات أندرويد، ولدي مختبر منزلي لأمن الشبكات، وأعمل الآن على تحويل كاشف الشجار إلى ورقة بحثية.",
       facts: [
@@ -826,6 +983,7 @@ export const content: Record<Lang, Content> = {
       ],
     },
     skills: {
+      eyebrow: "03 · المهارات",
       title: "المهارات",
       intro: "أدوات استخدمتها في مشاريع منجزة تعمل فعلاً.",
       groups: [
@@ -837,6 +995,7 @@ export const content: Record<Lang, Content> = {
       ],
     },
     contact: {
+      eyebrow: "04 · تواصل",
       title: "لنبنِ شيئاً معاً",
       text: "أبحث عن وظيفة مبتدئة في الذكاء الاصطناعي أو تعلّم الآلة أو البرمجة. أسرع طريقة للتواصل معي هي البريد الإلكتروني.",
       copy: "نسخ",

@@ -89,7 +89,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
             "AI engineering portfolio of Hussein Al Herk: computer vision, offline RAG and Android apps.",
         },
         { name: "author", content: "Hussein Al Herk" },
-        { name: "theme-color", content: "#0b0d14" },
+        { name: "theme-color", content: "#0a0a0a" },
         { property: "og:type", content: "website" },
         { name: "twitter:card", content: "summary_large_image" },
       ],
@@ -106,7 +106,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         },
         {
           rel: "stylesheet",
-          href: "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap",
+          href: "https://fonts.googleapis.com/css2?family=Geist:wght@400..700&family=Geist+Mono:wght@400..500&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap",
         },
         { rel: "icon", href: "/favicon.png", type: "image/png" },
       ],
@@ -126,6 +126,13 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang={isArabic ? "ar" : "en"} dir={isArabic ? "rtl" : "ltr"}>
       <head>
         <HeadContent />
+        {/* Scroll reveals only hide content once JavaScript is running, so
+            the prerendered page is complete without it. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "document.documentElement.classList.add('js-reveal')",
+          }}
+        />
       </head>
       <body>
         {children}
