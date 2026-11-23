@@ -28,9 +28,6 @@ import {
   PhoneShowcase,
   ResultBars,
   RetrievalFlow,
-  SnakeDraft,
-  TodoPhone,
-  VoiceDemo,
 } from "@/components/WorkVisuals";
 import { Spotlight } from "@/components/aceternity/spotlight";
 import { TextGenerateEffect } from "@/components/aceternity/text-generate";
@@ -463,7 +460,11 @@ function visualsFor(p: Project, t: Content, lang: Lang): ReactNode {
   switch (p.id) {
     case "forge":
       return (
-        <PhoneShowcase screens={v.forgeScreens} label={v.forgeScreensLabel} />
+        <PhoneShowcase
+          app={p.title}
+          screens={v.forgeScreens}
+          label={v.forgeScreensLabel}
+        />
       );
     case "fight":
       return (
@@ -488,23 +489,11 @@ function visualsFor(p: Project, t: Content, lang: Lang): ReactNode {
       );
     case "todo":
       return (
-        <div className="grid items-center gap-8 md:grid-cols-[minmax(0,1fr)_auto] md:gap-12">
-          <VoiceDemo
-            labels={v.voice}
-            heard={v.voice.heard}
-            demo={v.voice.demo}
-            said={v.todoSaid}
-            meaning={v.todoMeaning}
-          />
-          <TodoPhone />
-        </div>
-      );
-    case "classes":
-      return (
-        <SnakeDraft
-          caption={v.classesCaption}
-          names={v.classesNames}
-          avgLabel={v.classesAvg}
+        <PhoneShowcase
+          app={p.title}
+          screens={v.todoScreens}
+          label={v.todoScreensLabel}
+          height={903}
         />
       );
   }
@@ -578,7 +567,7 @@ function ProjectCard({ p, t, lang }: { p: Project; t: Content; lang: Lang }) {
   const release = useLatestRelease(p.releaseRepo);
   const version = release?.tag ?? p.version;
   const building = p.status === "building";
-  const wide = p.id === "shop" || p.id === "todo";
+  const wide = p.id === "shop";
   const visual = visualsFor(p, t, lang);
 
   return (
