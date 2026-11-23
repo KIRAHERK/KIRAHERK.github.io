@@ -9,8 +9,7 @@
 
 export type Lang = "en" | "ar";
 export type Status = "live" | "building";
-export type ProjectId =
-  "forge" | "fight" | "qgen" | "shop" | "todo" | "classes";
+export type ProjectId = "forge" | "fight" | "qgen" | "shop" | "todo";
 
 export const LINKS = {
   email: "hussenalherk@gmail.com",
@@ -25,7 +24,6 @@ export const LINKS = {
   todoRelease: "https://github.com/KIRAHERK/Smart-To-Do/releases/latest",
   fightRepo: "https://github.com/KIRAHERK/fight-detection-mlstm",
   qgenRepo: "https://github.com/KIRAHERK/arabic-exam-question-generator",
-  seniorRepo: "https://github.com/KIRAHERK/Senior-Project",
 };
 
 type Stat = [value: string, label: string];
@@ -130,25 +128,8 @@ export type Content = {
       llm: [string, string];
       out: [string, string];
     };
-    /** Labels for the hold-to-talk demo (a gesture demo: nothing is recorded). */
-    voice: {
-      hold: string;
-      holdAria: string;
-      recording: string;
-      slide: string;
-      release: string;
-      play: string;
-      pause: string;
-      discard: string;
-      heard: string;
-      demo: string;
-    };
-    todoListening: string;
-    todoSaid: string;
-    todoMeaning?: string;
-    classesCaption: string;
-    classesNames: [string, string, string];
-    classesAvg: string;
+    todoScreens: Array<[file: string, label: string]>;
+    todoScreensLabel: string;
     journey: {
       title: string;
       steps: Array<{ label: string; title: string; text: string; alt: string }>;
@@ -291,8 +272,8 @@ export const content: Record<Lang, Content> = {
         },
         {
           icon: "android",
-          title: "Android apps people install",
-          text: "Kotlin and Jetpack Compose apps in Arabic and English, released on GitHub and updating themselves.",
+          title: "Android apps and their websites",
+          text: "Kotlin and Jetpack Compose apps in Arabic and English that update themselves from GitHub, and the websites that present them, like Forge's download page.",
           proof: "Forge is released; Smart To-Do is in progress",
           project: "forge",
           tools: ["Kotlin", "Jetpack Compose", "Room", "CameraX"],
@@ -425,17 +406,6 @@ export const content: Record<Lang, Content> = {
           version: "v0.2.4",
           note: "Still in development: features and screens are changing.",
         },
-        {
-          id: "classes",
-          status: "live",
-          meta: "Senior project · 2026",
-          title: "Class distributor",
-          tagline: "Fair, balanced classes",
-          text: "Ranks students by a weighted score of grades, behaviour and attendance, then deals them into classes in zigzag order, so every class gets the same mix. A small FastAPI service that also reports how balanced the result is.",
-          stats: [],
-          tags: ["Python", "FastAPI", "NumPy"],
-          links: [{ label: "Team repo", href: LINKS.seniorRepo, kind: "code" }],
-        },
       ],
       moreTitle: "More projects",
       more: [
@@ -492,24 +462,13 @@ export const content: Record<Lang, Content> = {
         llm: ["Local LLM", "command-r7b-arabic"],
         out: ["Word exam", ".docx + answer key"],
       },
-      voice: {
-        hold: "Hold to talk",
-        holdAria: "Hold to record a voice note",
-        recording: "Recording. Release to keep, Escape to discard.",
-        slide: "‹ Slide to cancel",
-        release: "Release to cancel",
-        play: "Play",
-        pause: "Pause",
-        discard: "Discard",
-        heard: "What the app understood",
-        demo: "A demo of the gesture: nothing is recorded.",
-      },
-      todoListening: "Listening…",
-      todoSaid: "ذكرني كل أسبوعين يوم الاثنين الساعة عشرة أتصل بأحمد",
-      todoMeaning: "“Remind me every two weeks, Monday at ten, to call Ahmed.”",
-      classesCaption: "12 ranked students, dealt in a zigzag",
-      classesNames: ["A", "B", "C"],
-      classesAvg: "avg rank",
+      todoScreens: [
+        ["todo-today", "Today"],
+        ["todo-listening", "Listening"],
+        ["todo-confirm", "Confirm"],
+        ["todo-task", "Task"],
+      ],
+      todoScreensLabel: "Smart To-Do screens",
       journey: {
         title: "One order, through all three apps",
         steps: [
@@ -685,8 +644,8 @@ export const content: Record<Lang, Content> = {
         },
         {
           icon: "android",
-          title: "تطبيقات أندرويد يثبّتها الناس",
-          text: "تطبيقات بلغة Kotlin وJetpack Compose بالعربية والإنجليزية، تُنشر عبر GitHub وتحدّث نفسها بنفسها.",
+          title: "تطبيقات أندرويد ومواقعها",
+          text: "تطبيقات بلغة Kotlin وJetpack Compose بالعربية والإنجليزية تحدّث نفسها من GitHub، مع مواقع ويب تعرّف بها، مثل صفحة تحميل Forge.",
           proof: "Forge منشور، ومهامي الذكية قيد التطوير",
           project: "forge",
           tools: ["Kotlin", "Jetpack Compose", "Room", "CameraX"],
@@ -811,19 +770,6 @@ export const content: Record<Lang, Content> = {
           version: "v0.2.4",
           note: "ما زال قيد التطوير: الميزات والشاشات تتغير.",
         },
-        {
-          id: "classes",
-          status: "live",
-          meta: "مشروع التخرج · 2026",
-          title: "توزيع الطلاب على الشُّعب",
-          tagline: "شُعب متوازنة وعادلة",
-          text: "يرتّب الطلاب حسب درجة مركّبة من العلامات والسلوك والحضور، ثم يوزّعهم على الشُّعب بترتيب متعرّج، فتحصل كل شعبة على المزيج نفسه. خدمة FastAPI صغيرة تقيس أيضاً مدى توازن النتيجة.",
-          stats: [],
-          tags: ["Python", "FastAPI", "NumPy"],
-          links: [
-            { label: "مستودع الفريق", href: LINKS.seniorRepo, kind: "code" },
-          ],
-        },
       ],
       moreTitle: "مشاريع أخرى",
       more: [
@@ -880,23 +826,13 @@ export const content: Record<Lang, Content> = {
         llm: ["نموذج لغوي محلي", "command-r7b-arabic"],
         out: ["امتحان Word", "مع مفتاح الإجابات"],
       },
-      voice: {
-        hold: "اضغط مطولاً وتحدث",
-        holdAria: "اضغط مطولاً لتسجيل ملاحظة صوتية",
-        recording: "جارٍ التسجيل. أفلت للحفظ، أو اضغط Escape للحذف.",
-        slide: "‹ اسحب للإلغاء",
-        release: "أفلت للإلغاء",
-        play: "تشغيل",
-        pause: "إيقاف مؤقت",
-        discard: "حذف",
-        heard: "ما فهمه التطبيق",
-        demo: "عرض توضيحي للحركة: لا يُسجَّل أي صوت.",
-      },
-      todoListening: "أنا أسمعك…",
-      todoSaid: "ذكرني كل أسبوعين يوم الاثنين الساعة عشرة أتصل بأحمد",
-      classesCaption: "12 طالباً مرتّبين، موزّعين بترتيب متعرّج",
-      classesNames: ["أ", "ب", "ج"],
-      classesAvg: "متوسط الترتيب",
+      todoScreens: [
+        ["todo-today", "اليوم"],
+        ["todo-listening", "الاستماع"],
+        ["todo-confirm", "التأكيد"],
+        ["todo-task", "المهمة"],
+      ],
+      todoScreensLabel: "شاشات مهامي الذكية",
       journey: {
         title: "طلب واحد عبر التطبيقات الثلاثة",
         steps: [

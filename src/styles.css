@@ -5,12 +5,11 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
-  Dark, modern portfolio built on three free libraries:
+  Dark, modern portfolio built on two free libraries:
   - Aceternity UI (spotlight, text generate, glowing borders, tracing beam,
     timeline, background beams), adapted in src/components/aceternity/
   - Transitions.dev CSS snippets (texts reveal, sliding tabs, learn-more
     arrow, icon swap, spinning counter), below and in src/components/transitions/
-  - Bencho's voice-note block, in src/components/bencho/
   Geist for Latin, IBM Plex Sans Arabic for Arabic, Geist Mono for figures.
 */
 @theme inline {
@@ -379,18 +378,6 @@
     display: inline-block;
     height: var(--reel-cell);
     line-height: var(--reel-cell);
-  }
-
-  /* Bencho tokens, scoped to its blocks so they never touch the page theme */
-  .bencho {
-    --font-ui: var(--font-sans);
-    --card: #111111;
-    --ink: #ffffff;
-    --ink-3: #9a9a9a;
-    --fill-slab: #232323;
-    --fill-on: #ffffff;
-    --pane-edge: rgb(255 255 255 / 0.08);
-    --signal: var(--brand);
   }
 }
 

@@ -5,12 +5,10 @@ import {
   type CSSProperties,
   type ReactNode,
 } from "react";
-import { ArrowRight, Mic } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { prefersReducedMotion } from "@/components/motion";
 import { SlidingTabs } from "@/components/transitions/SlidingTabs";
 import { Line, Reveal } from "@/components/transitions/Reveal";
-import { VoiceNote, type VoiceNoteLabels } from "@/components/bencho/VoiceNote";
-import "@/components/bencho/VoiceNote.css";
 
 const PANEL =
   "rounded-2xl border border-line bg-[linear-gradient(180deg,rgb(255_255_255/0.03),rgb(255_255_255/0.01))] p-4 sm:p-5";
@@ -39,15 +37,20 @@ function Phone({
   );
 }
 
-/* --------------------------------- Forge --------------------------------- */
+/* ---------------------------- App screenshots ---------------------------- */
 
-/** Forge screenshots: sliding tabs pick the screen, which cross-blurs in. */
+/** App screenshots in a phone: sliding tabs pick the screen, which cross-blurs in. */
 export function PhoneShowcase({
+  app,
   screens,
   label,
+  height = 933,
 }: {
+  app: string;
   screens: Array<[string, string]>;
   label: string;
+  /** Screenshot height at 420 px wide. */
+  height?: number;
 }) {
   const [cur, setCur] = useState(screens[0]?.[0] ?? "");
   return (
@@ -57,10 +60,10 @@ export function PhoneShowcase({
           <img
             key={file}
             src={`/work/${file}.webp`}
-            alt={file === cur ? `Forge: ${name}` : ""}
+            alt={file === cur ? `${app}: ${name}` : ""}
             aria-hidden={file === cur ? undefined : true}
             width={420}
-            height={933}
+            height={height}
             loading="lazy"
             decoding="async"
             className={`absolute inset-0 h-full w-full object-cover object-top transition-[opacity,filter,transform] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
@@ -241,144 +244,6 @@ export function RetrievalFlow({
           <Node title={steps.out[0]} sub={steps.out[1]} strong />
         </Line>
       </div>
-    </Reveal>
-  );
-}
-
-/* ------------------------------ Smart To-Do ------------------------------ */
-
-/**
- * The hold-to-talk gesture (Bencho's voice-note block). Letting go reveals
- * the sentence and what the app understood from it. Nothing is recorded.
- */
-export function VoiceDemo({
-  labels,
-  heard,
-  demo,
-  said,
-  meaning,
-}: {
-  labels: VoiceNoteLabels;
-  heard: string;
-  demo: string;
-  said: string;
-  meaning?: string | undefined;
-}) {
-  const [done, setDone] = useState(false);
-  return (
-    <div className={PANEL}>
-      <div className="bencho flex justify-center" dir="ltr">
-        <VoiceNote labels={labels} bars={28} onClip={() => setDone(true)} />
-      </div>
-      <p className="-mt-6 text-center text-[12.5px] text-faint">{demo}</p>
-      <div
-        className={`mt-4 grid transition-[grid-template-rows,opacity] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${done ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}
-        aria-live="polite"
-      >
-        <div className="overflow-hidden">
-          {done && (
-            <Reveal className="rounded-xl bg-white/[0.04] p-4 ring-1 ring-white/10">
-              <Line
-                i={0}
-                className="flex items-center gap-2 text-[12.5px] font-medium text-brand"
-              >
-                <Mic size={14} aria-hidden="true" />
-                {heard}
-              </Line>
-              <Line i={1}>
-                <p
-                  lang="ar"
-                  dir="rtl"
-                  className="mt-2 font-arabic text-[17px] leading-[1.8] text-text"
-                >
-                  «{said}»
-                </p>
-              </Line>
-              {meaning && (
-                <Line i={2}>
-                  <p className="mt-1 text-[14px] leading-[1.6] text-soft">
-                    {meaning}
-                  </p>
-                </Line>
-              )}
-            </Reveal>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export function TodoPhone() {
-  return (
-    <Phone className="mx-auto w-[184px]">
-      <img
-        src="/work/todo-today.webp"
-        alt="Smart To-Do: today's tasks, in Arabic"
-        width={420}
-        height={903}
-        loading="lazy"
-        decoding="async"
-        className="absolute inset-0 h-full w-full object-cover object-top"
-      />
-    </Phone>
-  );
-}
-
-/* ---------------------------- Class distributor --------------------------- */
-
-/** 12 ranked students dealt into 3 classes in zigzag (snake) order. */
-export function SnakeDraft({
-  caption,
-  names,
-  avgLabel,
-}: {
-  caption: string;
-  names: [string, string, string];
-  avgLabel: string;
-}) {
-  const cols: number[][] = [[], [], []];
-  for (let i = 0; i < 12; i++) {
-    const round = Math.floor(i / 3);
-    const pos = i % 3;
-    cols[round % 2 === 0 ? pos : 2 - pos]?.push(i);
-  }
-  return (
-    <Reveal className={PANEL}>
-      <div className="grid grid-cols-3 gap-2">
-        {cols.map((ranks, c) => (
-          <div
-            key={c}
-            className="flex flex-col items-center gap-2 rounded-xl bg-white/[0.03] py-3 ring-1 ring-white/[0.06]"
-          >
-            <span className="text-[12px] font-medium text-soft">
-              {names[c]}
-            </span>
-            {ranks.map((r) => (
-              <Line
-                as="span"
-                i={r}
-                key={r}
-                className={`!grid size-8 place-items-center rounded-full font-mono text-[12px] tnum ${
-                  r < 3
-                    ? "bg-brand text-brand-ink"
-                    : r < 6
-                      ? "bg-brand/25 text-text"
-                      : "bg-white/[0.06] text-soft"
-                }`}
-              >
-                {r + 1}
-              </Line>
-            ))}
-            <span className="mt-1 font-mono text-[11.5px] text-faint" dir="ltr">
-              {(ranks.reduce((a, b) => a + b + 1, 0) / ranks.length).toFixed(1)}
-            </span>
-          </div>
-        ))}
-      </div>
-      <p className="mt-3 text-[13px] leading-[1.5] text-faint">
-        {caption} · {avgLabel} <span dir="ltr">6.5</span>
-      </p>
     </Reveal>
   );
 }
