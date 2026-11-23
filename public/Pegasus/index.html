@@ -180,7 +180,7 @@
     .time { display: none; }
     .more p { padding: 0 12px 18px 48px; }
     .more ul { padding: 0 12px 18px 64px; }
-    .shot-inline { margin-left: 48px; width: min(240px, calc(100% - 60px)); border-radius: 24px; aspect-ratio: 600 / 1100; object-fit: cover; object-position: top; max-height: 62svh; }
+    .shot-inline { margin-left: 48px; width: min(240px, calc(100% - 60px)); border-radius: 24px; aspect-ratio: 600 / 1100; object-fit: cover; object-position: center bottom; max-height: 62svh; }
   }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -266,6 +266,12 @@
             <p>Search songs, albums, artists and playlists and play them straight away. Songs already on your phone come first, marked with a small phone.</p>
             <ul>
               <li>Share a YouTube, YouTube Music or Spotify link to Pegasus and it plays.</li>
+              <li>Share a playlist link and it becomes your playlist.</li>
+              <li>Each song you start gets its proper name, artist and cover.</li>
+            </ul>
+            <img class="shot-inline" src="assets/search.webp" alt="Pegasus search: songs on the phone marked with a phone icon, online songs below" width="600" height="1301" loading="lazy">
+          </div></div>
+        </li>
         <li class="track" style="--tint:#1f4747" data-shot="assets/library.webp" data-alt="Pegasus library: songs, albums, artists, playlists and folders">
           <button class="row" aria-expanded="false" aria-controls="t4">
             <span class="no"><span>5</span><span class="bars" aria-hidden="true"><i></i><i></i><i></i></span></span>
