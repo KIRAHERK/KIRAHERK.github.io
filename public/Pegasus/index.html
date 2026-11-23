@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pegasus · Free music player for Android</title>
+<meta name="description" content="Pegasus is a free Android music player: the songs on your phone and any song online, with lyrics that light up word by word, translations, downloads and tidy names and covers.">
+<meta name="theme-color" content="#0b0d14">
+<meta property="og:title" content="Pegasus · Free music player for Android">
+<meta property="og:description" content="Your phone's music and any song online, with lyrics that light up word by word. Free, no account.">
+<meta property="og:image" content="https://kiraherk.github.io/Pegasus/assets/full-player-cover.webp">
+<link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ground: #0b0d14;
+    --raise: #141827;
+    --line: #232a3f;
+    --ink: #f1f3fb;
+    --ink-2: #a9b1cc;
+    --ink-3: #78819f;
+    --blue: #3a5dcc;
+    --cyan: #36d2e6;
+    --play: linear-gradient(135deg, #3a5dcc 0%, #3c99dc 50%, #36d2e6 100%);
+    --display: "Bricolage Grotesque", "Figtree", system-ui, sans-serif;
+    --body: "Figtree", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --gutter: clamp(16px, 4vw, 40px);
+  }
+  * { box-sizing: border-box; }
+  html { scrollbar-color: #2c3550 var(--ground); scrollbar-width: thin; }
+  ::selection { background: rgba(54, 210, 230, 0.35); color: #fff; }
+  ::-webkit-scrollbar { width: 10px; }
+  ::-webkit-scrollbar-track { background: var(--ground); }
+  ::-webkit-scrollbar-thumb { background: #2c3550; border-radius: 10px; border: 2px solid var(--ground); }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font: 400 17px/1.55 var(--body);
+    -webkit-font-smoothing: antialiased;
+    caret-color: var(--cyan);
+  }
+  a { color: var(--cyan); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+  a:hover { color: #7fe6f2; }
+  :focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; border-radius: 12px; }
+  img { display: block; max-width: 100%; height: auto; }
+  .wrap { width: min(1180px, 100%); margin: 0 auto; padding: 0 var(--gutter); }
+
+  /* ---------- Now playing: the page's header and its one action ---------- */
+  .now {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(11, 13, 20, 0.86);
+    -webkit-backdrop-filter: saturate(140%) blur(18px);
+    backdrop-filter: saturate(140%) blur(18px);
+    border-bottom: 1px solid var(--line);
+  }
+  .now .wrap { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 16px; padding-top: 12px; padding-bottom: 12px; }
+  .cover {
+    width: 52px; height: 52px; border-radius: 14px;
+    background: #101a3a; display: grid; place-items: center;
+    box-shadow: 0 6px 16px -6px rgba(0, 0, 0, 0.7);
+  }
+  .cover svg { width: 40px; height: 40px; }
+  .song { min-width: 0; }
+  .song b { display: block; font: 800 20px/1.15 var(--display); letter-spacing: -0.02em; }
+  .song span { display: block; color: var(--ink-2); font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .progress { height: 3px; border-radius: 3px; background: var(--line); margin-top: 8px; overflow: hidden; }
+  .progress i { display: block; height: 100%; width: 100%; background: var(--play); border-radius: inherit; transform-origin: left; animation: listen 60s linear infinite; }
+  @keyframes listen { from { transform: scaleX(0.06); } to { transform: scaleX(1); } }
+  .get {
+    display: inline-flex; align-items: center; gap: 12px;
+    padding: 8px 22px 8px 8px; border-radius: 999px;
+    background: var(--ink); color: #0b0d14; text-decoration: none;
+    font: 600 16px/1 var(--body);
+    box-shadow: 0 10px 24px -10px rgba(0, 0, 0, 0.8);
+    transition: transform .35s var(--ease-out), box-shadow .35s var(--ease-out);
+  }
+  .get:hover { color: #0b0d14; transform: translateY(-2px); box-shadow: 0 16px 30px -12px rgba(0, 0, 0, 0.9); }
+  .get:active { transform: translateY(0) scale(0.98); }
+  .get .play { width: 40px; height: 40px; border-radius: 50%; background: var(--play); display: grid; place-items: center; flex: none; }
+  .get .play svg { width: 16px; height: 16px; margin-left: 2px; }
+  .get small { display: block; font-weight: 500; font-size: 12px; color: #4d5570; margin-top: 3px; }
+
+  /* ---------- Opening: what it is ---------- */
+  .intro { padding-top: clamp(40px, 7vw, 88px); padding-bottom: clamp(28px, 4vw, 48px); }
+  h1 {
+    font: 800 clamp(40px, 7.2vw, 92px)/0.98 var(--display);
+    letter-spacing: -0.035em; margin: 0; max-width: 13ch; text-wrap: balance;
+  }
+  h1 em { font-style: normal; color: var(--cyan); }
+  .lede { color: var(--ink-2); font-size: clamp(17px, 1.6vw, 20px); max-width: 52ch; margin: 22px 0 0; }
+
+  /* ---------- The queue ---------- */
+  .top { display: grid; grid-template-columns: minmax(0, 1fr) 340px; column-gap: clamp(24px, 5vw, 72px); align-items: start; padding-bottom: 72px; }
+  .intro, .queue-side { grid-column: 1; }
+  .phone-side { grid-column: 2; grid-row: 1 / span 2; align-self: stretch; padding-top: clamp(40px, 7vw, 88px); }
+  .queue-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 10px; }
+  .queue-head h2 { font: 800 26px/1.2 var(--display); letter-spacing: -0.02em; margin: 0; }
+  .queue-head span { color: var(--ink-3); font-size: 14px; font-variant-numeric: tabular-nums; }
+  ol.queue { list-style: none; margin: 0; padding: 0; }
+  .track { --tint: #26305a; border-radius: 18px; transition: background .5s var(--ease-out); }
+  .track + .track { margin-top: 4px; }
+  .track.open { background: color-mix(in oklab, var(--tint) 55%, var(--ground)); }
+  .row {
+    width: 100%; display: grid; grid-template-columns: 34px 1fr auto 24px; align-items: center; gap: 14px;
+    padding: 14px 16px; border: 0; background: none; color: inherit; text-align: left; cursor: pointer;
+    font: inherit; border-radius: 18px;
+  }
+  .row:hover { background: rgba(255, 255, 255, 0.04); }
+  .track.open .row:hover { background: none; }
+  .no { color: var(--ink-3); font-variant-numeric: tabular-nums; text-align: center; font-size: 15px; }
+  .bars { display: none; height: 16px; justify-content: center; gap: 3px; align-items: flex-end; }
+  .bars i { transform-origin: bottom; width: 3px; border-radius: 2px; background: var(--cyan); animation: bar 1s var(--ease-out) infinite alternate; }
+  .bars i:nth-child(1) { height: 60%; animation-delay: -.2s; }
+  .bars i:nth-child(2) { height: 100%; animation-delay: -.6s; }
+  .bars i:nth-child(3) { height: 40%; animation-delay: -.4s; }
+  @keyframes bar { from { transform: scaleY(0.35); } to { transform: scaleY(1); } }
+  .track.open .no > span:first-child { display: none; }
+  .track.open .bars { display: flex; }
+  .name b { display: block; font: 600 18px/1.3 var(--body); }
+  .track.open .name b { color: #fff; }
+  .track.open .name small, .track.open .time, .track.open .no, .track.open .chev { color: #c3cae0; }
+  .name small { display: block; color: var(--ink-3); font-size: 14px; }
+  .time { color: var(--ink-3); font-variant-numeric: tabular-nums; font-size: 14px; }
+  .chev { width: 20px; height: 20px; color: var(--ink-3); transition: transform .45s var(--ease-out); }
+  .track.open .chev { transform: rotate(180deg); }
+  .more { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .55s var(--ease-out); }
+  .track.open .more { grid-template-rows: 1fr; }
+  .more > div { overflow: hidden; }
+  .more p { margin: 0; padding: 0 20px 20px 64px; color: #d6dbee; max-width: 60ch; }
+  .more ul { margin: -8px 0 0; padding: 0 20px 20px 82px; color: var(--ink-2); max-width: 58ch; }
+  .more li { margin: 4px 0; }
+  .shot-inline { display: none; }
+
+  /* The phone beside the queue shows the open track's screen. */
+  .phone {
+    position: sticky; top: 96px;
+    border-radius: 44px; padding: 10px; background: #05060a;
+    box-shadow: 0 0 0 1px #262c40, 0 40px 80px -30px rgba(0, 0, 0, 0.9);
+  }
+  .screen { position: relative; border-radius: 34px; overflow: hidden; aspect-ratio: 600 / 1301; background: var(--raise); }
+  .screen img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  /* The new screen slides up over the old one; the old one is then hidden. */
+  .screen img:not(.on) { visibility: hidden; }
+  .screen img.on { z-index: 1; }
+  .screen img.enter { animation: rise .7s var(--ease-out); }
+  @keyframes rise { from { opacity: 0; transform: translateY(18px) scale(0.985); filter: blur(6px); } to { opacity: 1; transform: none; filter: none; } }
+  .caption { text-align: center; color: var(--ink-3); font-size: 13px; margin-top: 14px; }
+
+  /* ---------- Installing ---------- */
+  .install { border-top: 1px solid var(--line); padding: 64px 0 40px; }
+  .install h2 { font: 800 clamp(28px, 3.4vw, 40px)/1.1 var(--display); letter-spacing: -0.025em; margin: 0 0 8px; }
+  .install > .wrap > p { color: var(--ink-2); margin: 0 0 28px; max-width: 56ch; }
+  .steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(16px, 3vw, 40px); counter-reset: step; list-style: none; padding: 0; margin: 0 0 36px; }
+  .steps li { counter-increment: step; }
+  .steps li::before { content: counter(step); display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--line); color: var(--cyan); font: 600 15px/1 var(--body); margin-bottom: 12px; }
+  .steps b { display: block; font-weight: 600; margin-bottom: 4px; }
+  .steps span { color: var(--ink-2); font-size: 15px; }
+  footer { padding: 28px 0 48px; color: var(--ink-3); font-size: 14px; }
+  footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
+
+  @media (max-width: 900px) {
+    .top { grid-template-columns: 1fr; }
+    .phone-side { display: none; }
+    .shot-inline { display: block; width: min(280px, 70%); margin: 0 0 24px 64px; border-radius: 28px; overflow: hidden; box-shadow: 0 0 0 1px #262c40, 0 24px 50px -24px rgba(0, 0, 0, 0.9); }
+    .steps { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) {
+    .now .wrap { gap: 12px; }
+    .cover { width: 44px; height: 44px; border-radius: 12px; }
+    .cover svg { width: 32px; height: 32px; }
+    .song b { font-size: 18px; }
+    .song span, .now .get small { display: none; }
+    .get { padding: 6px 16px 6px 6px; font-size: 15px; gap: 10px; }
+    .get .play { width: 34px; height: 34px; }
+    .row { grid-template-columns: 26px 1fr 20px; gap: 12px; padding: 14px 10px; }
+    .time { display: none; }
+    .more p { padding: 0 12px 18px 48px; }
+    .more ul { padding: 0 12px 18px 64px; }
+    .shot-inline { margin-left: 48px; width: min(240px, calc(100% - 60px)); border-radius: 24px; aspect-ratio: 600 / 1100; object-fit: cover; object-position: top; max-height: 62svh; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="now" aria-label="Pegasus">
+  <div class="wrap">
+    <div class="cover" aria-hidden="true">
+      <svg viewBox="30 28 48 52"><defs><linearGradient id="g" x1="32.8" y1="77.4" x2="75.2" y2="30.6" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#3A5DCC"/><stop offset=".5" stop-color="#3C99DC"/><stop offset="1" stop-color="#36D2E6"/></linearGradient></defs><path fill="url(#g)" d="M38.9,77.39C36.84,77.05 35.01,75.94 33.99,74.41C32.92,72.79 32.59,71.15 32.96,69.12C33.2,67.75 34.05,66.15 35.1,65.05C37.31,62.74 40.27,61.56 43.23,61.81C44.56,61.92 45.34,62.13 46.44,62.67C47.07,62.98 47.23,63.04 47.26,62.98C47.28,62.94 47.29,60.4 47.28,57.34C47.26,53.22 47.27,51.61 47.31,51.1C47.56,48.51 48.37,46.51 49.91,44.69C50.45,44.05 50.67,43.84 51.34,43.3C52.59,42.3 54.67,41.2 56.6,40.5C58.02,40 58.99,39.68 60.6,39.19C64.39,38.04 66.44,37.28 68.24,36.35C71.24,34.79 72.88,33.46 74.52,31.26C75.18,30.38 75.19,30.38 75.24,31.43C75.31,33.1 74.97,34.86 74.29,36.27C73.05,38.84 70.97,40.68 67.76,42.07C65.99,42.83 65.2,43.11 62.81,43.79C58.88,44.92 57.26,45.52 55.69,46.4C53.98,47.37 52.77,48.44 51.92,49.74C51.16,50.9 50.66,52.32 50.36,54.13C50.24,54.84 50.24,54.86 50.23,61.95C50.23,66.97 50.21,69.2 50.16,69.53C49.68,73.26 46.49,76.44 42.35,77.31C41.46,77.5 39.81,77.54 38.9,77.39ZM52.39,56.43C52.46,56.09 53.24,54.94 53.69,54.52C54.25,54 55.17,53.41 56.03,53.03C57.54,52.36 58.49,52.13 61.68,51.68C63.37,51.45 64.8,51.14 66.1,50.73C67.05,50.43 67.41,50.29 68.56,49.75C69.73,49.2 69.77,49.24 69.16,50.24C68.6,51.14 67.58,52.29 66.82,52.88C65.66,53.77 64.23,54.38 62.44,54.73C61.42,54.93 61.04,54.96 58.99,55.05C57.97,55.1 56.84,55.17 56.5,55.21C54.95,55.4 53.75,55.79 52.85,56.39C52.44,56.66 52.34,56.67 52.39,56.43ZM52.65,52.97C52.67,52.83 52.76,52.5 52.85,52.25C53.42,50.64 54.44,49.4 56.13,48.24C57.69,47.18 59.74,46.41 63.44,45.47C66.85,44.61 68.69,43.93 70.51,42.85C71.25,42.41 72.39,41.61 72.96,41.14C73.22,40.94 73.44,40.77 73.47,40.77C73.58,40.77 73.58,40.96 73.44,41.57C73.25,42.42 73.02,43.04 72.61,43.81C71.49,45.88 70.39,46.93 68.23,48.02C66.4,48.94 64.54,49.47 61.1,50.06C58.17,50.56 57.33,50.76 55.82,51.38C54.6,51.87 53.83,52.32 53.08,52.95C52.65,53.31 52.61,53.31 52.65,52.97Z"/></svg>
+    </div>
+    <div class="song">
+      <b>Pegasus</b>
+      <span>Free music player for Android</span>
+      <div class="progress" aria-hidden="true"><i></i></div>
+    </div>
+    <a class="get" href="https://github.com/KIRAHERK/Pegasus-Free-Online-Music-Player/releases/latest/download/Pegasus.apk">
+      <span class="play" aria-hidden="true"><svg viewBox="0 0 16 16"><path fill="#fff" d="M3 1.8v12.4c0 .8.9 1.3 1.6.8l9.4-6.2c.6-.4.6-1.2 0-1.6L4.6 1c-.7-.5-1.6 0-1.6.8z"/></svg></span>
+      <span>Download for Android<small>Free · no account · no ads</small></span>
+    </a>
+  </div>
+</header>
+
+<main>
+  <div class="top wrap">
+  <section class="intro">
+    <h1>Your music. <em>Any song.</em> Every word.</h1>
+    <p class="lede">Pegasus plays the songs on your phone and any song online, with lyrics that light up word by word as they're sung. Open a track below to see it.</p>
+  </section>
+
+  <section class="queue-side" aria-label="What Pegasus does">
+      <div class="queue-head">
+        <h2>Up next</h2>
+        <span>7 tracks</span>
+      </div>
+      <ol class="queue">
+        <li class="track open" style="--tint:#3e2f6b" data-shot="assets/full-player-cover.webp" data-alt="The Pegasus player with the album cover, controls and audio quality">
+          <button class="row" aria-expanded="true" aria-controls="t7">
+            <span class="no"><span>1</span><span class="bars" aria-hidden="true"><i></i><i></i><i></i></span></span>
+            <span class="name"><b>In the colours of every song</b><small>The player, the equalizer, the sleep timer</small></span>
+            <span class="time">3:40</span>
+            <svg class="chev" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 7.5l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="more" id="t7"><div>
+            <p>An equalizer with presets, bass boost, crossfade between songs, even volume across songs, skip silence and a sleep timer. The player takes its colours from each cover, and you can pick red, green, blue, purple or pink for the rest of the app.</p>
+            <img class="shot-inline" src="assets/full-player-cover.webp" alt="The Pegasus player with the album cover, controls and audio quality" width="600" height="1301" loading="lazy">
+          </div></div>
+        </li>
+        <li class="track" style="--tint:#2c4a63" data-shot="assets/lyrics-word-by-word.webp" data-alt="Pegasus lyrics: the line being sung, lit word by word">
+          <button class="row" aria-expanded="false" aria-controls="t1">
+            <span class="no"><span>2</span><span class="bars" aria-hidden="true"><i></i><i></i><i></i></span></span>
+            <span class="name"><b>Lyrics that light up</b><small>Word by word, as it's sung</small></span>
+            <span class="time">3:12</span>
+            <svg class="chev" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 7.5l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="more" id="t1"><div>
+            <p>Each word lifts and fills with light as the singer reaches it. When a song has no word timing, whole lines light up instead, and songs without timing still show their lyrics. Go full screen and the background moves with the cover's colours.</p>
+            <img class="shot-inline" src="assets/lyrics-word-by-word.webp" alt="Pegasus lyrics: the line being sung, lit word by word" width="600" height="1301" loading="lazy">
+          </div></div>
+        </li>
+        <li class="track" style="--tint:#3b3f7a" data-shot="assets/lyrics-translated.webp" data-alt="Japanese lyrics with an English translation under each line">
+          <button class="row" aria-expanded="false" aria-controls="t2">
+            <span class="no"><span>3</span><span class="bars" aria-hidden="true"><i></i><i></i><i></i></span></span>
+            <span class="name"><b>Know what they're singing</b><small>Lyrics translated to English</small></span>
+            <span class="time">2:58</span>
+            <svg class="chev" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 7.5l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="more" id="t2"><div>
+            <p>Songs in Spanish, Korean, Japanese, French and more get an English line under each original line, slang included. One tap turns translations on or off. English and Arabic songs stay as they are.</p>
+            <img class="shot-inline" src="assets/lyrics-translated.webp" alt="Japanese lyrics with an English translation under each line" width="600" height="1301" loading="lazy">
+          </div></div>
+        </li>
+        <li class="track" style="--tint:#1e3550" data-shot="assets/search.webp" data-alt="Pegasus search: songs on the phone marked with a phone icon, online songs below">
+          <button class="row" aria-expanded="false" aria-controls="t3">
+            <span class="no"><span>4</span><span class="bars" aria-hidden="true"><i></i><i></i><i></i></span></span>
+            <span class="name"><b>Any song, online</b><small>Search, stream, paste a link</small></span>
+            <span class="time">3:34</span>
+            <svg class="chev" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 7.5l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="more" id="t3"><div>
+            <p>Search songs, albums, artists and playlists and play them straight away. Songs already on your phone come first, marked with a small phone.</p>
+            <ul>
+              <li>Share a YouTube, YouTube Music or Spotify link to Pegasus and it plays.</li>
+        <li class="track" style="--tint:#1f4747" data-shot="assets/library.webp" data-alt="Pegasus library: songs, albums, artists, playlists and folders">
+          <button class="row" aria-expanded="false" aria-controls="t4">
+            <span class="no"><span>5</span><span class="bars" aria-hidden="true"><i></i><i></i><i></i></span></span>
+            <span class="name"><b>The music on your phone</b><small>Tidy at last</small></span>
+            <span class="time">2:47</span>
+            <svg class="chev" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 7.5l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="more" id="t4"><div>
+            <p>Songs, albums, artists, folders, liked songs and history, all in one library. "Clean up my music" fixes names like "03 - Artist - Song (Official Video) [Lyrics]", finds proper covers and hides extra copies. You check every change first, your files stay untouched, and you can undo it all.</p>
+            <img class="shot-inline" src="assets/library.webp" alt="Pegasus library: songs, albums, artists, playlists and folders" width="600" height="1301" loading="lazy">
+          </div></div>
+        </li>
+        <li class="track" style="--tint:#283463" data-shot="assets/playlist.webp" data-alt="A Pegasus playlist with shuffle and play buttons">
+          <button class="row" aria-expanded="false" aria-controls="t5">
+            <span class="no"><span>6</span><span class="bars" aria-hidden="true"><i></i><i></i><i></i></span></span>
+            <span class="name"><b>Take it offline</b><small>Download a whole playlist</small></span>
+            <span class="time">3:05</span>
+            <svg class="chev" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 7.5l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="more" id="t5"><div>
+            <p>Download one song or a whole album or playlist. It arrives in order, as its own playlist, saved as real music files in Music/Pegasus with name, artist and cover, so any music app can play them.</p>
+            <img class="shot-inline" src="assets/playlist.webp" alt="A Pegasus playlist with shuffle and play buttons" width="600" height="1301" loading="lazy">
+          </div></div>
+        </li>
+        <li class="track" style="--tint:#1d5a3a" data-shot="assets/recap-1.webp" data-alt="Pegasus Recap: you listened for 170 minutes this month">
+          <button class="row" aria-expanded="false" aria-controls="t6">
+            <span class="no"><span>7</span><span class="bars" aria-hidden="true"><i></i><i></i><i></i></span></span>
+            <span class="name"><b>Your month in music</b><small>Recap</small></span>
+            <span class="time">2:21</span>
+            <svg class="chev" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 7.5l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="more" id="t6"><div>
+            <p>Every month Pegasus puts together your top songs, artists and albums, the minutes you listened and your longest streak, as cards you tap through and share. It's worked out on your phone; nothing is sent anywhere.</p>
+            <img class="shot-inline" src="assets/recap-1.webp" alt="Pegasus Recap: you listened for 170 minutes this month" width="600" height="1301" loading="lazy">
+          </div></div>
+        </li>
+      </ol>
+  </section>
+
+    <aside class="phone-side" aria-hidden="true">
+      <div class="phone">
+        <div class="screen">
+          <img class="on" src="assets/full-player-cover.webp" alt="" width="600" height="1301">
+          <img src="assets/full-player-cover.webp" alt="" width="600" height="1301">
+        </div>
+      </div>
+      <p class="caption">Real Pegasus screens, with sample songs</p>
+    </aside>
+  </div>
+
+  <section class="install" aria-labelledby="install">
+    <div class="wrap">
+      <h2 id="install">Install in a minute</h2>
+      <p>Pegasus isn't in the Play Store, so you install it straight from here. It keeps itself up to date after that.</p>
+      <ol class="steps">
+        <li><b>Download</b><span>Tap Download for Android and open Pegasus.apk when it's done.</span></li>
+        <li><b>Allow it once</b><span>Android asks whether your browser may install apps. Allow it, then go back.</span></li>
+        <li><b>Install and play</b><span>Tap Install. Pegasus finds the music on your phone and you can search anything else.</span></li>
+      </ol>
+      <a class="get" href="https://github.com/KIRAHERK/Pegasus-Free-Online-Music-Player/releases/latest/download/Pegasus.apk">
+        <span class="play" aria-hidden="true"><svg viewBox="0 0 16 16"><path fill="#fff" d="M3 1.8v12.4c0 .8.9 1.3 1.6.8l9.4-6.2c.6-.4.6-1.2 0-1.6L4.6 1c-.7-.5-1.6 0-1.6.8z"/></svg></span>
+        <span>Download for Android<small>Android 8 or newer</small></span>
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Pegasus · free, no account, no ads</span>
+    <span><a href="https://github.com/KIRAHERK/Pegasus-Free-Online-Music-Player/releases">All releases</a> · <a href="https://kiraherk.github.io/">Made by KIRAHERK</a></span>
+  </div>
+</footer>
+
+<script>
+  // One track open at a time; the phone beside the queue shows its screen.
+  const tracks = [...document.querySelectorAll('.track')];
+  const shots = [...document.querySelectorAll('.screen img')];
+  let shown = 0;
+  function open(i) {
+    tracks.forEach((t, k) => {
+      const on = k === i;
+      t.classList.toggle('open', on);
+      t.querySelector('.row').setAttribute('aria-expanded', on);
+    });
+    const src = tracks[i].dataset.shot;
+    if (shots[shown].getAttribute('src') === src) return;
+    const next = shots[1 - shown];
+    next.src = src;
+    next.classList.remove('enter');
+    void next.offsetWidth;
+    next.classList.add('on', 'enter');
+    shots[shown].classList.remove('on');
+    shown = 1 - shown;
+  }
+  tracks.forEach((t, i) => t.querySelector('.row').addEventListener('click', () => {
+    if (t.classList.contains('open')) {
+      t.classList.remove('open');
+      t.querySelector('.row').setAttribute('aria-expanded', 'false');
+    } else open(i);
+  }));
+  open(0);
+</script>
+</body>
+</html>
